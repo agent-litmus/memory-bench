@@ -3,9 +3,11 @@ import io.github.agentlitmus.agent.Answerer;
 import io.github.agentlitmus.report.BenchmarkReport;
 import io.github.agentlitmus.evidence.EvidenceCollector;
 import io.github.agentlitmus.evidence.Evidence;
+import io.github.agentlitmus.evidence.Transcript;
 import io.github.agentlitmus.memory.LongTermMemory;
 import io.github.agentlitmus.memory.MemoryEntry;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class MemoryBenchmarkRunner {
     private final Answerer answerer;
     private final CaseJudge judge;
     private final EvidenceCollector collector;
+    private final Path artifactDir;
 
     public MemoryBenchmarkRunner(LongTermMemory memory, Answerer answerer, CaseJudge judge) {
         this(memory, answerer, judge, new EvidenceCollector());
@@ -36,10 +39,19 @@ public class MemoryBenchmarkRunner {
 
     public MemoryBenchmarkRunner(LongTermMemory memory, Answerer answerer, CaseJudge judge,
                                  EvidenceCollector collector) {
+        this(memory, answerer, judge, collector, null);
+    }
+
+    /**
+     * @param artifactDir 运行产物目录（每条用例一个 Markdown 文件）；为 null 表示不落盘
+     */
+    public MemoryBenchmarkRunner(LongTermMemory memory, Answerer answerer, CaseJudge judge,
+                                 EvidenceCollector collector, Path artifactDir) {
         this.memory = memory;
         this.answerer = answerer;
         this.judge = judge;
         this.collector = collector == null ? new EvidenceCollector() : collector;
+        this.artifactDir = artifactDir;
     }
 
     public EvidenceCollector collector() {
@@ -58,7 +70,12 @@ public class MemoryBenchmarkRunner {
         String sessionId = kase.sessionId();
         memory.clear(sessionId);
 
+        List<String> transcript = new ArrayList<>();
+        transcript.add("# 用例 " + kase.id() + "（" + kase.dimension().label() + "）");
+        transcript.add("");
+
         // 1) 注入种子记忆
+        transcript.add("## 注入记忆");
         String firstEntryId = null;
         for (String seed : kase.seeds()) {
             MemoryEntry entry = MemoryEntry.of(sessionId, seed, "fact",
@@ -67,13 +84,18 @@ public class MemoryBenchmarkRunner {
             if (firstEntryId == null) {
                 firstEntryId = id;
             }
+            transcript.add("- " + seed + "（retainable=" + kase.seedsRetainable() + "）");
             collector.collect(Evidence.memory(sessionId, seed, id));
         }
+        transcript.add("");
 
         // 2) 动态更新：新事实取代旧事实
         if (kase.updateTo() != null && !kase.updateTo().isBlank() && firstEntryId != null) {
             memory.update(sessionId, firstEntryId, MemoryEntry.fact(sessionId, kase.updateTo()));
             collector.collect(Evidence.memory(sessionId, kase.updateTo(), firstEntryId));
+            transcript.add("## 更新记忆");
+            transcript.add("- " + kase.updateTo());
+            transcript.add("");
         }
 
         // 3) 提问
@@ -84,6 +106,20 @@ public class MemoryBenchmarkRunner {
         // 4) 判定
         Judgment judgment = judge.judge(kase, answer);
         collector.collect(Evidence.artifact(sessionId, judgment.toString(), "judgment"));
+
+        // 5) 落盘为文件产物并登记证据
+        transcript.add("## 提问");
+        transcript.add("- " + kase.question());
+        transcript.add("");
+        transcript.add("## 智能体回答");
+        transcript.add(answer == null || answer.isBlank() ? "（空回答）" : answer);
+        transcript.add("");
+        transcript.add("## 判定");
+        transcript.add("- " + judgment);
+        String path = Transcript.write(artifactDir, sessionId, transcript);
+        if (path != null) {
+            collector.collect(Evidence.artifact(sessionId, path, "transcript"));
+        }
         return judgment;
     }
 }

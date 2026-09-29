@@ -17,6 +17,7 @@ target/
 ### 评测运行产物（本地留证用，不入库） ###
 evidence/
 *.jsonl
+!samples/*.jsonl
 
 ### CLI 默认输出目录（含各智能体记忆与证据快照） ###
 litmus-out/

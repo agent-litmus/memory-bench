@@ -1,0 +1,24 @@
+[
+  {
+    "id": "reference",
+    "name": "参考智能体（baseline）",
+    "description": "内置确定性实现：基于相关性召回，记忆能力健全，作为对照组",
+    "type": "builtin"
+  },
+  {
+    "id": "degraded",
+    "name": "缺陷智能体（degraded）",
+    "description": "内置问题样本：总取最早写入的记忆，会复用旧信息、混淆相近信息、泄露不应保留的信息",
+    "type": "builtin"
+  },
+  {
+    "id": "kylinbot",
+    "name": "KylinBot（麒灵助手）",
+    "description": "openKylin 桌面智能体。CLI 单消息模式接入；每个评测会话使用独立工作区隔离记忆，并用会话状态文件保持多轮上下文",
+    "type": "command",
+    "command": "bash",
+    "args": ["scripts/kylinbot-adapter.sh", "{sessionId}", "{question}"],
+    "resetArgs": ["scripts/kylinbot-adapter.sh", "{sessionId}", "--reset"],
+    "timeoutSeconds": 180
+  }
+]

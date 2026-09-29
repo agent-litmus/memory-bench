@@ -3,8 +3,10 @@ package io.github.agentlitmus.core;
 import io.github.agentlitmus.agent.Answerer;
 import io.github.agentlitmus.evidence.Evidence;
 import io.github.agentlitmus.evidence.EvidenceCollector;
+import io.github.agentlitmus.evidence.Transcript;
 import io.github.agentlitmus.report.BenchmarkReport;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +27,25 @@ public class DialogueBenchmarkRunner {
     private final Answerer agent;
     private final CaseJudge judge;
     private final EvidenceCollector collector;
+    private final Path artifactDir;
 
     public DialogueBenchmarkRunner(Answerer agent, CaseJudge judge) {
         this(agent, judge, new EvidenceCollector());
     }
 
     public DialogueBenchmarkRunner(Answerer agent, CaseJudge judge, EvidenceCollector collector) {
+        this(agent, judge, collector, null);
+    }
+
+    /**
+     * @param artifactDir 运行产物目录（每条用例一个 Markdown 文件）；为 null 表示不落盘
+     */
+    public DialogueBenchmarkRunner(Answerer agent, CaseJudge judge,
+                                   EvidenceCollector collector, Path artifactDir) {
         this.agent = agent;
         this.judge = judge;
         this.collector = collector == null ? new EvidenceCollector() : collector;
+        this.artifactDir = artifactDir;
     }
 
     public EvidenceCollector collector() {
@@ -50,16 +62,26 @@ public class DialogueBenchmarkRunner {
 
     public Judgment runOne(MemoryCase kase) {
         String sessionId = kase.sessionId();
+        List<String> transcript = new ArrayList<>();
+        transcript.add("# 用例 " + kase.id() + "（" + kase.dimension().label() + "）"
+                + (kase.crossSession() ? " ｜ 跨会话" : ""));
+        transcript.add("");
 
         // 1) 通过对话注入事实（用户先把信息告诉智能体）
+        transcript.add("## 注入事实");
         for (String seed : kase.seeds()) {
             collector.collect(Evidence.dialogue(sessionId, seed));
+            transcript.add("- " + seed);
             agent.answer(sessionId, seed);
         }
+        transcript.add("");
 
         // 2) 动态更新：告知新事实，看它是否覆盖旧信息
         if (kase.updateTo() != null && !kase.updateTo().isBlank()) {
             collector.collect(Evidence.dialogue(sessionId, kase.updateTo()));
+            transcript.add("## 更新事实");
+            transcript.add("- " + kase.updateTo());
+            transcript.add("");
             agent.answer(sessionId, kase.updateTo());
         }
 
@@ -67,6 +89,9 @@ public class DialogueBenchmarkRunner {
         if (kase.crossSession()) {
             collector.collect(Evidence.dialogue(sessionId,
                     "[评测] 重置会话上下文：清空当前对话，仅保留长期记忆"));
+            transcript.add("## 会话重置");
+            transcript.add("- 已清空对话上下文，仅保留长期记忆");
+            transcript.add("");
             agent.resetSession(sessionId);
         }
 
@@ -77,6 +102,20 @@ public class DialogueBenchmarkRunner {
 
         Judgment judgment = judge.judge(kase, answer);
         collector.collect(Evidence.artifact(sessionId, judgment.toString(), "judgment"));
+
+        // 4) 把整条执行过程落盘为文件产物，并登记为证据
+        transcript.add("## 提问");
+        transcript.add("- " + kase.question());
+        transcript.add("");
+        transcript.add("## 智能体回答");
+        transcript.add(answer == null || answer.isBlank() ? "（空回答）" : answer);
+        transcript.add("");
+        transcript.add("## 判定");
+        transcript.add("- " + judgment);
+        String path = Transcript.write(artifactDir, sessionId, transcript);
+        if (path != null) {
+            collector.collect(Evidence.artifact(sessionId, path, "transcript"));
+        }
         return judgment;
     }
 }

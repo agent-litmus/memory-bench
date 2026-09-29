@@ -7,6 +7,7 @@ import io.github.agentlitmus.memory.MemoryRegistry;
 import io.github.agentlitmus.report.BenchmarkReport;
 import io.github.agentlitmus.report.BenchmarkResult;
 
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +30,25 @@ public final class MultiAgentBenchmark {
     public static BenchmarkResult run(List<MemoryCase> cases,
                                       List<AgentUnderTest> agents,
                                       CaseJudge judge) {
+        return run(cases, agents, judge, null);
+    }
+
+    /**
+     * @param artifactRoot 运行产物根目录；非 null 时每个智能体一个子目录，逐条用例落盘
+     */
+    public static BenchmarkResult run(List<MemoryCase> cases,
+                                      List<AgentUnderTest> agents,
+                                      CaseJudge judge,
+                                      Path artifactRoot) {
         Map<AgentUnderTest, BenchmarkReport> reports = new LinkedHashMap<>();
         Map<AgentUnderTest, EvidenceCollector> evidences = new LinkedHashMap<>();
 
         for (AgentUnderTest agent : agents) {
             EvidenceCollector collector = new EvidenceCollector();
+            Path dir = artifactRoot == null ? null : artifactRoot.resolve(agent.id());
             BenchmarkReport report = agent.mode() == RunnerMode.MEMORY
-                    ? new MemoryBenchmarkRunner(MemoryRegistry.resolve(agent), agent.answerer(), judge, collector).run(cases)
-                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector).run(cases);
+                    ? new MemoryBenchmarkRunner(MemoryRegistry.resolve(agent), agent.answerer(), judge, collector, dir).run(cases)
+                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir).run(cases);
 
             reports.put(agent, report);
             evidences.put(agent, collector);

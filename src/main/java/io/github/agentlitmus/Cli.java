@@ -107,8 +107,9 @@ public final class Cli {
         }
         System.out.println("被测智能体: " + agents.size() + " 款");
 
-        // 3) 批量评测（规则判定，无需模型）
-        BenchmarkResult result = MultiAgentBenchmark.run(cases, agents, new CaseJudge());
+        // 3) 批量评测（规则判定，无需模型）；产物目录用于逐条用例落盘
+        BenchmarkResult result = MultiAgentBenchmark.run(cases, agents, new CaseJudge(),
+                outDir.resolve("artifacts"));
 
         // 4) 控制台输出
         StringBuilder text = new StringBuilder();
@@ -139,6 +140,7 @@ public final class Cli {
         System.out.println("  ├─ report.txt    文本报告 + 横向对比表");
         System.out.println("  ├─ report.html   含六维雷达图（浏览器打开，便于录屏）");
         System.out.println("  ├─ radar.svg     雷达图");
+        System.out.println("  ├─ artifacts/    逐条用例的运行产物（Markdown，可直接打开查看）");
         System.out.println("  └─ evidence/     各智能体运行证据（JSON Lines）");
     }
 
