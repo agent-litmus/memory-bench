@@ -1,4 +1,7 @@
 package io.github.zaojiaoci.agentlitmus;
+import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
+import io.github.zaojiaoci.agentlitmus.agent.HttpAnswerer;
+import io.github.zaojiaoci.agentlitmus.core.DialogueBenchmarkRunner;
 import io.github.zaojiaoci.agentlitmus.evidence.EvidenceCollector;
 import io.github.zaojiaoci.agentlitmus.report.HtmlReport;
 import io.github.zaojiaoci.agentlitmus.report.RadarChart;
@@ -18,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AgentLitmus 命令行入口。
@@ -56,6 +60,7 @@ public final class Cli {
         try {
             switch (command) {
                 case "run" -> run(parse(argv));
+                case "run-http" -> runHttp(parse(argv));
                 case "export-cases" -> exportCases(parse(argv));
                 case "help", "-h", "--help" -> printUsage();
                 default -> {
@@ -130,6 +135,45 @@ public final class Cli {
         System.out.println("  └─ evidence/     各智能体运行证据（JSON Lines）");
     }
 
+    /**
+     * 对<b>真实智能体</b>跑评测：通过 HTTP 调用，以对话方式注入事实。
+     * <p>
+     * 这是面向"真实智能体运行证据"的评测入口，用于验证工具在真实系统上的可用性。
+     */
+    private static void runHttp(Options options) throws IOException {
+        if (options.endpoint == null || options.endpoint.isBlank()) {
+            throw new IllegalArgumentException("请使用 --endpoint 指定智能体地址，例如 --endpoint http://localhost:8089");
+        }
+        Path outDir = Path.of(options.out);
+        Files.createDirectories(outDir);
+
+        List<MemoryCase> cases = options.cases != null
+                ? MemoryCases.loadFrom(Path.of(options.cases))
+                : MemoryCases.defaultCases();
+
+        HttpAnswerer agent = new HttpAnswerer(options.endpoint);
+        System.out.println("被测智能体: " + options.endpoint);
+        System.out.println("用例集: " + cases.size() + " 条（对话式注入）");
+
+        DialogueBenchmarkRunner runner = new DialogueBenchmarkRunner(agent, new CaseJudge());
+        BenchmarkReport report = runner.run(cases);
+
+        System.out.println();
+        System.out.println(report.toText());
+
+        Files.writeString(outDir.resolve("real-agent-report.txt"), report.toText(), StandardCharsets.UTF_8);
+        Files.writeString(outDir.resolve("real-agent-report.html"),
+                HtmlReport.html(new BenchmarkResult(Map.of(REAL_AGENT, report), Map.of(REAL_AGENT, runner.collector()))),
+                StandardCharsets.UTF_8);
+        runner.collector().exportTo(outDir.resolve("evidence").resolve("real-agent.jsonl"));
+
+        System.out.println("报告已输出到: " + outDir.toAbsolutePath());
+    }
+
+    private static final AgentUnderTest REAL_AGENT =
+            AgentUnderTest.of("real-agent", "真实智能体（HTTP）", "通过 HTTP 接口接入的真实智能体",
+            (sessionId, question) -> "");
+
     private static void exportCases(Options options) {
         Path file = Path.of(options.out).resolve("cases.json");
         MemoryCases.exportTo(MemoryCases.defaultCases(), file);
@@ -147,14 +191,16 @@ public final class Cli {
 
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
-                  --cases <file>         使用外部用例集 JSON（默认内置 12 条）
+                  --cases <file>         使用外部用例集 JSON（默认内置 24 条）
                   --out <dir>            输出目录（默认 litmus-out）
+                  --endpoint <url>       真实智能体地址（run-http 使用）
                   --help                 显示帮助
 
                 示例:
                   litmus run
                   litmus run --agents reference,degraded --out result/
                   litmus run --cases my-cases.json --out result/
+                  litmus run-http --endpoint http://localhost:8089 --out real/
                 """);
     }
 
@@ -168,6 +214,7 @@ public final class Cli {
                 case "--agents" -> options.agents = value(argv, ++i, arg);
                 case "--cases" -> options.cases = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--out" -> options.out = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
+                case "--endpoint" -> options.endpoint = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 default -> {
                     // 忽略未知参数，避免因多余参数中断评测
                 }
@@ -194,5 +241,6 @@ public final class Cli {
         private String agents;
         private String cases;
         private String out = DEFAULT_OUT;
+        private String endpoint;
     }
 }
