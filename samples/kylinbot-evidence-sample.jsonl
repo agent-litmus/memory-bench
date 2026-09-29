@@ -1,20 +1,20 @@
-{"type":"dialogue","sessionId":"case-r1","timestamp":1790711630231,"content":"用户从事订单录入工作","metadata":{}}
-{"type":"dialogue","sessionId":"case-r1","timestamp":1790711636082,"content":"我的工作内容是什么？","metadata":{}}
-{"type":"dialogue","sessionId":"case-r1","timestamp":1790711638219,"content":"根据我记住的信息：你从事**订单录入**工作（这是目前关于你工作内容唯一记录）。\n\n除此之外我没有更多细节了——如果你想让我记住更具体的内容（比如所在公司、常用系统、具体职责或流程），告诉我，我可以补充到长期记忆里。","metadata":{}}
-{"type":"artifact","sessionId":"case-r1","timestamp":1790711638219,"content":"Judgment[caseId=r1, dimension=RETENTION, passed=true, score=1.0, reason=包含[订单录入] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
-{"type":"artifact","sessionId":"case-r1","timestamp":1790711638220,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r1.md","metadata":{"kind":"transcript"}}
-{"type":"dialogue","sessionId":"case-r2","timestamp":1790711638220,"content":"用户所在行业是制造业","metadata":{}}
-{"type":"dialogue","sessionId":"case-r2","timestamp":1790711639729,"content":"我在哪个行业？","metadata":{}}
-{"type":"dialogue","sessionId":"case-r2","timestamp":1790711644784,"content":"根据我记录的信息，你所在的行业是**制造业**。\n\n（这条来自我记忆中的 `user_industry` 条目。如果最近有变动，或者你想更具体一些——比如是机械、电子、化工还是其他细分领域——告诉我，我来更新记录。）","metadata":{}}
-{"type":"artifact","sessionId":"case-r2","timestamp":1790711644784,"content":"Judgment[caseId=r2, dimension=RETENTION, passed=true, score=1.0, reason=包含[制造业] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
-{"type":"artifact","sessionId":"case-r2","timestamp":1790711644785,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r2.md","metadata":{"kind":"transcript"}}
-{"type":"dialogue","sessionId":"case-r3","timestamp":1790711644785,"content":"用户常用的开发语言是 Java","metadata":{}}
-{"type":"dialogue","sessionId":"case-r3","timestamp":1790711646324,"content":"我平时用什么语言开发？","metadata":{}}
-{"type":"dialogue","sessionId":"case-r3","timestamp":1790711647632,"content":"你平时主要用 **Java** 开发。","metadata":{}}
-{"type":"artifact","sessionId":"case-r3","timestamp":1790711647632,"content":"Judgment[caseId=r3, dimension=RETENTION, passed=true, score=1.0, reason=包含[Java] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
-{"type":"artifact","sessionId":"case-r3","timestamp":1790711647632,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r3.md","metadata":{"kind":"transcript"}}
-{"type":"dialogue","sessionId":"case-r4","timestamp":1790711647632,"content":"用户的团队规模是 8 人","metadata":{}}
-{"type":"dialogue","sessionId":"case-r4","timestamp":1790711649385,"content":"我的团队有多少人？","metadata":{}}
-{"type":"dialogue","sessionId":"case-r4","timestamp":1790711651666,"content":"你的团队有 **8 人**。\n\n这是之前记录在长期记忆里的一条核心信息（key: `team_size`）。如果你想更新这个数字或补充成员名单，告诉我就行。","metadata":{}}
-{"type":"artifact","sessionId":"case-r4","timestamp":1790711651666,"content":"Judgment[caseId=r4, dimension=RETENTION, passed=true, score=1.0, reason=包含[8 人] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
-{"type":"artifact","sessionId":"case-r4","timestamp":1790711651666,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r4.md","metadata":{"kind":"transcript"}}
+{"type":"dialogue","sessionId":"case-r1","timestamp":1790713581022,"content":"用户从事订单录入工作","metadata":{}}
+{"type":"dialogue","sessionId":"case-r1","timestamp":1790713582892,"content":"我的工作内容是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r1","timestamp":1790713585003,"content":"根据我记录的信息，你的工作内容是**订单录入（order entry）**。\n\n我这边保存的相关记忆只有这一条：\n- 用户职业：从事订单录入工作。\n\n工作区里没有更详细的资料（USER.md 等文件都还不存在），所以目前只能给到这个概括。如果你愿意补充更多细节——比如具体负责哪个系统、每天处理哪些单据/流程、有哪些固定任务或截止时间——我可以帮你记下来，之后按需提醒或协助处理。","metadata":{}}
+{"type":"artifact","sessionId":"case-r1","timestamp":1790713585003,"content":"Judgment[caseId=r1, dimension=RETENTION, passed=true, score=1.0, reason=包含[订单录入] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r1","timestamp":1790713585003,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r1.md","metadata":{"kind":"transcript"}}
+{"type":"dialogue","sessionId":"case-r2","timestamp":1790713585004,"content":"用户所在行业是制造业","metadata":{}}
+{"type":"dialogue","sessionId":"case-r2","timestamp":1790713586561,"content":"我在哪个行业？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r2","timestamp":1790713593157,"content":"根据我记录的关于你的资料：你所在的行业是**制造业**。\n\n这是一条存储在我记忆里的核心信息（`user_industry`）。如果你最近换了行业，或者想补充更具体的细分领域（比如机械、电子、汽车、化工等），告诉我，我可以更新记录。","metadata":{}}
+{"type":"artifact","sessionId":"case-r2","timestamp":1790713593157,"content":"Judgment[caseId=r2, dimension=RETENTION, passed=true, score=1.0, reason=包含[制造业] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r2","timestamp":1790713593157,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r2.md","metadata":{"kind":"transcript"}}
+{"type":"dialogue","sessionId":"case-r3","timestamp":1790713593157,"content":"用户常用的开发语言是 Java","metadata":{}}
+{"type":"dialogue","sessionId":"case-r3","timestamp":1790713594786,"content":"我平时用什么语言开发？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r3","timestamp":1790713596113,"content":"你平时主要用 **Java** 开发。","metadata":{}}
+{"type":"artifact","sessionId":"case-r3","timestamp":1790713596113,"content":"Judgment[caseId=r3, dimension=RETENTION, passed=true, score=1.0, reason=包含[Java] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r3","timestamp":1790713596114,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r3.md","metadata":{"kind":"transcript"}}
+{"type":"dialogue","sessionId":"case-r4","timestamp":1790713596114,"content":"用户的团队规模是 8 人","metadata":{}}
+{"type":"dialogue","sessionId":"case-r4","timestamp":1790713597780,"content":"我的团队有多少人？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r4","timestamp":1790713599213,"content":"你的团队有 **8 人**。\n\n（这条信息来自我的长期记忆，记录在你的团队规模档案里。）","metadata":{}}
+{"type":"artifact","sessionId":"case-r4","timestamp":1790713599213,"content":"Judgment[caseId=r4, dimension=RETENTION, passed=true, score=1.0, reason=包含[8 人] 命中, mode=rule, outcome=CORRECT]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r4","timestamp":1790713599214,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/out-multi-final/artifacts/kylinbot/case-r4.md","metadata":{"kind":"transcript"}}
