@@ -1,4 +1,5 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.report;
+import io.github.zaojiaoci.agentlitmus.core.Dimension;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

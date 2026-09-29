@@ -1,4 +1,7 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.report;
+import io.github.zaojiaoci.agentlitmus.core.Judgment;
+import io.github.zaojiaoci.agentlitmus.core.Dimension;
+import io.github.zaojiaoci.agentlitmus.agent.AgentUnderTest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

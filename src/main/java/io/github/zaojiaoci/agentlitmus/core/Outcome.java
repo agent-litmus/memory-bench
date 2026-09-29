@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.core;
 
 /**
  * 判定结果类别——命题要求评分能区分「正确记忆、遗漏、混淆、错误持久化、错误复用」。

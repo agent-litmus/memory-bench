@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.agent;
 
 /**
  * 被测回答器：给定会话与问题，产出回答。

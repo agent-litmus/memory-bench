@@ -1,4 +1,7 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.agent;
+import io.github.zaojiaoci.agentlitmus.memory.MemoryRegistry;
+import io.github.zaojiaoci.agentlitmus.memory.FileLongTermMemory;
+import io.github.zaojiaoci.agentlitmus.memory.LongTermMemory;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

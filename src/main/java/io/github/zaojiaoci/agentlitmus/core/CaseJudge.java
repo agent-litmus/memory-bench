@@ -1,4 +1,5 @@
-package io.github.zaojiaoci.agentlitmus;
+package io.github.zaojiaoci.agentlitmus.core;
+import io.github.zaojiaoci.agentlitmus.llm.LlmClient;
 
 import java.util.Locale;
 

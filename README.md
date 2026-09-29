@@ -197,23 +197,43 @@ CaseJudge judge = new CaseJudge(llm);
 
 ## 项目结构
 
+按职责分包，入口 `Cli` 保留在根包：
+
 ```
-src/main/java/io/github/zaojiaoci/agentlitmus/
-├── MemoryEntry.java            # 长期记忆条目（可信度 + 保留策略）
-├── LongTermMemory.java         # 长期记忆接口
-├── FileLongTermMemory.java     # 文件持久化实现（JSON Lines）
-├── Evidence.java               # 统一证据（对话/记忆/轨迹/产物）
-├── EvidenceCollector.java      # 证据收集与导出
-├── Dimension.java              # 六个评测维度
-├── MemoryCase.java             # 评测用例模型
-├── CaseJudge.java              # 判定器（规则优先、LLM 兜底）
-├── Judgment.java               # 判定结果
-├── LlmClient.java              # 大模型调用最小抽象（零框架）
-├── Answerer.java               # 被测回答器抽象
-├── RecallAnswerer.java         # 确定性回答器（内置 baseline）
-├── MemoryBenchmarkRunner.java  # 评测执行器
-├── BenchmarkReport.java        # 多维指标报告
-└── MemoryCases.java            # 内置用例集（12 条）
+io/github/zaojiaoci/agentlitmus/
+├── Cli.java              命令行入口
+├── core/                 评测引擎
+│   ├── Dimension.java        六个评测维度
+│   ├── MemoryCase.java       评测用例模型（可扩展数据结构）
+│   ├── Judgment.java         判定结果
+│   ├── Outcome.java          五类结果（正确/遗漏/混淆/错误持久化/错误复用）
+│   ├── CaseJudge.java        判定器（规则优先、LLM 兜底）
+│   ├── MemoryBenchmarkRunner.java   单智能体执行器
+│   └── MultiAgentBenchmark.java     多智能体批量对比
+├── memory/               长期记忆载体
+│   ├── MemoryEntry.java        记忆条目（可信度 + 保留策略）
+│   ├── LongTermMemory.java     记忆接口
+│   ├── FileLongTermMemory.java 文件持久化（JSON Lines）
+│   └── MemoryRegistry.java     智能体与记忆的隔离绑定
+├── agent/                被测智能体
+│   ├── Answerer.java          被测对象契约（单方法）
+│   ├── AgentUnderTest.java    被测智能体身份
+│   ├── Agents.java            内置注册表（reference / degraded）
+│   ├── RecallAnswerer.java    参考智能体（baseline）
+│   └── DegradedAnswerer.java  缺陷智能体（问题样本）
+├── evidence/             证据
+│   ├── Evidence.java          统一证据结构（对话/记忆/轨迹/产物）
+│   └── EvidenceCollector.java 收集与导出
+├── report/               报告与可视化
+│   ├── BenchmarkReport.java   多维指标报告
+│   ├── BenchmarkResult.java   批量对比结果
+│   ├── CompareTable.java      横向对比表
+│   ├── RadarChart.java        六维雷达图（纯 SVG）
+│   └── HtmlReport.java        HTML 报告（自包含）
+├── dataset/              数据集
+│   └── MemoryCases.java       内置 24 条用例 + JSON 加载/导出
+└── llm/                  外部模型接入
+    └── LlmClient.java        单方法抽象，零框架绑定
 ```
 
 ## 踩坑记录
