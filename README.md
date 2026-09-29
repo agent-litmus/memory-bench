@@ -4,9 +4,20 @@
 > **区分「跑通了」与「能落地」**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![JDK](https://img.shields.io/badge/JDK-17%2B-orange.svg)](https://www.openjdk.org/)
+[![Platform](https://img.shields.io/badge/openKylin-3.0-brightgreen.svg)](https://www.openkylin.top/)
+[![GitHub](https://img.shields.io/badge/GitHub-agent--litmus%2Fmemory--bench-181717?logo=github)](https://github.com/agent-litmus/memory-bench)
+[![Gitee](https://img.shields.io/badge/Gitee-agent--litmus%2Fmemory--bench-C71D23?logo=gitee)](https://gitee.com/agent-litmus/memory-bench)
 
-**开源仓库**：GitHub `github.com/agent-litmus/memory-bench` ｜ Gitee 镜像 `gitee.com/agent-litmus/memory-bench`
-（品牌 AgentLitmus ｜ 组织 `agent-litmus` ｜ 包名 `io.github.agentlitmus` ｜ 协议 Apache 2.0）
+**开源仓库**
+
+| 平台 | 地址 | 说明 |
+|---|---|---|
+| GitHub | <https://github.com/agent-litmus/memory-bench> | 主仓（组织 `agent-litmus`） |
+| Gitee | <https://gitee.com/agent-litmus/memory-bench> | 国内镜像，与 GitHub 同步 |
+
+品牌 **AgentLitmus（智能体试金石）** ｜ 组织 `agent-litmus` ｜ 包名 `io.github.agentlitmus` ｜ 协议 Apache 2.0
+｜ 已在 openKylin 3.0 完成真实智能体实测（详见 [接入真实智能体](#接入真实智能体openkylin-kylinbot-实战)）
 
 📄 **[方案说明文档（SOLUTION.md）](./SOLUTION.md)** — 测试目标、前提、数据生成、用例设计、证据收集与自动评分完整流程
 

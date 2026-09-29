@@ -505,7 +505,8 @@ agent-litmus run --out ~/litmus-result     # 直接可用，无需 apt install o
 
 ## 11. 开源与可复现材料
 
-- **仓库**：GitHub `github.com/agent-litmus/memory-bench`（组织 `agent-litmus`）；Gitee 镜像 `gitee.com/agent-litmus/memory-bench`
+- **仓库**：GitHub <https://github.com/agent-litmus/memory-bench>（主仓，组织 `agent-litmus`）；
+  Gitee 镜像 <https://gitee.com/agent-litmus/memory-bench>（与 GitHub 同步）
 - **包名**：`io.github.agentlitmus`（与组织命名空间一致）
 - **协议**：Apache License 2.0
 - **可复现材料**：本仓库全部代码、`scripts/` 下构建与验证脚本、`README.md` 使用说明
