@@ -4,16 +4,19 @@ package io.github.zaojiaoci.agentlitmus.agent;
  * 被测智能体。
  * <p>
  * 命题要求「支持导入不同智能体配置进行批量对比评测」，因此被测对象需要
- * 有稳定身份（id / 名称）以便在同一张报告里区分，而不只是一个回答函数。
+ * 有稳定身份（id / 名称）以便在同一张报告里区分，并声明自己的评测模式
+ * （记忆由框架注入，还是由对话建立）。
  *
  * @param id          唯一标识（命令行 --agents 使用）
  * @param name        展示名称
  * @param description 说明，会写进报告
+ * @param mode        评测模式：{@link RunnerMode#MEMORY} 或 {@link RunnerMode#DIALOGUE}
  * @param answerer    回答实现
  */
 public record AgentUnderTest(String id,
                              String name,
                              String description,
+                             RunnerMode mode,
                              Answerer answerer) {
 
     public AgentUnderTest {
@@ -29,14 +32,18 @@ public record AgentUnderTest(String id,
         if (description == null) {
             description = "";
         }
+        if (mode == null) {
+            mode = RunnerMode.DIALOGUE;
+        }
     }
 
-    /** 便捷构造：用 id 同时作为名称 */
-    public static AgentUnderTest of(String id, Answerer answerer) {
-        return new AgentUnderTest(id, id, "", answerer);
+    /** 内置智能体：记忆由框架注入 */
+    public static AgentUnderTest memory(String id, String name, String description, Answerer answerer) {
+        return new AgentUnderTest(id, name, description, RunnerMode.MEMORY, answerer);
     }
 
-    public static AgentUnderTest of(String id, String name, String description, Answerer answerer) {
-        return new AgentUnderTest(id, name, description, answerer);
+    /** 真实智能体：记忆由对话建立 */
+    public static AgentUnderTest dialogue(String id, String name, String description, Answerer answerer) {
+        return new AgentUnderTest(id, name, description, RunnerMode.DIALOGUE, answerer);
     }
 }

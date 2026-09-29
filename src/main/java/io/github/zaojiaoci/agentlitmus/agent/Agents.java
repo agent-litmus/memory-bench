@@ -32,11 +32,11 @@ public final class Agents {
     public static AgentUnderTest builtin(String id, LongTermMemory memory) {
         String key = id == null ? "" : id.trim().toLowerCase();
         AgentUnderTest agent = switch (key) {
-            case REFERENCE -> AgentUnderTest.of(
+            case REFERENCE -> AgentUnderTest.memory(
                     REFERENCE, "参考智能体（baseline）",
                     "基于相关性召回记忆，忠实使用召回结果；记忆能力健全，作为对照组。",
                     new RecallAnswerer(memory));
-            case DEGRADED -> AgentUnderTest.of(
+            case DEGRADED -> AgentUnderTest.memory(
                     DEGRADED, "缺陷智能体（degraded）",
                     "不按相关性检索，总是取最早写入的记忆；会复用过时信息、混淆相近信息、泄露不应保留的信息。",
                     new DegradedAnswerer(memory));

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "reference",
+    "name": "参考智能体（baseline）",
+    "description": "内置参考实现：基于相关性召回，记忆能力健全，作为对照组",
+    "type": "builtin"
+  },
+  {
+    "id": "degraded",
+    "name": "缺陷智能体（degraded）",
+    "description": "内置问题样本：总取最早写入的记忆，会复用旧信息、混淆相近信息、泄露不应保留的信息",
+    "type": "builtin"
+  },
+  {
+    "id": "kylinbot",
+    "name": "KylinBot",
+    "description": "openKylin 桌面智能体（麒灵助手）。需按其实际接口填写 endpoint 与 path",
+    "type": "http",
+    "endpoint": "http://127.0.0.1:8080",
+    "path": "/v1/chat",
+    "timeoutSeconds": 120
+  },
+  {
+    "id": "kylin-agent",
+    "name": "kylin-agent",
+    "description": "openKylin 生态智能体框架。若为 CLI 形态，改用 command 类型",
+    "type": "http",
+    "endpoint": "http://127.0.0.1:8081",
+    "path": "/api/analyze/stream",
+    "timeoutSeconds": 120
+  },
+  {
+    "id": "openclaw",
+    "name": "OpenClaw",
+    "description": "openKylin 3.0 可运行的智能体之一，按实际接口调整",
+    "type": "http",
+    "endpoint": "http://127.0.0.1:8082",
+    "path": "/v1/chat",
+    "timeoutSeconds": 120
+  },
+  {
+    "id": "hermes-agent",
+    "name": "Hermes Agent",
+    "description": "命题提及的智能体之一。命令行形态示例（参数占位符 {sessionId} {question}）",
+    "type": "command",
+    "command": "hermes-agent",
+    "args": ["--session", "{sessionId}", "--prompt", "{question}"],
+    "timeoutSeconds": 120
+  }
+]

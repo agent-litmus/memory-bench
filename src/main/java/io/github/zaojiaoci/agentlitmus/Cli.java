@@ -1,4 +1,6 @@
 package io.github.zaojiaoci.agentlitmus;
+import io.github.zaojiaoci.agentlitmus.agent.AgentFactory;
+import io.github.zaojiaoci.agentlitmus.agent.RunnerMode;
 import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
 import io.github.zaojiaoci.agentlitmus.agent.HttpAnswerer;
 import io.github.zaojiaoci.agentlitmus.core.DialogueBenchmarkRunner;
@@ -86,13 +88,18 @@ public final class Cli {
         System.out.println("用例集: " + (options.cases == null ? "内置 (" : options.cases + " (")
                 + cases.size() + " 条)");
 
-        // 2) 被测智能体：按 id 解析，各自独立记忆目录
-        List<String> agentIds = Arrays.stream(options.agents.split(","))
-                .map(String::trim)
-                .filter(id -> !id.isEmpty())
-                .toList();
+        // 2) 被测智能体：优先用配置文件，否则按内置 id 解析
         List<String> warnings = new ArrayList<>();
-        List<AgentUnderTest> agents = Agents.resolve(agentIds, outDir.resolve("memory"), warnings);
+        List<AgentUnderTest> agents;
+        if (options.agentsConfig != null && !options.agentsConfig.isBlank()) {
+            agents = AgentFactory.loadFrom(Path.of(options.agentsConfig), warnings);
+        } else {
+            List<String> agentIds = Arrays.stream(options.agents.split(","))
+                    .map(String::trim)
+                    .filter(id -> !id.isEmpty())
+                    .toList();
+            agents = Agents.resolve(agentIds, outDir.resolve("memory"), warnings);
+        }
         warnings.forEach(w -> System.out.println("警告: " + w));
         if (agents.isEmpty()) {
             throw new IllegalArgumentException("没有可评测的智能体，请用 --agents 指定（内置: "
@@ -171,8 +178,8 @@ public final class Cli {
     }
 
     private static final AgentUnderTest REAL_AGENT =
-            AgentUnderTest.of("real-agent", "真实智能体（HTTP）", "通过 HTTP 接口接入的真实智能体",
-            (sessionId, question) -> "");
+            AgentUnderTest.dialogue("real-agent", "真实智能体（HTTP）", "通过 HTTP 接口接入的真实智能体",
+                    (sessionId, question) -> "");
 
     private static void exportCases(Options options) {
         Path file = Path.of(options.out).resolve("cases.json");
@@ -215,6 +222,7 @@ public final class Cli {
                 case "--cases" -> options.cases = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--out" -> options.out = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--endpoint" -> options.endpoint = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
+                case "--agents-config" -> options.agentsConfig = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 default -> {
                     // 忽略未知参数，避免因多余参数中断评测
                 }
@@ -239,6 +247,7 @@ public final class Cli {
 
     private static final class Options {
         private String agents;
+        private String agentsConfig;
         private String cases;
         private String out = DEFAULT_OUT;
         private String endpoint;
