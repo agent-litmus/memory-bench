@@ -1,0 +1,27 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IDE ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+
+### OS ###
+.DS_Store
+
+### 评测运行产物（本地留证用，不入库） ###
+evidence/
+*.jsonl
+
+### CLI 默认输出目录（含各智能体记忆与证据快照） ###
+litmus-out/
+result/
+out/
+
+### 打包产物 ###
+dist/
