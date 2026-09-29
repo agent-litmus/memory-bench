@@ -81,7 +81,7 @@ public interface Answerer {
 
 | 来源 | 说明 |
 |---|---|
-| 内置用例集 | **24 条（六维各 4 条）**，用于快速验证与演示 |
+| 内置用例集 | **28 条**，其中 4 条为跨会话用例（注入后重置会话上下文再提问），用于快速验证与演示 |
 | 外部数据集 | JSON 文件，通过 `--cases` 加载；`export-cases` 可导出内置用例作为扩展模板 |
 
 ### 3.3 措辞设计原则（保证区分度）
@@ -245,7 +245,7 @@ public interface Answerer {
 | **错误持久化** | 期望排除出现，且该内容为**不应保留的信息**（边界用例） | 答出了临时验证码 |
 | **错误复用** | 期望排除出现，且该内容为**已被取代的旧值**（更新用例） | 仍使用过时的旧岗位 |
 
-**该分类已显式化为 `Outcome` 枚举字段并计入统计**。实测（内置 24 条用例，缺陷智能体）：
+**该分类已显式化为 `Outcome` 枚举字段并计入统计**。实测（内置 28 条用例，缺陷智能体）：
 
 ```
 结果分类:
@@ -313,7 +313,7 @@ java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run --out result/
 | `reference` | 参考智能体：基于相关性召回，记忆能力健全 |
 | `degraded` | 缺陷智能体：不按相关性检索，总取最早写入的记忆（会复用旧信息、混淆相近信息、泄露不应保留信息） |
 
-横向对比（内置 24 条用例，六维各 4 条）：
+横向对比（内置 28 条用例，含 4 条跨会话用例）：
 
 ```
 ========== 多智能体横向对比 ==========
@@ -343,7 +343,7 @@ java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run --out result/
 litmus run-http --endpoint http://localhost:8089 --out real/
 ```
 
-实测结果（同为 24 条用例）：
+实测结果（该组为早期 24 条用例集的实验数据，当前内置集已扩为 28 条）：
 
 ```
 被测智能体: http://localhost:8089（真实 Spring AI 应用）
@@ -383,12 +383,28 @@ litmus run-http --endpoint http://localhost:8089 --out real/
 
 - JDK 17+（openKylin 标准环境）
 - Maven 3.8+（或项目自带 `./mvnw`）
-- **不需要 API Key**
+- **不需要 API Key**（内置用例全部走规则判定，离线可跑完整套）
+
+实测环境（已验证）：
+
+| 项 | 值 |
+|---|---|
+| 系统 | openKylin 3.0（huanghe），x86_64 |
+| JDK | OpenJDK 17.0.11（`Openkylin-ok1`） |
+| 打包工具 | `jpackage` / `dpkg` 均可用 |
+| 被测真实智能体 | KylinBot（麒灵助手），`/usr/bin/kylin-bot` |
 
 ### 8.2 一键验证
 
 ```bash
 ./scripts/verify-openkylin.sh     # 环境采集 + 全量测试 + 评测
+```
+
+接入真实智能体验证（需被测智能体可用，会调用其自身模型）：
+
+```bash
+java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run \
+     --agents-config examples/agents-kylinbot.json --out out-kylinbot2/
 ```
 
 ### 8.3 稳定性保证
@@ -403,6 +419,31 @@ litmus run-http --endpoint http://localhost:8089 --out real/
 
 同一输入下评测结果完全稳定，支持批量运行与结果追踪。
 
+### 8.4 真实智能体实测（openKylin KylinBot）
+
+在 openKylin 3.0 上接入桌面智能体 KylinBot（麒灵助手）完成全量评测，验证「工具能在真实智能体的运行证据上完成评测」：
+
+| 智能体 | 长期保持 | 记忆调用 | 动态更新 | 相近区分 | 边界识别 | 任务复用 | 总体 |
+|---|---|---|---|---|---|---|---|
+| 参考智能体（baseline） | 100% | 100% | 100% | 100% | 100% | 100% | 100% |
+| **KylinBot（麒灵助手）** | 100% | 75% | 60% | 75% | 100% | 100% | **86%** |
+| 缺陷智能体（degraded） | 100% | 100% | 0% | 50% | 0% | 75% | 54% |
+
+结果分类：`正确记忆 24 / 遗漏 2 / 混淆 1 / 错误复用 1`（内置 28 条用例）。
+
+**跨会话长期保持用例**（`r5` `r6` `u5` `b5`）：注入事实后重置会话上下文、仅保留长期记忆再提问，
+KylinBot **4/4 通过**——证明其表现来自长期记忆而非上下文窗口，回应了「长期记忆」命题的核心要求。
+
+接入方式：CLI 形态经 `command` 类型接入，适配器 `scripts/kylinbot-adapter.sh` 负责
+**按会话隔离工作区**（避免用例间记忆污染）与**保持多轮会话状态**（`--session-state-file`）。
+
+证据校验：`out-kylinbot2/evidence/kylinbot.jsonl` 共 127 条、**空回答 0 条**，
+可证明分数来自真实对话而非接口未连通。
+
+可解释性示例：`u4`（动态更新）失败可由记忆库直接证实——KylinBot 写入了
+`user_city=深圳` 与 `user_current_city=杭州` 两个 key 而非覆盖同一条，
+因此回答时自述「两条记录冲突，无法确定」。
+
 ---
 
 ## 9. 已知边界与后续迭代
@@ -410,8 +451,8 @@ litmus run-http --endpoint http://localhost:8089 --out real/
 | 项 | 当前状态 | 迭代方向 |
 |---|---|---|
 | 失败分类 | 判定已可区分五类 | 显式化为字段，统计各类错误占比 |
-| 数据集规模 | 内置 12 条 | 扩充至覆盖敏感信息、风险指令、噪声等类型 |
-| 真实智能体接入 | 内置两款（确定性） | 提供配置化适配器，接入 openKylin 生态智能体 |
+| 数据集规模 | 内置 28 条（含 4 条跨会话） | 扩充至覆盖敏感信息、风险指令、噪声等类型 |
+| 真实智能体接入 | 已接入 openKylin KylinBot 实测（86%） | 补充 ACP 适配器，覆盖更多生态智能体 |
 | 证据来源 | 自产为主 | 支持导入外部智能体的运行证据（文件/轨迹） |
 | 分发 | deb 打包脚本就绪 | .deb 分发、跨平台（deb / exe / dmg） |
 
@@ -464,7 +505,8 @@ agent-litmus run --out ~/litmus-result     # 直接可用，无需 apt install o
 
 ## 11. 开源与可复现材料
 
-- **仓库**：`github.com/agent-litmus/memory-bench`（组织 `agent-litmus`）
+- **仓库**：GitHub `github.com/agent-litmus/memory-bench`（组织 `agent-litmus`）；Gitee 镜像 `gitee.com/agent-litmus/memory-bench`
+- **包名**：`io.github.agentlitmus`（与组织命名空间一致）
 - **协议**：Apache License 2.0
 - **可复现材料**：本仓库全部代码、`scripts/` 下构建与验证脚本、`README.md` 使用说明
 - **核心依赖**：仅 Jackson（持久化）+ slf4j（日志）+ JUnit（测试），**零框架依赖**，可在 openKylin 上直接编译运行

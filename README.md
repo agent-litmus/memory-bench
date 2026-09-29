@@ -5,7 +5,8 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-**开源仓库**：`github.com/agent-litmus/memory-bench`（品牌 AgentLitmus ｜ 组织 `agent-litmus` ｜ 协议 Apache 2.0）
+**开源仓库**：GitHub `github.com/agent-litmus/memory-bench` ｜ Gitee 镜像 `gitee.com/agent-litmus/memory-bench`
+（品牌 AgentLitmus ｜ 组织 `agent-litmus` ｜ 包名 `io.github.agentlitmus` ｜ 协议 Apache 2.0）
 
 📄 **[方案说明文档（SOLUTION.md）](./SOLUTION.md)** — 测试目标、前提、数据生成、用例设计、证据收集与自动评分完整流程
 
@@ -27,12 +28,15 @@
 
 | 维度 | 评测内容 | 内置用例 |
 |------|----------|---------|
-| 长期保持 | 应保留的信息是否被稳定记住并在后续使用 | `r1` `r2` |
-| 记忆调用 | 后续交互中是否能正确调用相关信息 | `c1` `c2` |
-| 动态更新 | 新信息出现后是否能正确覆盖或修正旧信息 | `u1` `u2` |
-| 相近区分 | 是否能识别相近信息之间的差异 | `d1` `d2` |
-| 边界识别 | 不应长期保留或不应复用的信息是否被正确识别 | `b1` `b2` |
-| 任务复用 | 实际任务执行中是否能合理使用历史信息 | `t1` `t2` |
+| 长期保持 | 应保留的信息是否被稳定记住并在后续使用（含跨会话） | `r1`–`r6` |
+| 记忆调用 | 后续交互中是否能正确调用相关信息 | `c1`–`c4` |
+| 动态更新 | 新信息出现后是否能正确覆盖或修正旧信息（含跨会话） | `u1`–`u5` |
+| 相近区分 | 是否能识别相近信息之间的差异 | `d1`–`d4` |
+| 边界识别 | 不应长期保留或不应复用的信息是否被正确识别（含跨会话） | `b1`–`b5` |
+| 任务复用 | 实际任务执行中是否能合理使用历史信息 | `t1`–`t4` |
+
+其中 `r5` `r6` `u5` `b5` 为**跨会话用例**：注入事实后先重置会话上下文（仅保留长期记忆），再提问——
+答对只能来自长期记忆，不能靠上下文窗口，这才是「长期记忆」的本义。
 
 ## 快速开始
 
@@ -52,14 +56,14 @@
 
 ```
 ========== 长期记忆评测报告 ==========
-用例总数: 12    通过: 12    通过率: 100.0%
+用例总数: 28    通过: 28    通过率: 100.0%
 -------------------------------------
-长期保持      2/2    100.0%
-记忆调用      2/2    100.0%
-动态更新      2/2    100.0%
-相近区分      2/2    100.0%
-边界识别      2/2    100.0%
-任务复用      2/2    100.0%
+长期保持      6/6    100.0%
+记忆调用      4/4    100.0%
+动态更新      5/5    100.0%
+相近区分      4/4    100.0%
+边界识别      5/5    100.0%
+任务复用      4/4    100.0%
 -------------------------------------
 明细:
   [通过] u1     动态更新   包含[客户关系管理专员] 命中；排除[订单录入员] 未出现(合格)
@@ -82,6 +86,7 @@ java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run --out result/
 ```bash
 litmus run                                   # 内置两款智能体对比 + 内置用例
 litmus run --agents reference,degraded       # 指定被测智能体
+litmus run --agents-config examples/agents-kylinbot.json --out out/   # 导入外部智能体配置
 litmus run --cases my-cases.json --out out/  # 使用外部数据集
 litmus export-cases --out out/               # 导出内置用例，便于扩展数据集
 ```
@@ -102,7 +107,7 @@ litmus export-cases --out out/               # 导出内置用例，便于扩展
 | `reference` | 参考智能体（baseline）：基于相关性召回，记忆能力健全 | 六维 100% |
 | `degraded` | 缺陷智能体：不按相关性检索，总是取最早写入的记忆 | 总体 58%，动态更新 / 边界识别 0% |
 
-实测对比（内置 24 条用例，六维各 4 条）：
+实测对比（内置 28 条用例，含 4 条跨会话用例）：
 
 ```
 智能体                   长期保持  记忆调用  动态更新  相近区分  边界识别  任务复用  总体
@@ -146,6 +151,94 @@ agent-litmus run --out ~/litmus-result
 ```
 
 脚本会采集环境信息（系统 / JDK / 内存 / 架构）+ 跑全量测试 + 跑评测并输出多维指标。
+
+### 接入真实智能体：openKylin KylinBot 实战
+
+内置两款用于证明「尺子有效」，真正有说服力的评测必须落在真实智能体上。
+已在 **openKylin 3.0（x86_64 / JDK 17.0.11）** 完成 KylinBot（麒灵助手）接入实测。
+
+**选型：为什么用 CLI 而不是 Gateway / ACP**
+
+| KylinBot 接法 | 能否直接接入 | 原因 |
+|---|---|---|
+| CLI（`kylin-bot agent -m`） | ✅ `command` 类型直接接 | 每轮独立进程，配合会话状态文件即可保持多轮 |
+| Gateway HTTP（Unix Socket） | ❌ | 需 Bearer Token、字段是 `message`、响应非 SSE；`HttpAnswerer` 不支持 Unix Socket 与自定义请求头 |
+| ACP（JSON-RPC over stdio） | ❌ 需自写常驻中继 | 每轮新起进程，无法复用 stdio 会话 |
+| Telegram 等外部通道 | ❌ | 异步，无法同步取回答 |
+
+**适配器**（`scripts/kylinbot-adapter.sh`）解决两个硬约束：
+
+1. **用例间记忆污染** —— 每个会话用独立 `--config-dir`（KylinBot 记忆库 `workspace/memory/brain.db` 随配置目录走），
+   28 条用例互不干扰，且**不触碰用户真实的 `~/.kylinbot` 记忆**；
+2. **多轮上下文** —— `--session-state-file` 落盘会话状态，保证多次独立调用仍是同一段会话。
+
+> 注意：`--config-dir` 必须**同时**拷贝 `config.toml` 与 `.secret_key`，否则 `api_key` 的 enc2 解密会失败。
+
+**配置**（`examples/agents-kylinbot.json`）：
+
+```json
+{
+  "id": "kylinbot", "name": "KylinBot（麒灵助手）", "type": "command",
+  "command": "bash",
+  "args": ["scripts/kylinbot-adapter.sh", "{sessionId}", "{question}"],
+  "timeoutSeconds": 180
+}
+```
+
+**运行**：
+
+```bash
+java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run \
+     --agents-config examples/agents-kylinbot.json --out out-kylinbot2/
+```
+
+**实测结果**（28 条用例，六维）：
+
+| 智能体 | 长期保持 | 记忆调用 | 动态更新 | 相近区分 | 边界识别 | 任务复用 | 总体 |
+|---|---|---|---|---|---|---|---|
+| 参考智能体（baseline） | 100% | 100% | 100% | 100% | 100% | 100% | 100% |
+| **KylinBot（麒灵助手）** | 100% | 75% | 60% | 75% | 100% | 100% | **86%** |
+| 缺陷智能体（degraded） | 100% | 100% | 0% | 50% | 0% | 75% | 54% |
+
+结果分类：`正确记忆 24 / 遗漏 2 / 混淆 1 / 错误复用 1`。
+
+**跨会话长期保持**（`r5` `r6` `u5` `b5`，注入后重置对话上下文再提问）：KylinBot **4/4 全通过**，
+证明它确实具备脱离上下文窗口的长期记忆能力，而不只是「当前会话还记得」。
+
+**校验是否真接上**（比看分数更可靠）：
+
+```bash
+# 证据行数 + 空回答数（空回答=没连上却被判 0 分）
+python3 -c "
+import json;rows=[json.loads(l) for l in open('out-kylinbot2/evidence/kylinbot.jsonl',encoding='utf-8')]
+print('证据条数:',len(rows),'空回答:',sum(1 for r in rows if not r['content'].strip()))"
+
+# 查看某条用例在 KylinBot 记忆库里到底存了什么
+kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list
+```
+
+实测 `evidence/kylinbot.jsonl` 共 127 条、**空回答 0 条**；其中 `case-r5`/`case-r6`/`case-u5`/`case-b5`
+四条证据里带有「重置会话上下文」标记，可核对跨会话用例确实执行了重置。
+`u4`（动态更新失败）的根因可由记忆库直接证实：写入了 `user_city=深圳` 与 `user_current_city=杭州`
+**两个 key 而非覆盖**，导致回答时自述「两条记录冲突，无法确定」。
+
+> 说明：接入真实智能体后评测**不再离线可复现**——被测对象会调用云端模型，存在随机性与额度消耗。
+> 因此提交材料时应同时给出 `reference` / `degraded` 对照组，证明「尺子本身」稳定。
+
+### 参赛录屏方案（3–5 分钟）
+
+| 时长 | 画面内容 | 操作 |
+|---|---|---|
+| 0:00–0:30 | 环境与项目定位 | `./scripts/verify-openkylin.sh` 的环境采集输出（openKylin 3.0 / JDK 17 / 架构） |
+| 0:30–1:10 | 一键验证跑通 | 执行 `./scripts/verify-openkylin.sh`，展示全量测试通过 + 六维报告 |
+| 1:10–1:50 | 内置两款对照（尺子有分辨力） | `java -jar target/*.jar run --out out-baseline2/`，展示 100% vs 54% 对比表与雷达图 |
+| 1:50–3:00 | **真实智能体 KylinBot 接入** | 展示 `examples/agents-kylinbot.json` + `scripts/kylinbot-adapter.sh`，执行评测命令 |
+| 3:00–3:50 | 结果可视化 | 浏览器打开 `out-kylinbot2/report.html`（六维雷达图）+ 展示 `evidence/kylinbot.jsonl` 真实对话证据 |
+| 3:50–4:30 | 证据闭环 | `kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list`，展示失败用例的机制性原因 |
+| 4:30–5:00 | 分发形态 | 展示 `dist/*.deb` 安装与 `agent-litmus run`（可选，若已打包） |
+
+录制建议：全程 KylinBot 评测约 10–15 分钟，**不要实时录**——先跑完再录「回放 + 产物讲解」，
+或把长耗时片段剪成「命令执行 → 结果」两段拼接。
 
 ## 设计要点
 
@@ -200,7 +293,7 @@ CaseJudge judge = new CaseJudge(llm);
 按职责分包，入口 `Cli` 保留在根包：
 
 ```
-io/github/zaojiaoci/agentlitmus/
+io/github/agentlitmus/
 ├── Cli.java              命令行入口
 ├── core/                 评测引擎
 │   ├── Dimension.java        六个评测维度
@@ -231,7 +324,7 @@ io/github/zaojiaoci/agentlitmus/
 │   ├── RadarChart.java        六维雷达图（纯 SVG）
 │   └── HtmlReport.java        HTML 报告（自包含）
 ├── dataset/              数据集
-│   └── MemoryCases.java       内置 24 条用例 + JSON 加载/导出
+│   └── MemoryCases.java       内置 28 条用例（含 4 条跨会话）+ JSON 加载/导出
 └── llm/                  外部模型接入
     └── LlmClient.java        单方法抽象，零框架绑定
 ```

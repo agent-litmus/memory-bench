@@ -36,7 +36,7 @@ jpackage \
   --name "$APP_NAME" \
   --input target \
   --main-jar "$MAIN_JAR" \
-  --main-class io.github.zaojiaoci.agentlitmus.Cli \
+  --main-class io.github.agentlitmus.Cli \
   --type deb \
   --app-version "$VERSION" \
   --vendor "AgentLitmus" \

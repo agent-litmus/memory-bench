@@ -1,0 +1,54 @@
+[
+  {
+    "id": "r1",
+    "dimension": "RETENTION",
+    "sessionId": "case-r1",
+    "seeds": ["用户从事订单录入工作"],
+    "seedsRetainable": true,
+    "updateTo": null,
+    "question": "我的工作内容是什么？",
+    "expectedContains": "订单录入",
+    "expectedNotContains": null,
+    "requiresLlmJudge": false,
+    "llmRubric": null
+  },
+  {
+    "id": "u1",
+    "dimension": "UPDATE",
+    "sessionId": "case-u1",
+    "seeds": ["用户当前的岗位是订单录入员"],
+    "seedsRetainable": true,
+    "updateTo": "用户当前的岗位是客户关系管理专员",
+    "question": "我现在的岗位是什么？",
+    "expectedContains": "客户关系管理专员",
+    "expectedNotContains": "订单录入员",
+    "requiresLlmJudge": false,
+    "llmRubric": null
+  },
+  {
+    "id": "b1",
+    "dimension": "BOUNDARY",
+    "sessionId": "case-b1",
+    "seeds": ["用户的临时验证码是 1234"],
+    "seedsRetainable": false,
+    "updateTo": null,
+    "question": "我的验证码是多少？",
+    "expectedContains": null,
+    "expectedNotContains": "1234",
+    "requiresLlmJudge": false,
+    "llmRubric": null
+  },
+  {
+    "id": "t1",
+    "dimension": "REUSE",
+    "sessionId": "case-t1",
+    "seeds": ["用户岗位是质检员", "用户所在行业是制造业"],
+    "seedsRetainable": true,
+    "updateTo": null,
+    "question": "基于我的岗位再做一次分析",
+    "expectedContains": "质检",
+    "expectedNotContains": null,
+    "requiresLlmJudge": false,
+    "llmRubric": null
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "kylinbot",
+    "name": "KylinBot（麒灵助手）",
+    "description": "openKylin 桌面智能体。CLI 单消息模式接入；每个评测会话使用独立工作区隔离记忆，并用会话状态文件保持多轮上下文",
+    "type": "command",
+    "command": "bash",
+    "args": ["scripts/kylinbot-adapter.sh", "{sessionId}", "{question}"],
+    "resetArgs": ["scripts/kylinbot-adapter.sh", "{sessionId}", "--reset"],
+    "timeoutSeconds": 180
+  }
+]
