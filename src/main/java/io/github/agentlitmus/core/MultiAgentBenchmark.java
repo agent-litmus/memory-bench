@@ -1,11 +1,11 @@
-package io.github.zaojiaoci.agentlitmus.core;
+package io.github.agentlitmus.core;
 
-import io.github.zaojiaoci.agentlitmus.agent.AgentUnderTest;
-import io.github.zaojiaoci.agentlitmus.agent.RunnerMode;
-import io.github.zaojiaoci.agentlitmus.evidence.EvidenceCollector;
-import io.github.zaojiaoci.agentlitmus.memory.MemoryRegistry;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkResult;
+import io.github.agentlitmus.agent.AgentUnderTest;
+import io.github.agentlitmus.agent.RunnerMode;
+import io.github.agentlitmus.evidence.EvidenceCollector;
+import io.github.agentlitmus.memory.MemoryRegistry;
+import io.github.agentlitmus.report.BenchmarkReport;
+import io.github.agentlitmus.report.BenchmarkResult;
 
 import java.util.LinkedHashMap;
 import java.util.List;

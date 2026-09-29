@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -94,7 +94,7 @@ class AgentFactoryTest {
 
     @Test
     void rejectsUnknownAgentType() {
-        AgentConfig config = new AgentConfig("x", "X", "", "grpc", null, null, null, List.of(), 60);
+        AgentConfig config = new AgentConfig("x", "X", "", "grpc", null, null, null, List.of(), List.of(), 60);
         assertThrows(IllegalArgumentException.class, () -> AgentFactory.create(config));
     }
 

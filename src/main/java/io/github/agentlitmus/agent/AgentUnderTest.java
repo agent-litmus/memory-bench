@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 /**
  * 被测智能体。

@@ -1,9 +1,9 @@
-package io.github.zaojiaoci.agentlitmus.core;
+package io.github.agentlitmus.core;
 
-import io.github.zaojiaoci.agentlitmus.agent.Answerer;
-import io.github.zaojiaoci.agentlitmus.evidence.Evidence;
-import io.github.zaojiaoci.agentlitmus.evidence.EvidenceCollector;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
+import io.github.agentlitmus.agent.Answerer;
+import io.github.agentlitmus.evidence.Evidence;
+import io.github.agentlitmus.evidence.EvidenceCollector;
+import io.github.agentlitmus.report.BenchmarkReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +61,13 @@ public class DialogueBenchmarkRunner {
         if (kase.updateTo() != null && !kase.updateTo().isBlank()) {
             collector.collect(Evidence.dialogue(sessionId, kase.updateTo()));
             agent.answer(sessionId, kase.updateTo());
+        }
+
+        // 2.5) 跨会话：重置对话上下文（长期记忆保留），确保答对只能来自长期记忆
+        if (kase.crossSession()) {
+            collector.collect(Evidence.dialogue(sessionId,
+                    "[评测] 重置会话上下文：清空当前对话，仅保留长期记忆"));
+            agent.resetSession(sessionId);
         }
 
         // 3) 提问并判定

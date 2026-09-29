@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.core;
+package io.github.agentlitmus.core;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ import java.util.List;
  * @param sessionId           会话 ID（每个用例独立，避免互相污染）
  * @param seeds               注入的记忆事实
  * @param seedsRetainable     注入的事实是否应长期保留（边界识别维度用 false）
+ * @param crossSession        是否在提问前重置会话上下文（跨会话长期保持）
  * @param updateTo            非空时表示用该内容更新第一条 seed（动态更新维度）
  * @param question            后续提问
  * @param expectedContains    期望回答包含的内容（null 表示不检查）
@@ -26,6 +27,7 @@ public record MemoryCase(String id,
                          String sessionId,
                          List<String> seeds,
                          boolean seedsRetainable,
+                         boolean crossSession,
                          String updateTo,
                          String question,
                          String expectedContains,
@@ -46,36 +48,65 @@ public record MemoryCase(String id,
     /** 注入事实后提问，期望回答包含某内容——用于长期保持 / 记忆调用 / 任务复用 */
     public static MemoryCase expect(String id, Dimension dimension, List<String> seeds,
                                     String question, String expectedContains) {
-        return new MemoryCase(id, dimension, sessionOf(id), seeds, true, null,
+        return new MemoryCase(id, dimension, sessionOf(id), seeds, true, false, null,
                 question, expectedContains, null, false, null);
     }
 
     /** 期望回答<b>不包含</b>某内容——用于边界识别（不应保留的信息不能被复用） */
     public static MemoryCase expectAbsent(String id, Dimension dimension, List<String> seeds,
                                           boolean retainable, String question, String expectedNotContains) {
-        return new MemoryCase(id, dimension, sessionOf(id), seeds, retainable, null,
+        return new MemoryCase(id, dimension, sessionOf(id), seeds, retainable, false, null,
                 question, null, expectedNotContains, false, null);
     }
 
     /** 动态更新：先注入旧事实，再更新为新事实，期望含新且不含旧 */
     public static MemoryCase expectUpdate(String id, String oldFact, String newFact,
                                           String question, String expectedNew, String unexpectedOld) {
-        return new MemoryCase(id, Dimension.UPDATE, sessionOf(id), List.of(oldFact), true, newFact,
+        return new MemoryCase(id, Dimension.UPDATE, sessionOf(id), List.of(oldFact), true, false, newFact,
                 question, expectedNew, unexpectedOld, false, null);
     }
 
     /** 相近区分：注入两条相近事实，期望答中目标且不混淆另一条 */
     public static MemoryCase expectDiscriminate(String id, String factA, String factB,
                                                 String question, String expected, String unexpected) {
-        return new MemoryCase(id, Dimension.DISCRIMINATION, sessionOf(id), List.of(factA, factB), true, null,
+        return new MemoryCase(id, Dimension.DISCRIMINATION, sessionOf(id), List.of(factA, factB), true, false, null,
                 question, expected, unexpected, false, null);
     }
 
     /** 需要 LLM 语义判定的用例（关键词无法表达的标准，如「语气是否得体」） */
     public static MemoryCase llmJudged(String id, Dimension dimension, List<String> seeds,
                                        String question, String rubric) {
-        return new MemoryCase(id, dimension, sessionOf(id), seeds, true, null,
+        return new MemoryCase(id, dimension, sessionOf(id), seeds, true, false, null,
                 question, null, null, true, rubric);
+    }
+
+    // ------------------------------------------------------------------ 跨会话用例
+
+    /**
+     * 跨会话长期保持：注入事实后<b>重置会话上下文</b>（只保留长期记忆），再提问。
+     * <p>
+     * 普通用例在同一段对话里问，被测对象可以靠「上下文窗口」答对，测的其实是短期记忆；
+     * 本类用例清空对话后再问，答对只能来自长期记忆——这才是「长期记忆」的本义。
+     */
+    public static MemoryCase expectCrossSession(String id, Dimension dimension, List<String> seeds,
+                                                String question, String expectedContains) {
+        return new MemoryCase(id, dimension, sessionOf(id), seeds, true, true, null,
+                question, expectedContains, null, false, null);
+    }
+
+    /** 跨会话边界识别：重置会话后，不应保留的信息仍不得被复用 */
+    public static MemoryCase expectAbsentCrossSession(String id, Dimension dimension, List<String> seeds,
+                                                      boolean retainable, String question,
+                                                      String expectedNotContains) {
+        return new MemoryCase(id, dimension, sessionOf(id), seeds, retainable, true, null,
+                question, null, expectedNotContains, false, null);
+    }
+
+    /** 跨会话动态更新：重置会话后仍应使用新值、不复用旧值 */
+    public static MemoryCase expectUpdateCrossSession(String id, String oldFact, String newFact,
+                                                      String question, String expectedNew, String unexpectedOld) {
+        return new MemoryCase(id, Dimension.UPDATE, sessionOf(id), List.of(oldFact), true, true, newFact,
+                question, expectedNew, unexpectedOld, false, null);
     }
 
     private static String sessionOf(String id) {

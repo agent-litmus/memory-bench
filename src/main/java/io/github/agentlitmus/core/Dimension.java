@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.core;
+package io.github.agentlitmus.core;
 
 /**
  * 长期记忆能力的六个评测维度。

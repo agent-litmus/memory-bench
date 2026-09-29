@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,9 +34,9 @@ public final class AgentFactory {
                     new HttpAnswerer(config.endpoint(), pathOf(config), timeout));
             case AgentConfig.TYPE_COMMAND -> AgentUnderTest.dialogue(
                     config.id(), config.name(), config.description(),
-                    new CommandAnswerer(config.command(), config.args(), timeout));
+                    new CommandAnswerer(config.command(), config.args(), config.resetArgs(), timeout));
             case AgentConfig.TYPE_BUILTIN -> Agents.builtin(config.id(),
-                    new io.github.zaojiaoci.agentlitmus.memory.FileLongTermMemory());
+                    new io.github.agentlitmus.memory.FileLongTermMemory());
             default -> throw new IllegalArgumentException(
                     "不支持的智能体类型: " + config.type() + "（可选 http / command / builtin）");
         };

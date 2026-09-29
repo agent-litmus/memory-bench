@@ -1,7 +1,7 @@
-package io.github.zaojiaoci.agentlitmus.report;
-import io.github.zaojiaoci.agentlitmus.core.Outcome;
-import io.github.zaojiaoci.agentlitmus.core.Dimension;
-import io.github.zaojiaoci.agentlitmus.core.Judgment;
+package io.github.agentlitmus.report;
+import io.github.agentlitmus.core.Outcome;
+import io.github.agentlitmus.core.Dimension;
+import io.github.agentlitmus.core.Judgment;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

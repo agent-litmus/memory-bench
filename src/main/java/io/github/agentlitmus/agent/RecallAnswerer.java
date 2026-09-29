@@ -1,6 +1,6 @@
-package io.github.zaojiaoci.agentlitmus.agent;
-import io.github.zaojiaoci.agentlitmus.memory.MemoryEntry;
-import io.github.zaojiaoci.agentlitmus.memory.LongTermMemory;
+package io.github.agentlitmus.agent;
+import io.github.agentlitmus.memory.MemoryEntry;
+import io.github.agentlitmus.memory.LongTermMemory;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterEach;

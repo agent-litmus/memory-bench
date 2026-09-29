@@ -1,5 +1,5 @@
-package io.github.zaojiaoci.agentlitmus.memory;
-import io.github.zaojiaoci.agentlitmus.agent.AgentUnderTest;
+package io.github.agentlitmus.memory;
+import io.github.agentlitmus.agent.AgentUnderTest;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

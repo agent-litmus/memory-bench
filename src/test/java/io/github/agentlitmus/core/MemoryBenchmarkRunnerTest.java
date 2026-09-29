@@ -1,14 +1,14 @@
-package io.github.zaojiaoci.agentlitmus.core;
-import io.github.zaojiaoci.agentlitmus.dataset.MemoryCases;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
-import io.github.zaojiaoci.agentlitmus.llm.LlmClient;
-import io.github.zaojiaoci.agentlitmus.evidence.EvidenceCollector;
-import io.github.zaojiaoci.agentlitmus.evidence.Evidence;
-import io.github.zaojiaoci.agentlitmus.agent.Answerer;
-import io.github.zaojiaoci.agentlitmus.agent.DegradedAnswerer;
-import io.github.zaojiaoci.agentlitmus.agent.RecallAnswerer;
-import io.github.zaojiaoci.agentlitmus.memory.MemoryEntry;
-import io.github.zaojiaoci.agentlitmus.memory.FileLongTermMemory;
+package io.github.agentlitmus.core;
+import io.github.agentlitmus.dataset.MemoryCases;
+import io.github.agentlitmus.report.BenchmarkReport;
+import io.github.agentlitmus.llm.LlmClient;
+import io.github.agentlitmus.evidence.EvidenceCollector;
+import io.github.agentlitmus.evidence.Evidence;
+import io.github.agentlitmus.agent.Answerer;
+import io.github.agentlitmus.agent.DegradedAnswerer;
+import io.github.agentlitmus.agent.RecallAnswerer;
+import io.github.agentlitmus.memory.MemoryEntry;
+import io.github.agentlitmus.memory.FileLongTermMemory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +51,8 @@ class MemoryBenchmarkRunnerTest {
         // 打印报告：在 CI / openKylin 上跑完即可直接看到多维指标
         System.out.println(report.toText());
 
-        assertEquals(24, report.total(), "内置用例集应为 24 条（六维各 4）");
-        assertEquals(24, report.passedCount(), "确定性回答器应通过全部用例:\n" + report.toText());
+        assertEquals(28, report.total(), "内置用例集应为 28 条（含 4 条跨会话用例）");
+        assertEquals(28, report.passedCount(), "确定性回答器应通过全部用例:\n" + report.toText());
         assertEquals(1.0, report.passRate(), 0.0001);
     }
 
@@ -83,8 +83,8 @@ class MemoryBenchmarkRunnerTest {
                 .toList());
 
         BenchmarkReport.DimensionStat boundary = report.byDimension().get(Dimension.BOUNDARY);
-        assertEquals(4, boundary.total());
-        assertEquals(4, boundary.passed(), "不应保留的信息必须被正确排除:\n" + report.toText());
+        assertEquals(5, boundary.total());
+        assertEquals(5, boundary.passed(), "不应保留的信息必须被正确排除:\n" + report.toText());
     }
 
     @Test
@@ -97,7 +97,7 @@ class MemoryBenchmarkRunnerTest {
                 .toList());
 
         BenchmarkReport.DimensionStat update = report.byDimension().get(Dimension.UPDATE);
-        assertEquals(4, update.passed(), "动态更新后应只使用新信息:\n" + report.toText());
+        assertEquals(5, update.passed(), "动态更新后应只使用新信息:\n" + report.toText());
     }
 
     @Test
@@ -108,8 +108,9 @@ class MemoryBenchmarkRunnerTest {
         BenchmarkReport report = runner.run(MemoryCases.defaultCases());
 
         assertEquals(6, report.byDimension().size(), "应覆盖六个评测维度");
+        assertEquals(28, report.total(), "六个维度用例数合计应为 28 条");
         report.byDimension().forEach((dimension, stat) ->
-                assertEquals(4, stat.total(), dimension.label() + " 维度应有 4 条用例"));
+                assertTrue(stat.total() >= 4, dimension.label() + " 维度应至少有 4 条用例"));
     }
 
     @Test
@@ -175,7 +176,7 @@ class MemoryBenchmarkRunnerTest {
 
         BenchmarkReport report = runner.run(MemoryCases.defaultCases());
 
-        assertEquals(24L, report.outcomeCounts().get(Outcome.CORRECT),
+        assertEquals(28L, report.outcomeCounts().get(Outcome.CORRECT),
                 "参考智能体应全部归为正确记忆");
         assertEquals(0L, report.outcomeCounts().get(Outcome.OMISSION));
         assertEquals(0L, report.outcomeCounts().get(Outcome.CONFUSION));

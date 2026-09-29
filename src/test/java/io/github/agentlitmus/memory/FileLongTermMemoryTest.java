@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.memory;
+package io.github.agentlitmus.memory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

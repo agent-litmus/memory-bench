@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.memory;
+package io.github.agentlitmus.memory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

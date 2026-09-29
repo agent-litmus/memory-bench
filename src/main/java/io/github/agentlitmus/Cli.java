@@ -1,20 +1,20 @@
-package io.github.zaojiaoci.agentlitmus;
-import io.github.zaojiaoci.agentlitmus.agent.AgentFactory;
-import io.github.zaojiaoci.agentlitmus.agent.RunnerMode;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkReport;
-import io.github.zaojiaoci.agentlitmus.agent.HttpAnswerer;
-import io.github.zaojiaoci.agentlitmus.core.DialogueBenchmarkRunner;
-import io.github.zaojiaoci.agentlitmus.evidence.EvidenceCollector;
-import io.github.zaojiaoci.agentlitmus.report.HtmlReport;
-import io.github.zaojiaoci.agentlitmus.report.RadarChart;
-import io.github.zaojiaoci.agentlitmus.report.CompareTable;
-import io.github.zaojiaoci.agentlitmus.report.BenchmarkResult;
-import io.github.zaojiaoci.agentlitmus.agent.Agents;
-import io.github.zaojiaoci.agentlitmus.agent.AgentUnderTest;
-import io.github.zaojiaoci.agentlitmus.dataset.MemoryCases;
-import io.github.zaojiaoci.agentlitmus.core.MultiAgentBenchmark;
-import io.github.zaojiaoci.agentlitmus.core.CaseJudge;
-import io.github.zaojiaoci.agentlitmus.core.MemoryCase;
+package io.github.agentlitmus;
+import io.github.agentlitmus.agent.AgentFactory;
+import io.github.agentlitmus.agent.RunnerMode;
+import io.github.agentlitmus.report.BenchmarkReport;
+import io.github.agentlitmus.agent.HttpAnswerer;
+import io.github.agentlitmus.core.DialogueBenchmarkRunner;
+import io.github.agentlitmus.evidence.EvidenceCollector;
+import io.github.agentlitmus.report.HtmlReport;
+import io.github.agentlitmus.report.RadarChart;
+import io.github.agentlitmus.report.CompareTable;
+import io.github.agentlitmus.report.BenchmarkResult;
+import io.github.agentlitmus.agent.Agents;
+import io.github.agentlitmus.agent.AgentUnderTest;
+import io.github.agentlitmus.dataset.MemoryCases;
+import io.github.agentlitmus.core.MultiAgentBenchmark;
+import io.github.agentlitmus.core.CaseJudge;
+import io.github.agentlitmus.core.MemoryCase;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -198,7 +198,8 @@ public final class Cli {
 
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
-                  --cases <file>         使用外部用例集 JSON（默认内置 24 条）
+                  --agents-config <file> 从 JSON 文件导入智能体配置（http/command/builtin）
+                  --cases <file>         使用外部用例集 JSON（默认内置 28 条）
                   --out <dir>            输出目录（默认 litmus-out）
                   --endpoint <url>       真实智能体地址（run-http 使用）
                   --help                 显示帮助
@@ -206,6 +207,7 @@ public final class Cli {
                 示例:
                   litmus run
                   litmus run --agents reference,degraded --out result/
+                  litmus run --agents-config examples/agents-kylinbot.json --out result/
                   litmus run --cases my-cases.json --out result/
                   litmus run-http --endpoint http://localhost:8089 --out real/
                 """);

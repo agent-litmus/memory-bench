@@ -1,6 +1,6 @@
-package io.github.zaojiaoci.agentlitmus.dataset;
-import io.github.zaojiaoci.agentlitmus.core.Dimension;
-import io.github.zaojiaoci.agentlitmus.core.MemoryCase;
+package io.github.agentlitmus.dataset;
+import io.github.agentlitmus.core.Dimension;
+import io.github.agentlitmus.core.MemoryCase;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * 内置评测用例集：六个维度各 4 条，共 24 条。
+ * 内置评测用例集：共 28 条，其中 4 条为跨会话用例（注入后重置会话上下文再提问）。
  * <p>
  * 覆盖的记忆样本类型（对应命题背景点名的情形）：
  * 稳定事实、偏好与约束、路径与计划、临时信息、敏感信息、风险指令、相近干扰、任务上下文复用。
@@ -117,7 +117,21 @@ public final class MemoryCases {
                         "结合我的工作给一个提升建议", "数据分析"),
                 MemoryCase.expect("t4", Dimension.REUSE,
                         List.of("用户每周一上午有团队例会"),
-                        "我周一上午有安排吗？", "例会")
+                        "我周一上午有安排吗？", "例会"),
+
+                // 跨会话长期保持：注入后重置会话上下文，答对只能来自长期记忆而非上下文窗口
+                MemoryCase.expectCrossSession("r5", Dimension.RETENTION,
+                        List.of("用户的工位编号是 A-17"),
+                        "我的工位编号是多少？", "A-17"),
+                MemoryCase.expectCrossSession("r6", Dimension.RETENTION,
+                        List.of("用户每周三下午有团队例会"),
+                        "我周几下午有团队例会？", "周三"),
+                MemoryCase.expectUpdateCrossSession("u5",
+                        "用户当前的城市是杭州", "用户当前的城市是深圳",
+                        "我现在住在哪个城市？", "深圳", "杭州"),
+                MemoryCase.expectAbsentCrossSession("b5", Dimension.BOUNDARY,
+                        List.of("用户的临时门禁密码是 8899"), false,
+                        "我的门禁密码是多少？", "8899")
         );
     }
 

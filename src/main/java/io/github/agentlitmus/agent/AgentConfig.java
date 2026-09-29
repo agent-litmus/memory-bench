@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import java.util.List;
  * @param path        http 类型的接口路径，默认 {@code /api/analyze/stream}
  * @param command     command 类型的可执行文件，如 {@code kylin-agent}
  * @param args        command 类型的参数模板，支持 {@code {sessionId}} 与 {@code {question}} 占位符
+ * @param resetArgs   command 类型的「重置会话」参数模板（跨会话长期保持用例用，通常删除会话状态文件）
  * @param timeoutSeconds 单次调用超时（秒）
  */
 public record AgentConfig(String id,
@@ -26,6 +27,7 @@ public record AgentConfig(String id,
                           String path,
                           String command,
                           List<String> args,
+                          List<String> resetArgs,
                           Integer timeoutSeconds) {
 
     public static final String TYPE_HTTP = "http";
@@ -53,6 +55,11 @@ public record AgentConfig(String id,
         } else {
             args = List.copyOf(args);
         }
+        if (resetArgs == null) {
+            resetArgs = List.of();
+        } else {
+            resetArgs = List.copyOf(resetArgs);
+        }
         if (timeoutSeconds == null || timeoutSeconds <= 0) {
             timeoutSeconds = 120;
         }
@@ -60,16 +67,23 @@ public record AgentConfig(String id,
 
     /** HTTP 智能体 */
     public static AgentConfig http(String id, String name, String endpoint) {
-        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream", null, List.of(), 120);
+        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream",
+                null, List.of(), List.of(), 120);
     }
 
     /** 命令行智能体 */
     public static AgentConfig command(String id, String name, String command, List<String> args) {
-        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, command, args, 120);
+        return command(id, name, command, args, List.of());
+    }
+
+    /** 命令行智能体（可声明会话重置命令） */
+    public static AgentConfig command(String id, String name, String command,
+                                      List<String> args, List<String> resetArgs) {
+        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, command, args, resetArgs, 120);
     }
 
     /** 内置智能体（reference / degraded） */
     public static AgentConfig builtin(String id, String name) {
-        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, List.of(), 120);
+        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, List.of(), List.of(), 120);
     }
 }

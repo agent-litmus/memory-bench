@@ -1,6 +1,6 @@
-package io.github.zaojiaoci.agentlitmus.report;
-import io.github.zaojiaoci.agentlitmus.core.Dimension;
-import io.github.zaojiaoci.agentlitmus.agent.AgentUnderTest;
+package io.github.agentlitmus.report;
+import io.github.agentlitmus.core.Dimension;
+import io.github.agentlitmus.agent.AgentUnderTest;
 
 import java.util.List;
 

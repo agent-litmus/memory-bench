@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +21,7 @@ public class CommandAnswerer implements Answerer {
 
     private final String command;
     private final List<String> args;
+    private final List<String> resetArgs;
     private final Duration timeout;
 
     public CommandAnswerer(String command, List<String> args) {
@@ -28,12 +29,43 @@ public class CommandAnswerer implements Answerer {
     }
 
     public CommandAnswerer(String command, List<String> args, Duration timeout) {
+        this(command, args, List.of(), timeout);
+    }
+
+    public CommandAnswerer(String command, List<String> args, List<String> resetArgs, Duration timeout) {
         if (command == null || command.isBlank()) {
             throw new IllegalArgumentException("命令行智能体必须提供 command");
         }
         this.command = command;
         this.args = args == null ? List.of() : List.copyOf(args);
+        this.resetArgs = resetArgs == null ? List.of() : List.copyOf(resetArgs);
         this.timeout = timeout;
+    }
+
+    /**
+     * 重置会话上下文：执行配置里声明的 resetArgs 命令（通常为删除会话状态文件）。
+     * 长期记忆不在会话状态里，因此不受影响——这正是跨会话用例要测的边界。
+     */
+    @Override
+    public void resetSession(String sessionId) {
+        if (resetArgs.isEmpty()) {
+            return;
+        }
+        List<String> commandLine = new ArrayList<>();
+        commandLine.add(command);
+        for (String arg : resetArgs) {
+            commandLine.add(render(arg, sessionId, null));
+        }
+        try {
+            ProcessBuilder builder = new ProcessBuilder(commandLine);
+            Process process = builder.start();
+            readAll(process.getInputStream());
+            if (!process.waitFor(30, TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+            }
+        } catch (Exception e) {
+            // 重置失败不应中断评测：退化为本轮仍带上下文，由判定结果体现
+        }
     }
 
     @Override

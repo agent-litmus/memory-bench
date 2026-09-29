@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.llm;
+package io.github.agentlitmus.llm;
 
 /**
  * 大模型调用的最小抽象。

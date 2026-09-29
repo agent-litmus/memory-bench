@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.core;
+package io.github.agentlitmus.core;
 
 /**
  * 单条用例的判定结果。

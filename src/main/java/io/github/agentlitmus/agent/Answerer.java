@@ -1,4 +1,4 @@
-package io.github.zaojiaoci.agentlitmus.agent;
+package io.github.agentlitmus.agent;
 
 /**
  * 被测回答器：给定会话与问题，产出回答。
@@ -11,4 +11,14 @@ package io.github.zaojiaoci.agentlitmus.agent;
 public interface Answerer {
 
     String answer(String sessionId, String question);
+
+    /**
+     * 重置该会话的<b>对话上下文</b>（不清长期记忆），用于跨会话长期保持用例。
+     * <p>
+     * 默认空实现：内置被测对象没有「上下文窗口」概念，本就不依赖对话历史，重置与否无差别。
+     * 真实智能体（如命令行适配器）应覆写，真正清掉会话状态后再接受提问。
+     */
+    default void resetSession(String sessionId) {
+        // 默认无需处理
+    }
 }
