@@ -94,7 +94,8 @@ class AgentFactoryTest {
 
     @Test
     void rejectsUnknownAgentType() {
-        AgentConfig config = new AgentConfig("x", "X", "", "grpc", null, null, null, null, List.of(), List.of(), 60);
+        AgentConfig config = new AgentConfig("x", "X", "", "grpc", null, null, null, null,
+                List.of(), List.of(), 60, null);
         assertThrows(IllegalArgumentException.class, () -> AgentFactory.create(config));
     }
 

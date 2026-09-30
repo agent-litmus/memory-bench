@@ -1,0 +1,23 @@
+[
+  {
+    "id": "reference",
+    "name": "参考智能体（baseline）",
+    "description": "内置确定性实现：基于相关性召回，记忆能力健全，作为对照组（无需 API Key，重复运行 σ=0）",
+    "type": "builtin",
+    "role": "primary"
+  },
+  {
+    "id": "degraded",
+    "name": "缺陷智能体（degraded）",
+    "description": "内置问题样本：总取最早写入的记忆，会复用旧信息、混淆相近信息、泄露不该保留的信息（无需 API Key，σ=0）",
+    "type": "builtin",
+    "role": "primary"
+  },
+  {
+    "id": "hermes",
+    "name": "Hermes Agent（ACP）",
+    "description": "openKylin 生态智能体 Hermes：经 ACP（JSON-RPC over stdio）驱动其真实智能体循环，会话与长期记忆都在 Hermes 内部；每个用例使用独立 HERMES_HOME 隔离。需 Hermes 自身已配置可用的模型供应商（如 GLM_API_KEY）",
+    "type": "builtin",
+    "role": "primary"
+  }
+]

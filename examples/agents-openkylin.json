@@ -45,12 +45,9 @@
   },
   {
     "id": "hermes-agent",
-    "name": "Hermes Agent",
-    "description": "命题提及的智能体之一。命令行形态示例（参数占位符 {sessionId} {question}）",
-    "type": "command",
-    "command": "hermes-agent",
-    "args": ["--session", "{sessionId}", "--prompt", "{question}"],
-    "timeoutSeconds": 120,
+    "name": "Hermes Agent（openKylin kylin-agent 运行时）",
+    "description": "openKylin 官方 kylin-agent 包内置的 Hermes Agent 运行时（Python/uv）。经 ACP（JSON-RPC over stdio）驱动其真实智能体循环：每个用例独立 HERMES_HOME 隔离，会话与长期记忆都在 Hermes 内部。注意：Hermes 自身须先配置可用的模型供应商（如 GLM_API_KEY）才能产出回答",
+    "type": "builtin",
     "role": "primary"
   }
 ]

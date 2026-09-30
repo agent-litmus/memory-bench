@@ -51,8 +51,8 @@ class MemoryBenchmarkRunnerTest {
         // 打印报告：在 CI / openKylin 上跑完即可直接看到多维指标
         System.out.println(report.toText());
 
-        assertEquals(72, report.total(), "内置用例集应为 72 条（六维各 12）");
-        assertEquals(72, report.passedCount(), "确定性回答器应通过全部用例:\n" + report.toText());
+        assertEquals(150, report.total(), "内置用例集应为 150 条（六维各 25）");
+        assertEquals(150, report.passedCount(), "确定性回答器应通过全部用例:\n" + report.toText());
         assertEquals(1.0, report.passRate(), 0.0001);
     }
 
@@ -67,9 +67,9 @@ class MemoryBenchmarkRunnerTest {
         // 依赖「应记住」的维度必须判失败，否则评测就失去了意义
         assertFalse(report.byDimension().get(Dimension.RETENTION).passed() > 0,
                 "长期保持维度在失忆回答器下不应通过");
-        // 记忆调用维度含 1 条「反向」用例（c10：过敏源不应出现在推荐里）——
-        // 失忆回答器因为「什么都没说」会恰好通过它，其余 11 条必须判失败
-        assertTrue(report.byDimension().get(Dimension.RECALL).passed() <= 1,
+        // 记忆调用维度含 3 条「反向」用例（c10 过敏源、c21 芒果、c22 前公司——都不应出现在输出里）——
+        // 失忆回答器因为「什么都没说」会恰好通过它们，其余 22 条必须判失败
+        assertTrue(report.byDimension().get(Dimension.RECALL).passed() <= 3,
                 "记忆调用维度在失忆回答器下最多只能通过反向用例:\n" + report.toText());
         assertTrue(report.passedCount() < report.total(),
                 "整体通过率必须低于 100%，说明评测能发现问题");
@@ -85,8 +85,8 @@ class MemoryBenchmarkRunnerTest {
                 .toList());
 
         BenchmarkReport.DimensionStat boundary = report.byDimension().get(Dimension.BOUNDARY);
-        assertEquals(12, boundary.total());
-        assertEquals(12, boundary.passed(), "不应保留的信息必须被正确排除:\n" + report.toText());
+        assertEquals(25, boundary.total());
+        assertEquals(25, boundary.passed(), "不应保留的信息必须被正确排除:\n" + report.toText());
     }
 
     @Test
@@ -99,7 +99,7 @@ class MemoryBenchmarkRunnerTest {
                 .toList());
 
         BenchmarkReport.DimensionStat update = report.byDimension().get(Dimension.UPDATE);
-        assertEquals(12, update.passed(), "动态更新后应只使用新信息:\n" + report.toText());
+        assertEquals(25, update.passed(), "动态更新后应只使用新信息:\n" + report.toText());
     }
 
     @Test
@@ -110,9 +110,9 @@ class MemoryBenchmarkRunnerTest {
         BenchmarkReport report = runner.run(MemoryCases.defaultCases());
 
         assertEquals(6, report.byDimension().size(), "应覆盖六个评测维度");
-        assertEquals(72, report.total(), "六个维度用例数合计应为 72 条");
+        assertEquals(150, report.total(), "六个维度用例数合计应为 150 条");
         report.byDimension().forEach((dimension, stat) ->
-                assertEquals(12, stat.total(), dimension.label() + " 维度应有 12 条用例"));
+                assertEquals(25, stat.total(), dimension.label() + " 维度应有 25 条用例"));
     }
 
     @Test
@@ -178,7 +178,7 @@ class MemoryBenchmarkRunnerTest {
 
         BenchmarkReport report = runner.run(MemoryCases.defaultCases());
 
-        assertEquals(72L, report.outcomeCounts().get(Outcome.CORRECT),
+        assertEquals(150L, report.outcomeCounts().get(Outcome.CORRECT),
                 "参考智能体应全部归为正确记忆");
         assertEquals(0L, report.outcomeCounts().get(Outcome.OMISSION));
         assertEquals(0L, report.outcomeCounts().get(Outcome.CONFUSION));
