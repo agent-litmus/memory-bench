@@ -31,6 +31,7 @@ public class HttpAnswerer implements Answerer {
     private final ObjectMapper mapper = new ObjectMapper();
     private final String baseUrl;
     private final String path;
+    private final String resetPath;
     private final Duration timeout;
 
     public HttpAnswerer(String baseUrl) {
@@ -38,12 +39,41 @@ public class HttpAnswerer implements Answerer {
     }
 
     public HttpAnswerer(String baseUrl, String path, Duration timeout) {
+        this(baseUrl, path, null, timeout);
+    }
+
+    /**
+     * @param resetPath 会话重置路径（跨会话用例用，通常以 DELETE 调用）；为 null 表示不支持重置
+     */
+    public HttpAnswerer(String baseUrl, String path, String resetPath, Duration timeout) {
         this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
         this.path = path;
+        this.resetPath = (resetPath == null || resetPath.isBlank()) ? null : resetPath;
         this.timeout = timeout;
         this.http = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
+    }
+
+    /**
+     * 重置会话上下文：调用被测服务声明的重置端点（清空对话，保留其长期记忆）。
+     * 未配置 resetPath 时不做任何事——跨会话用例会退化为同会话用例，判定时应知悉该差异。
+     */
+    @Override
+    public void resetSession(String sessionId) {
+        if (resetPath == null) {
+            return;
+        }
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(baseUrl + resetPath + "?sessionId=" + encode(sessionId)))
+                    .timeout(Duration.ofSeconds(30))
+                    .DELETE()
+                    .build();
+            http.send(request, HttpResponse.BodyHandlers.discarding());
+        } catch (Exception e) {
+            // 重置失败不应中断评测
+        }
     }
 
     @Override

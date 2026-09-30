@@ -25,6 +25,7 @@ public record AgentConfig(String id,
                           String type,
                           String endpoint,
                           String path,
+                          String resetPath,
                           String command,
                           List<String> args,
                           List<String> resetArgs,
@@ -67,7 +68,7 @@ public record AgentConfig(String id,
 
     /** HTTP 智能体 */
     public static AgentConfig http(String id, String name, String endpoint) {
-        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream",
+        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream", null,
                 null, List.of(), List.of(), 120);
     }
 
@@ -79,11 +80,11 @@ public record AgentConfig(String id,
     /** 命令行智能体（可声明会话重置命令） */
     public static AgentConfig command(String id, String name, String command,
                                       List<String> args, List<String> resetArgs) {
-        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, command, args, resetArgs, 120);
+        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, null, command, args, resetArgs, 120);
     }
 
     /** 内置智能体（reference / degraded） */
     public static AgentConfig builtin(String id, String name) {
-        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, List.of(), List.of(), 120);
+        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, null, List.of(), List.of(), 120);
     }
 }
