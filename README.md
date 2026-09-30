@@ -518,6 +518,7 @@ Hermes 的长期记忆在 `HERMES_HOME` 里。如果所有用例共用一个 HOM
 |---|---|
 | [SOLUTION.md](./SOLUTION.md) | **方案说明**：测试目标、基本前提、数据生成、用例设计、证据收集、自动评分流程（命题交付 a） |
 | [README.md](./README.md) | 使用说明：快速开始、CLI、打包、设计要点 |
+| [PITFALLS.md](./PITFALLS.md) | **踩坑经验**：接入真实智能体（Hermes / ACP）全过程的问题定位、根因与处理，含成本与采样建议 |
 
 ## License
 
