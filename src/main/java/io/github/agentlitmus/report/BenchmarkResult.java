@@ -2,6 +2,7 @@ package io.github.agentlitmus.report;
 import io.github.agentlitmus.core.Dimension;
 import io.github.agentlitmus.evidence.EvidenceCollector;
 import io.github.agentlitmus.agent.AgentUnderTest;
+import io.github.agentlitmus.agent.AgentRole;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +13,10 @@ import java.util.Map;
  * <p>
  * 命题要求「支持导入不同智能体配置进行批量对比评测」，因此结果需要
  * 同时容纳多个智能体，并支持横向对比（雷达图 / 对比表）。
+ * <p>
+ * 结果中的智能体被分为<b>主对比（PRIMARY）</b>与<b>附加案例（EXTRA）</b>两类：
+ * 主对比进入雷达图与横向对比表；附加案例（通常为跨领域垂直 agent）单独成区展示，
+ * 作为鲁棒性边界证据，不计入通用记忆评分主体。
  *
  * @param reports 智能体 → 评测报告
  * @param evidence 智能体 → 证据收集器
@@ -38,7 +43,22 @@ public record BenchmarkResult(Map<AgentUnderTest, BenchmarkReport> reports,
         return rates;
     }
 
-    /** 按总体通过率从高到低排序的智能体列表 */
+    /** 主对比智能体（role = PRIMARY），按总体通过率从高到低排序 */
+    public List<AgentUnderTest> primary() {
+        return reports.keySet().stream()
+                .filter(a -> a.role() == AgentRole.PRIMARY)
+                .sorted((a, b) -> Double.compare(reports.get(b).passRate(), reports.get(a).passRate()))
+                .toList();
+    }
+
+    /** 附加案例智能体（role = EXTRA），单独成区展示 */
+    public List<AgentUnderTest> extras() {
+        return reports.keySet().stream()
+                .filter(a -> a.role() == AgentRole.EXTRA)
+                .toList();
+    }
+
+    /** 按总体通过率从高到低排序的全部智能体列表 */
     public List<AgentUnderTest> ranked() {
         return reports.keySet().stream()
                 .sorted((a, b) -> Double.compare(reports.get(b).passRate(), reports.get(a).passRate()))

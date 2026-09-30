@@ -109,6 +109,17 @@ public record MemoryCase(String id,
                 question, expectedNew, unexpectedOld, false, null);
     }
 
+    /**
+     * 返回使用新会话 ID 的副本——用于「同输入重复评测」时隔离各次运行，
+     * 避免真实智能体的跨轮记忆累积污染后续重复的结果（保证每次重复从干净状态独立运行）。
+     * 用例 ID 保持不变，以维持报告中的可对照标识。
+     */
+    public MemoryCase withSessionId(String newSessionId) {
+        return new MemoryCase(id, dimension, newSessionId, seeds, seedsRetainable,
+                crossSession, updateTo, question, expectedContains, expectedNotContains,
+                requiresLlmJudge, llmRubric);
+    }
+
     private static String sessionOf(String id) {
         return "case-" + id;
     }

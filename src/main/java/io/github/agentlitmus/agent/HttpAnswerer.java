@@ -102,7 +102,10 @@ public class HttpAnswerer implements Answerer {
                         .build();
 
                 HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 429) {
+                int code = response.statusCode();
+                // 限流 429 与服务端瞬时 5xx：尊重并指数退避重试，而非直接判失败——
+                // 这样评测结果反映真实记忆能力，而非被测服务的限流/抖动策略（避免污染分数）。
+                if (code == 429 || code / 100 == 5) {
                     if (attempt < maxAttempts) {
                         Thread.sleep(backoffMillis);
                         backoffMillis = Math.min(backoffMillis * 2, 30000);
@@ -110,7 +113,7 @@ public class HttpAnswerer implements Answerer {
                     }
                     return "";
                 }
-                if (response.statusCode() / 100 != 2) {
+                if (code / 100 != 2) {
                     return "";
                 }
                 return parseSse(response.body());

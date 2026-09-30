@@ -3,18 +3,22 @@ import io.github.agentlitmus.agent.AgentFactory;
 import io.github.agentlitmus.agent.RunnerMode;
 import io.github.agentlitmus.report.BenchmarkReport;
 import io.github.agentlitmus.agent.HttpAnswerer;
+import io.github.agentlitmus.agent.AgentRole;
 import io.github.agentlitmus.core.DialogueBenchmarkRunner;
 import io.github.agentlitmus.evidence.EvidenceCollector;
 import io.github.agentlitmus.report.HtmlReport;
 import io.github.agentlitmus.report.RadarChart;
 import io.github.agentlitmus.report.CompareTable;
 import io.github.agentlitmus.report.BenchmarkResult;
+import io.github.agentlitmus.report.StabilityReport;
 import io.github.agentlitmus.agent.Agents;
 import io.github.agentlitmus.agent.AgentUnderTest;
 import io.github.agentlitmus.dataset.MemoryCases;
+import io.github.agentlitmus.dataset.CoverageReport;
 import io.github.agentlitmus.core.MultiAgentBenchmark;
 import io.github.agentlitmus.core.CaseJudge;
 import io.github.agentlitmus.core.MemoryCase;
+import io.github.agentlitmus.core.Dimension;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +37,7 @@ import java.util.Map;
  * 本类即该 CLI 的实现：<b>不依赖任何框架、不依赖 API Key</b>，一条命令跑完并产出：
  * <ul>
  *   <li>{@code report.txt}——各智能体报告 + 横向对比表（纯文本，可贴进材料）</li>
- *   <li>{@code report.html}——含六维雷达图的自包含报告（浏览器打开即见，便于录屏）</li>
+ *   <li>{@code report.html}——含六维雷达图、归因改进建议、稳定性与覆盖度的自包含报告（浏览器打开即见，便于录屏）</li>
  *   <li>{@code radar.svg}——雷达图单独文件</li>
  *   <li>{@code evidence/<agent>.jsonl}——每个智能体的运行证据（命题要求"证据统一组织"）</li>
  * </ul>
@@ -42,7 +47,10 @@ import java.util.Map;
  *   litmus run                                  # 默认：内置两款智能体 + 内置用例
  *   litmus run --agents reference,degraded
  *   litmus run --cases my-cases.json --out out/
- *   litmus export-cases --out my-cases.json     # 导出内置用例，便于扩展数据集
+ *   litmus run --repeat 5                        # 同输入重复 5 次，产出稳定性证据
+ *   litmus run --agents-config examples/agents-openkylin.json --out result/
+ *   litmus export-cases --out my-cases.json      # 导出内置用例，便于扩展数据集
+ *   litmus validate-cases                        # 校验数据集合法性与覆盖度
  * </pre>
  */
 public final class Cli {
@@ -64,6 +72,7 @@ public final class Cli {
                 case "run" -> run(parse(argv));
                 case "run-http" -> runHttp(parse(argv));
                 case "export-cases" -> exportCases(parse(argv));
+                case "validate-cases" -> validateCases(parse(argv));
                 case "help", "-h", "--help" -> printUsage();
                 default -> {
                     System.err.println("未知命令: " + command);
@@ -88,6 +97,13 @@ public final class Cli {
         System.out.println("用例集: " + (options.cases == null ? "内置 (" : options.cases + " (")
                 + cases.size() + " 条)");
 
+        // 1.5) 数据集治理：覆盖度校验（借鉴 agentbench 的数据治理能力）
+        CoverageReport coverage = CoverageReport.of(cases);
+        System.out.println(coverage.toText());
+        if (!coverage.valid()) {
+            coverage.issues().forEach(i -> System.out.println("警告(数据治理): " + i));
+        }
+
         // 2) 被测智能体：优先用配置文件，否则按内置 id 解析
         List<String> warnings = new ArrayList<>();
         List<AgentUnderTest> agents;
@@ -105,28 +121,50 @@ public final class Cli {
             throw new IllegalArgumentException("没有可评测的智能体，请用 --agents 指定（内置: "
                     + String.join(",", Agents.defaultIds()) + "）");
         }
-        System.out.println("被测智能体: " + agents.size() + " 款");
+        long primaryN = agents.stream().filter(a -> a.role() == AgentRole.PRIMARY).count();
+        long extraN = agents.stream().filter(a -> a.role() == AgentRole.EXTRA).count();
+        System.out.println("被测智能体: " + agents.size() + " 款（主对比 " + primaryN + " / 附加 " + extraN + "）");
 
         // 3) 批量评测（规则判定，无需模型）；产物目录用于逐条用例落盘
-        BenchmarkResult result = MultiAgentBenchmark.run(cases, agents, new CaseJudge(),
-                outDir.resolve("artifacts"));
+        int repeat = Math.max(1, options.repeat);
+        BenchmarkResult result;
+        StabilityReport stability = null;
+        if (repeat > 1) {
+            MultiAgentBenchmark.RepeatedResult repeated = MultiAgentBenchmark.runRepeated(
+                    cases, agents, new CaseJudge(), outDir.resolve("artifacts"), repeat);
+            Map<AgentUnderTest, BenchmarkReport> repMap = new LinkedHashMap<>();
+            repeated.reports().forEach((a, list) -> repMap.put(a, list.get(0)));
+            result = new BenchmarkResult(repMap, repeated.evidence());
+            stability = StabilityReport.of(repeated.reports());
+            System.out.println("稳定性评测：同输入重复 " + repeat + " 次完成");
+        } else {
+            result = MultiAgentBenchmark.run(cases, agents, new CaseJudge(), outDir.resolve("artifacts"));
+        }
 
         // 4) 控制台输出
         StringBuilder text = new StringBuilder();
         for (AgentUnderTest agent : result.ranked()) {
-            text.append("========== ").append(agent.name()).append(" ==========\n");
+            text.append("========== ").append(agent.name())
+                    .append(agent.role() == AgentRole.EXTRA ? " [附加案例]" : "")
+                    .append(" ==========\n");
             text.append(result.reportOf(agent).toText()).append("\n");
         }
         text.append(CompareTable.toText(result));
+        if (stability != null) {
+            text.append(stability.toText());
+        }
         System.out.println();
         System.out.println(text);
 
         // 5) 落盘产物
         Files.writeString(outDir.resolve("report.txt"), text.toString(), StandardCharsets.UTF_8);
-        Files.writeString(outDir.resolve("radar.svg"),
-                RadarChart.svg(result.dimensionRates()), StandardCharsets.UTF_8);
+        Map<String, Map<Dimension, Double>> primaryRates = new LinkedHashMap<>();
+        for (AgentUnderTest agent : result.primary()) {
+            primaryRates.put(agent.name(), RadarChart.ratesOf(result.reportOf(agent)));
+        }
+        Files.writeString(outDir.resolve("radar.svg"), RadarChart.svg(primaryRates), StandardCharsets.UTF_8);
         Files.writeString(outDir.resolve("report.html"),
-                HtmlReport.html(result), StandardCharsets.UTF_8);
+                HtmlReport.html(result, stability, coverage), StandardCharsets.UTF_8);
 
         Path evidenceDir = outDir.resolve("evidence");
         for (AgentUnderTest agent : agents) {
@@ -138,7 +176,7 @@ public final class Cli {
 
         System.out.println("报告已输出到: " + outDir.toAbsolutePath());
         System.out.println("  ├─ report.txt    文本报告 + 横向对比表");
-        System.out.println("  ├─ report.html   含六维雷达图（浏览器打开，便于录屏）");
+        System.out.println("  ├─ report.html   含六维雷达图、归因改进建议、稳定性与覆盖度（浏览器打开，便于录屏）");
         System.out.println("  ├─ radar.svg     雷达图");
         System.out.println("  ├─ artifacts/    逐条用例的运行产物（Markdown，可直接打开查看）");
         System.out.println("  └─ evidence/     各智能体运行证据（JSON Lines）");
@@ -190,28 +228,42 @@ public final class Cli {
         System.out.println("可在其基础上扩展数据集，再用 --cases 指定运行。");
     }
 
+    /** 校验数据集合法性与覆盖度（数据治理入口） */
+    private static void validateCases(Options options) {
+        List<MemoryCase> cases = options.cases != null
+                ? MemoryCases.loadFrom(Path.of(options.cases))
+                : MemoryCases.defaultCases();
+        CoverageReport coverage = CoverageReport.of(cases);
+        System.out.println(coverage.toText());
+        System.exit(coverage.valid() ? 0 : 1);
+    }
+
     private static void printUsage() {
         System.out.println("""
                 AgentLitmus · 智能体长期记忆评测基准
 
                 用法:
                   litmus run [选项]              运行评测（默认内置两款智能体对比）
+                  litmus validate-cases [选项]   校验数据集合法性与覆盖度
                   litmus export-cases [选项]     导出内置用例集，便于扩展数据集
 
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
-                  --agents-config <file> 从 JSON 文件导入智能体配置（http/command/builtin）
-                  --cases <file>         使用外部用例集 JSON（默认内置 28 条）
+                  --agents-config <file> 从 JSON 文件导入智能体配置（http/command/builtin），可标注 role
+                  --cases <file>         使用外部用例集 JSON（默认内置 72 条）
                   --out <dir>            输出目录（默认 litmus-out）
                   --endpoint <url>       真实智能体地址（run-http 使用）
+                  --repeat <N>           同输入重复评测 N 次，产出稳定性证据（默认 1）
                   --help                 显示帮助
 
                 示例:
                   litmus run
                   litmus run --agents reference,degraded --out result/
-                  litmus run --agents-config examples/agents-kylinbot.json --out result/
+                  litmus run --repeat 5 --out stable/
+                  litmus run --agents-config examples/agents-openkylin.json --out result/
                   litmus run --cases my-cases.json --out result/
                   litmus run-http --endpoint http://localhost:8089 --out real/
+                  litmus validate-cases
                 """);
     }
 
@@ -227,6 +279,13 @@ public final class Cli {
                 case "--out" -> options.out = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--endpoint" -> options.endpoint = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--agents-config" -> options.agentsConfig = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
+                case "--repeat" -> {
+                    try {
+                        options.repeat = Integer.parseInt(value(argv, ++i, arg));
+                    } catch (NumberFormatException e) {
+                        System.err.println("警告: --repeat 参数无效，已忽略（使用默认 1）");
+                    }
+                }
                 default -> {
                     // 忽略未知参数，避免因多余参数中断评测
                 }
@@ -255,5 +314,6 @@ public final class Cli {
         private String cases;
         private String out = DEFAULT_OUT;
         private String endpoint;
+        private int repeat = 1;
     }
 }

@@ -14,10 +14,12 @@ import java.util.List;
  * @param type        接入类型：{@code http} / {@code command} / {@code builtin}
  * @param endpoint    http 类型的服务地址，如 {@code http://localhost:8089}
  * @param path        http 类型的接口路径，默认 {@code /api/analyze/stream}
+ * @param resetPath   http 类型的会话重置路径（跨会话长期保持用例用）
  * @param command     command 类型的可执行文件，如 {@code kylin-agent}
  * @param args        command 类型的参数模板，支持 {@code {sessionId}} 与 {@code {question}} 占位符
  * @param resetArgs   command 类型的「重置会话」参数模板（跨会话长期保持用例用，通常删除会话状态文件）
  * @param timeoutSeconds 单次调用超时（秒）
+ * @param role        对比角色：{@code primary}（主对比）/ {@code extra}（附加案例），默认 primary
  */
 public record AgentConfig(String id,
                           String name,
@@ -29,7 +31,8 @@ public record AgentConfig(String id,
                           String command,
                           List<String> args,
                           List<String> resetArgs,
-                          Integer timeoutSeconds) {
+                          Integer timeoutSeconds,
+                          String role) {
 
     public static final String TYPE_HTTP = "http";
     public static final String TYPE_COMMAND = "command";
@@ -64,12 +67,14 @@ public record AgentConfig(String id,
         if (timeoutSeconds == null || timeoutSeconds <= 0) {
             timeoutSeconds = 120;
         }
+        // 角色容错：空/非法一律回退 primary
+        role = (role == null || role.isBlank()) ? "primary" : role.trim().toLowerCase();
     }
 
     /** HTTP 智能体 */
     public static AgentConfig http(String id, String name, String endpoint) {
         return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream", null,
-                null, List.of(), List.of(), 120);
+                null, List.of(), List.of(), 120, null);
     }
 
     /** 命令行智能体 */
@@ -80,11 +85,11 @@ public record AgentConfig(String id,
     /** 命令行智能体（可声明会话重置命令） */
     public static AgentConfig command(String id, String name, String command,
                                       List<String> args, List<String> resetArgs) {
-        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, null, command, args, resetArgs, 120);
+        return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, null, command, args, resetArgs, 120, null);
     }
 
     /** 内置智能体（reference / degraded） */
     public static AgentConfig builtin(String id, String name) {
-        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, null, List.of(), List.of(), 120);
+        return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, null, List.of(), List.of(), 120, null);
     }
 }

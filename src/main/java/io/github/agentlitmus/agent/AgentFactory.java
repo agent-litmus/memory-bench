@@ -19,6 +19,7 @@ import java.util.List;
  *   <li>{@code command}——调用命令行程序，适用于 CLI 形态的本地智能体；</li>
  *   <li>{@code builtin}——内置参考/缺陷智能体，用于验证评测本身有效。</li>
  * </ul>
+ * 配置中的 {@code role} 字段（primary/extra）决定该智能体进入「主对比」还是「附加案例」。
  */
 public final class AgentFactory {
 
@@ -28,13 +29,14 @@ public final class AgentFactory {
     /** 由单条配置创建被测智能体 */
     public static AgentUnderTest create(AgentConfig config) {
         Duration timeout = Duration.ofSeconds(config.timeoutSeconds());
+        AgentRole role = AgentRole.parse(config.role());
         return switch (config.type()) {
             case AgentConfig.TYPE_HTTP -> AgentUnderTest.dialogue(
                     config.id(), config.name(), config.description(),
-                    new HttpAnswerer(config.endpoint(), pathOf(config), timeout));
+                    new HttpAnswerer(config.endpoint(), pathOf(config), config.resetPath(), timeout), role);
             case AgentConfig.TYPE_COMMAND -> AgentUnderTest.dialogue(
                     config.id(), config.name(), config.description(),
-                    new CommandAnswerer(config.command(), config.args(), config.resetArgs(), timeout));
+                    new CommandAnswerer(config.command(), config.args(), config.resetArgs(), timeout), role);
             case AgentConfig.TYPE_BUILTIN -> Agents.builtin(config.id(),
                     new io.github.agentlitmus.memory.FileLongTermMemory());
             default -> throw new IllegalArgumentException(

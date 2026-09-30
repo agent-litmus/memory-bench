@@ -4,7 +4,7 @@ import io.github.agentlitmus.llm.LlmClient;
 import java.util.Locale;
 
 /**
- * 用例判定器：<b>规则优先、LLM 兜底</b>，并输出五类结果之一，再叠加一层记忆失败归因。
+ * 用例判定器：<b>规则优先、LLM 兜底</b>，并输出五类结果之一，再叠加一层记忆失败归因（含改进建议）。
  * <p>
  * 这是刻意的顺序选择：能用确定性规则判定的（关键词包含 / 排除）绝不交给模型——
  * 判定本身不应引入新的不确定性，否则「评测结果不稳定」会掩盖被测对象的真实问题。
@@ -59,8 +59,8 @@ public class CaseJudge {
         }
 
         Outcome outcome = classify(kase, rulePass, expectedHit, excludedAppeared);
-        // 规则层面的归因（无响应 / 保持召回缺失 / 混淆 / 边界泄漏 / 旧值未更新）
-        FailureCause cause = causeOf(outcome, text);
+        // 规则层面的归因（无响应 / 未持久化 / 召回缺失 / 混淆 / 边界泄漏 / 旧值未更新）
+        FailureCause cause = causeOf(outcome, text, kase.crossSession());
 
         // 2) 不需要 LLM 判定：直接返回规则结果
         if (!kase.requiresLlmJudge()) {
@@ -70,7 +70,8 @@ public class CaseJudge {
         // 3) 需要 LLM 判定但没有模型：降级为规则判定并标注，保证流程不中断
         if (llm == null) {
             return new Judgment(kase.id(), kase.dimension(), rulePass, rulePass ? 1.0 : 0.0,
-                    reason + "（需 LLM 判定但无可用模型，已降级）", Judgment.MODE_DEGRADED, outcome, cause);
+                    reason + "（需 LLM 判定但无可用模型，已降级）", Judgment.MODE_DEGRADED,
+                    outcome, causeOf(outcome, answer, kase.crossSession()));
         }
 
         // 4) 规则是底线：规则不过直接判失败，不再浪费一次模型调用
@@ -111,11 +112,20 @@ public class CaseJudge {
      * 在五类结果之上做记忆失败归因：指向记忆生命周期阶段 / 可观测信号，
      * 并特意把「无响应」（请求失败 / 限流 429 / 超时 / 空回答）与真实记忆缺陷区分开——
      * 否则像限流这类评测导管问题会污染分数。
+     * <p>
+     * 对 {@link Outcome#OMISSION} 进一步<b>三态细分</b>：借助 crossSession 标记推断遗漏阶段——
+     * 跨会话仍遗漏 → {@link FailureCause#PERSIST_MISSING}（未持久化）；
+     * 同会话遗漏 → {@link FailureCause#RECALL_MISSING}（未召回/未应用）。
      */
-    private static FailureCause causeOf(Outcome outcome, String text) {
+    private static FailureCause causeOf(Outcome outcome, String text, boolean crossSession) {
         return switch (outcome) {
             case CORRECT -> null;
-            case OMISSION -> text.isEmpty() ? FailureCause.NO_RESPONSE : FailureCause.RECALL_MISSING;
+            case OMISSION -> {
+                if (text.isEmpty()) {
+                    yield FailureCause.NO_RESPONSE;
+                }
+                yield crossSession ? FailureCause.PERSIST_MISSING : FailureCause.RECALL_MISSING;
+            }
             case CONFUSION -> FailureCause.SIMILAR_CONFUSED;
             case WRONG_PERSISTENCE -> FailureCause.BOUNDARY_LEAKED;
             case WRONG_REUSE -> FailureCause.STALE_REUSE;
@@ -133,7 +143,7 @@ public class CaseJudge {
             // 模型调用失败不应让评测崩溃：回退到规则结果，并标注归因
             return new Judgment(kase.id(), kase.dimension(), true, 1.0,
                     ruleReason + "（LLM 判定失败，回退规则：" + e.getMessage() + "）",
-                    Judgment.MODE_DEGRADED, outcome, causeOf(outcome, answer));
+                    Judgment.MODE_DEGRADED, outcome, causeOf(outcome, answer, kase.crossSession()));
         }
 
         boolean pass = verdict != null
@@ -141,6 +151,6 @@ public class CaseJudge {
         Outcome finalOutcome = pass ? Outcome.CORRECT : outcome;
         return new Judgment(kase.id(), kase.dimension(), pass, pass ? 1.0 : 0.0,
                 ruleReason + "；LLM 判定：" + (verdict == null ? "无输出" : verdict.trim()),
-                Judgment.MODE_LLM, finalOutcome, causeOf(finalOutcome, answer));
+                Judgment.MODE_LLM, finalOutcome, causeOf(finalOutcome, answer, kase.crossSession()));
     }
 }

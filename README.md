@@ -108,8 +108,10 @@ java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run --out result/
 ```bash
 litmus run                                   # 内置两款智能体对比 + 内置用例
 litmus run --agents reference,degraded       # 指定被测智能体
-litmus run --agents-config examples/agents-kylinbot.json --out out/   # 导入外部智能体配置
+litmus run --agents-config examples/agents-openkylin.json --out out/   # 导入外部智能体配置（含主对比/附加角色）
 litmus run --cases my-cases.json --out out/  # 使用外部数据集
+litmus run --repeat 5 --out stable/          # 同输入重复 5 次，产出稳定性证据
+litmus validate-cases                        # 校验数据集合法性与覆盖度
 litmus export-cases --out out/               # 导出内置用例，便于扩展数据集
 ```
 
@@ -169,6 +171,53 @@ agent-litmus run --out ~/litmus-result
 | 错误复用 | 更新后仍用旧值 |
 
 缺陷智能体实测分类：`正确记忆 13 / 遗漏 1 / 混淆 2 / 错误持久化 4 / 错误复用 4`。
+
+### 失败归因与改进建议（可行动诊断）
+
+在五类结果之上，进一步叠加**记忆失败归因**与**可行动的改进建议**——把评测从"分类"升级为"诊断"，直接服务命题「自动评分能力」（25%）强调的"可解释评分原因"。
+
+- **三态细分**：同样的"遗漏"，借助 `crossSession` 标记可下钻——跨会话仍遗漏 ⇒ **长期记忆未持久化**（写入/保持阶段缺陷）；同会话即遗漏 ⇒ **召回/应用缺失**（检索/召回阶段缺陷）。这在不侵入被测对象内部的**黑盒**前提下，仍能再下钻一层。
+- **生命周期阶段 + 改进建议**：每条归因都标明发生在记忆生命周期的哪一阶段（写入/保持、检索/召回、相近区分、边界/安全、更新/覆盖、导管/服务），并给出一句改进建议，例如：
+
+| 归因 | 生命周期阶段 | 改进建议 |
+|---|---|---|
+| 长期记忆未持久化 | 写入/保持 | 核查记忆写入链路是否真正落库/持久化，引入写入确认、去重与 TTL 管理 |
+| 召回/应用缺失 | 检索/召回 | 优化检索召回（向量/关键词），强化上下文对长期记忆的引用 |
+| 相近混淆 | 相近区分 | 为相近实体增加消歧特征（命名实体+属性绑定） |
+| 边界泄漏 | 边界/安全 | 加敏感信息过滤器与临时/风险指令过期策略，明确"不该记"负面清单 |
+| 旧值未更新 | 更新/覆盖 | 引入带版本号/时间戳的记忆覆盖策略 |
+| 无响应 | 导管/服务 | 评测端已内置 429 指数退避重试；若仍大量出现请检查被测服务可用性 |
+
+> 设计取舍：memory-bench 是**黑盒**评测，看不到被测对象内部实现，因此归因指向"可观测证据 + 记忆功能阶段"，而非 Prompt/RAG/Tool 内部层——这区别于 agentbench 的架构层归因，但更贴合黑盒评真实智能体的场景。
+
+### 稳定性证据（同输入重复评测）
+
+命题「稳定性与可复现性」（15%）明确看"同输入下评测结果是否稳定"。`--repeat N` 同输入跑 N 次，报告各维度与总体通过率的**均值 / 抖动（max-min）/ 总体标准差 σ**——内置 `reference` / `degraded` 两次运行完全一致（σ=0），波动仅来自真实被测对象自身：
+
+```bash
+litmus run --repeat 5 --out stable/
+# 输出：参考智能体 均值 100.0% 抖动 0.0% (σ=0.0%)；缺陷智能体 均值 45.8% 抖动 0.0%
+```
+
+### 数据集覆盖度校验（数据治理）
+
+`validate-cases` 在评测前自动校验数据合法性与覆盖度（借鉴 agentbench 的数据治理能力），统计每维度用例数、正/负样本与区分度，并在报告中展示：
+
+```bash
+litmus validate-cases
+# 输出：每维度用例数、命中/排除样本、区分度、跨会话用例数、更新×边界交叉覆盖情况
+```
+
+### 主对比与附加案例（角色分离）
+
+命题评的是**通用**智能体长期记忆。为避免"通用基准评垂直 agent"的不公平观感，智能体配置支持 `role` 字段：
+
+- `primary`（默认）——主对比对象，进入雷达图与横向对比表；
+- `extra`——附加案例（通常为跨领域垂直 agent，如 AI 岗位影响分析智能体），单独成区展示，作为"尺子能否区分垂直与通用 agent"的鲁棒性证据，**不计入主对比评分主体**。
+
+```json
+{ "id": "employer-toolkit", "type": "http", "endpoint": "http://127.0.0.1:8089", "role": "extra" }
+```
 
 ### 在 openKylin 上一键验证
 
@@ -376,8 +425,9 @@ io/github/agentlitmus/
 │   ├── Judgment.java         判定结果
 │   ├── Outcome.java          五类结果（正确/遗漏/混淆/错误持久化/错误复用）
 │   ├── CaseJudge.java        判定器（规则优先、LLM 兜底）
+│   ├── FailureCause.java     失败归因（生命周期阶段 + 改进建议）
 │   ├── MemoryBenchmarkRunner.java   单智能体执行器
-│   └── MultiAgentBenchmark.java     多智能体批量对比
+│   └── MultiAgentBenchmark.java     多智能体批量对比（+ 同输入重复评测）
 ├── memory/               长期记忆载体
 │   ├── MemoryEntry.java        记忆条目（可信度 + 保留策略）
 │   ├── LongTermMemory.java     记忆接口
@@ -385,7 +435,8 @@ io/github/agentlitmus/
 │   └── MemoryRegistry.java     智能体与记忆的隔离绑定
 ├── agent/                被测智能体
 │   ├── Answerer.java          被测对象契约（单方法）
-│   ├── AgentUnderTest.java    被测智能体身份
+│   ├── AgentUnderTest.java    被测智能体身份（+ 主对比/附加角色）
+│   ├── AgentRole.java        对比角色（primary / extra）
 │   ├── Agents.java            内置注册表（reference / degraded）
 │   ├── RecallAnswerer.java    参考智能体（baseline）
 │   └── DegradedAnswerer.java  缺陷智能体（问题样本）
@@ -397,9 +448,11 @@ io/github/agentlitmus/
 │   ├── BenchmarkResult.java   批量对比结果
 │   ├── CompareTable.java      横向对比表
 │   ├── RadarChart.java        六维雷达图（纯 SVG）
-│   └── HtmlReport.java        HTML 报告（自包含）
+│   ├── HtmlReport.java        HTML 报告（含归因改进建议/稳定性/覆盖度）
+│   └── StabilityReport.java   稳定性证据（重复评测方差/抖动）
 ├── dataset/              数据集
-│   └── MemoryCases.java       内置 72 条用例（六维各 12，含 10 条跨会话）+ JSON 加载/导出
+│   ├── MemoryCases.java       内置 72 条用例（六维各 12，含 10 条跨会话）+ JSON 加载/导出
+│   └── CoverageReport.java    数据治理：覆盖度校验与区分度统计
 └── llm/                  外部模型接入
     └── LlmClient.java        单方法抽象，零框架绑定
 ```

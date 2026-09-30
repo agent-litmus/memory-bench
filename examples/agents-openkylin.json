@@ -2,14 +2,16 @@
   {
     "id": "reference",
     "name": "参考智能体（baseline）",
-    "description": "内置参考实现：基于相关性召回，记忆能力健全，作为对照组",
-    "type": "builtin"
+    "description": "内置参考实现：基于相关性召回，记忆能力健全，作为通用对照",
+    "type": "builtin",
+    "role": "primary"
   },
   {
     "id": "degraded",
     "name": "缺陷智能体（degraded）",
     "description": "内置问题样本：总取最早写入的记忆，会复用旧信息、混淆相近信息、泄露不应保留的信息",
-    "type": "builtin"
+    "type": "builtin",
+    "role": "primary"
   },
   {
     "id": "kylinbot",
@@ -18,7 +20,8 @@
     "type": "http",
     "endpoint": "http://127.0.0.1:8080",
     "path": "/v1/chat",
-    "timeoutSeconds": 120
+    "timeoutSeconds": 120,
+    "role": "primary"
   },
   {
     "id": "kylin-agent",
@@ -27,7 +30,8 @@
     "type": "http",
     "endpoint": "http://127.0.0.1:8081",
     "path": "/api/analyze/stream",
-    "timeoutSeconds": 120
+    "timeoutSeconds": 120,
+    "role": "primary"
   },
   {
     "id": "openclaw",
@@ -36,7 +40,8 @@
     "type": "http",
     "endpoint": "http://127.0.0.1:8082",
     "path": "/v1/chat",
-    "timeoutSeconds": 120
+    "timeoutSeconds": 120,
+    "role": "primary"
   },
   {
     "id": "hermes-agent",
@@ -45,6 +50,7 @@
     "type": "command",
     "command": "hermes-agent",
     "args": ["--session", "{sessionId}", "--prompt", "{question}"],
-    "timeoutSeconds": 120
+    "timeoutSeconds": 120,
+    "role": "primary"
   }
 ]
