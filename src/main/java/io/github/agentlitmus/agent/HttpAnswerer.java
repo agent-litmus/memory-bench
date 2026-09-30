@@ -65,8 +65,15 @@ public class HttpAnswerer implements Answerer {
             return;
         }
         try {
+            // 兼容两种重置端点形态：
+            //   - 路径参数式（如 /api/memory/{sessionId}，employer-toolkit 采用）
+            //   - 查询参数式（如 /api/reset?sessionId=xxx，历史默认）
+            String placeholder = "{sessionId}";
+            String uri = resetPath.contains(placeholder)
+                    ? baseUrl + resetPath.replace(placeholder, encode(sessionId))
+                    : baseUrl + resetPath + "?sessionId=" + encode(sessionId);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + resetPath + "?sessionId=" + encode(sessionId)))
+                    .uri(URI.create(uri))
                     .timeout(Duration.ofSeconds(30))
                     .DELETE()
                     .build();
@@ -80,24 +87,42 @@ public class HttpAnswerer implements Answerer {
     public String answer(String sessionId, String question) {
         String url = baseUrl + path + "?sessionId=" + encode(sessionId);
         String body = requestBody(question);
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "text/event-stream")
-                    .timeout(timeout)
-                    .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
-                    .build();
+        // 被测服务可能启用了限流（如令牌桶）。429 时尊重并指数退避重试，
+        // 而非直接判失败——这样评测结果反映真实记忆能力，而非被测服务的限流策略。
+        int maxAttempts = 8;
+        long backoffMillis = 2000;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("Content-Type", "application/json")
+                        .header("Accept", "text/event-stream")
+                        .timeout(timeout)
+                        .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
+                        .build();
 
-            HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() / 100 != 2) {
+                HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 429) {
+                    if (attempt < maxAttempts) {
+                        Thread.sleep(backoffMillis);
+                        backoffMillis = Math.min(backoffMillis * 2, 30000);
+                        continue;
+                    }
+                    return "";
+                }
+                if (response.statusCode() / 100 != 2) {
+                    return "";
+                }
+                return parseSse(response.body());
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return "";
+            } catch (Exception e) {
+                // 单个请求失败不应中断整轮评测：返回空串，由判定器判为"遗漏"
                 return "";
             }
-            return parseSse(response.body());
-        } catch (Exception e) {
-            // 单个请求失败不应中断整轮评测：返回空串，由判定器判为"遗漏"
-            return "";
         }
+        return "";
     }
 
     /**

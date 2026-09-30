@@ -1,0 +1,12 @@
+[
+  {
+    "id": "employer-toolkit",
+    "name": "AI 岗位影响分析智能体",
+    "description": "Spring AI 岗位分析服务（RAG + 工具调用 + 多轮会话记忆），默认端口 8089；跨会话 reset 端点为 DELETE /api/memory/{sessionId}。注意：其为垂直岗位分析智能体，而 memory-bench 用例为通用个人助理记忆场景，本次属跨场景对比，分数低不代表记忆能力差",
+    "type": "http",
+    "endpoint": "http://127.0.0.1:8089",
+    "path": "/api/analyze/stream",
+    "resetPath": "/api/memory/{sessionId}",
+    "timeoutSeconds": 180
+  }
+]

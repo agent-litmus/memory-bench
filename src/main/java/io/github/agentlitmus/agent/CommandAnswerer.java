@@ -98,12 +98,14 @@ public class CommandAnswerer implements Answerer {
                 }
             }
 
-            String output = readAll(process.getInputStream());
+            // 先等待进程在超时内结束，再读取输出：readAll 基于 readAllBytes，无法被中断，
+            // 必须先 waitFor(timeout) 才能避免子进程挂起时永久阻塞（HttpAnswerer 有 timeout，此处需对齐）
             boolean finished = process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
             if (!finished) {
                 process.destroyForcibly();
                 return "";
             }
+            String output = readAll(process.getInputStream());
             return output == null ? "" : output.trim();
         } catch (Exception e) {
             // 调用失败不应中断评测：返回空串，由判定器记为"遗漏"
