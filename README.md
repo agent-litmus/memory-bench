@@ -22,10 +22,10 @@
 >
 > | 项 | 值 |
 > |---|---|
-> | 实测环境 | openKylin 3.0（huanghe）x86_64 ｜ OpenJDK 17.0.11 ｜ KylinBot（`/usr/bin/kylin-bot`） |
+> | 实测环境 | openKylin 3.0（huanghe）x86_64 ｜ OpenJDK 17.0.11 ｜ KylinBot（`/usr/bin/kylin-bot`）｜ Hermes（`hermes-acp`） |
 > | 数据集 | 内置 150 条（六维各 25 条，含 20 条跨会话用例） |
-> | 实测对象 | 参考智能体 baseline ／ **KylinBot（真实智能体）** ／ 缺陷智能体 degraded ／ **AI 岗位影响分析智能体（跨场景）** |
-> | 实测结果 | **100% ／ 67%\* ／ 54% ／ 32%\*** —— 尺子具备分辨力（详见 [接入真实智能体](#接入真实智能体openkylin-kylinbot-实战)）；\*KylinBot 与 AI 岗位影响分析智能体为早期 72 条用例集实测，reference/degraded 已按 150 条用例集复测；AI 岗位影响分析智能体为垂直岗位分析服务，本基准用例为通用个人助理记忆场景，属跨场景对比，分数低不代表记忆能力差 |
+> | 实测对象 | 参考智能体 baseline ／ **KylinBot（真实智能体·CLI）** ／ 缺陷智能体 degraded ／ **Hermes（真实智能体·ACP）** |
+> | 实测结果 | **100% ／ 67% ／ 54%** —— 尺子具备分辨力（KylinBot 详见 [接入真实智能体](#接入真实智能体openkylin-kylinbot-实战)；Hermes 经 ACP 接入，详见 [Hermes（ACP）接入](#接入真实智能体openkylin-hermesacp)）。KylinBot 为早期 72 条用例集实测，reference/degraded 已按 150 条用例集复测 |
 > | 运行证据 | 每款智能体 394~404 条 JSONL 证据，空回答 0 条；每条用例另有 Markdown 产物 |
 > | 样例结果 | [`samples/`](./samples) —— 可直接查看的证据、产物与评分样例 |
 > | 一键复现 | `./scripts/verify-openkylin.sh`（环境采集 + 全量测试 + 评测） |
@@ -143,17 +143,14 @@ litmus export-cases --out out/               # 导出内置用例，便于扩展
 参考智能体（baseline）      100%     100%     100%     100%     100%     100%    100%
 KylinBot（麒灵助手）         83%      75%      50%      58%      50%      83%     67%
 缺陷智能体（degraded）      100%      88%       0%      60%       0%      76%     54%
-AI 岗位影响分析智能体*       25%      33%      17%      25%      92%       0%     32%
-
-\* AI 岗位影响分析智能体（employer-toolkit）为垂直岗位分析服务（RAG+工具调用+会话记忆），本基准用例为通用个人助理记忆场景，属**跨场景对比**：分数低不代表记忆能力差，但证明本基准能区分"通用记忆型"与"垂直领域型"智能体；其边界识别 92% 反而体现对非记忆类敏感信息（身份证号、银行卡号、手机号）的强拦截。KylinBot 全量并行 67%，单独专项评测 63%，波动 63%~69% 属被测云端模型正常波动。
 ```
 
 这个对比的意义在于：**评测能稳定区分不同智能体的记忆能力差异**——若两款表现都满分，尺子就失去了分辨力。
 
-> 说明：上表 KylinBot 与 AI 岗位影响分析智能体两行来自**早期 72 条用例集**的实测；
+> 说明：上表 KylinBot 一行来自**早期 72 条用例集**的实测；
 > `reference` / `degraded` 已按 150 条用例集复测（degraded 由 46% 升至 54%，
 > 相近区分 17%→60%、任务复用 67%→76%，说明扩充后的数据集分辨力更强）。
-> 真实智能体在 150 条用例集上重跑会调用其云端模型、产生额度消耗，重跑与否由使用者决定。
+> 真实智能体（KylinBot / Hermes）在 150 条用例集上重跑会调用其云端模型、产生额度消耗，建议分层抽样（详见接入章节）。
 
 ### 打包 openKylin / Debian 安装包
 
@@ -223,10 +220,10 @@ litmus validate-cases
 命题评的是**通用**智能体长期记忆。为避免"通用基准评垂直 agent"的不公平观感，智能体配置支持 `role` 字段：
 
 - `primary`（默认）——主对比对象，进入雷达图与横向对比表；
-- `extra`——附加案例（通常为跨领域垂直 agent，如 AI 岗位影响分析智能体），单独成区展示，作为"尺子能否区分垂直与通用 agent"的鲁棒性证据，**不计入主对比评分主体**。
+- `extra`——附加案例（通常为另一款真实智能体，作为对照 / 鲁棒性证据），单独成区展示，**不计入主对比评分主体**。
 
 ```json
-{ "id": "employer-toolkit", "type": "http", "endpoint": "http://127.0.0.1:8089", "role": "extra" }
+{ "id": "hermes", "type": "builtin", "role": "extra" }
 ```
 
 ### 在 openKylin 上一键验证
@@ -333,6 +330,31 @@ kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list
 
 > 说明：接入真实智能体后评测**不再离线可复现**——被测对象会调用云端模型，存在随机性与额度消耗。
 > 因此提交材料时应同时给出 `reference` / `degraded` 对照组，证明「尺子本身」稳定。
+
+### 接入真实智能体：openKylin Hermes（ACP）
+
+除 KylinBot（CLI）外，openKylin 生态的另一款真实智能体 **Hermes** 也可经 **ACP（Agent Communication Protocol，JSON-RPC over stdio）** 接入——这是 Hermes 面向编辑器（VS Code / Zed / JetBrains）暴露的正式集成接口，跑的是**真正的 Hermes 智能体循环**，会话与长期记忆都在 Hermes 内部，正是长期记忆评测要测的对象。
+
+**驱动方式**：`HermesAcpAnswerer` 以**每用例一个独立进程**的方式拉起官方 `hermes-acp` 二进制，走 `initialize → session/new → session/prompt`；每个用例分配独立的 `HERMES_HOME`（从主目录拷贝 `config.yaml` 与 `.env`），保证跨用例记忆互不污染、且不触碰用户真实记忆。
+
+**路径可配置**（避免硬编码，便于评审机指定自有安装位置）：
+
+```bash
+# 默认回落到 ~/.kylin-agent-runtime/agent-runtime/venv/bin/hermes-acp
+# 可用系统属性或环境变量覆盖：
+java -Dlitmus.hermes.bin=/opt/hermes/venv/bin/hermes-acp \
+     -Dlitmus.hermes.home=/opt/hermes \
+     -jar target/memory-bench-*.jar run --agents hermes --cases small.json --out probe/
+# 或等价环境变量：HERMES_ACP_BIN / HERMES_ACP_HOME
+```
+
+**配置**（`examples/agents-hermes.json`）：
+
+```json
+{ "id": "hermes", "name": "Hermes Agent（ACP）", "type": "builtin", "role": "primary" }
+```
+
+**复现注意**：Hermes 自身须先配置可用的模型供应商（如 `GLM_API_KEY`），且每个用例约 90 秒（Hermes 每回合固有处理开销，含记忆整理）；参赛建议**分层抽样**（如每维 5 条 ≈ 30 条，须含跨会话用例）并明确标注"抽样 N 条"，无需全量 150 条。其运行证据 `evidence/hermes.jsonl` 与 Markdown 产物可随包预置或在该环境复现。
 
 ### 参赛录屏方案（3–5 分钟）
 

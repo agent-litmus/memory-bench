@@ -51,8 +51,32 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
 
     private static final Logger log = LoggerFactory.getLogger(HermesAcpAnswerer.class);
 
+    /**
+     * 默认二进制路径。可被系统属性 {@code litmus.hermes.bin} 或环境变量
+     * {@code HERMES_ACP_BIN} 覆盖；模板目录（含 config.yaml / .env）可被
+     * {@code litmus.hermes.home} / {@code HERMES_ACP_HOME} 覆盖。
+     * 不设置时回落到用户主目录下的官方 openKylin 运行时安装位置。
+     */
     private static final String DEFAULT_BIN =
             System.getProperty("user.home") + "/.kylin-agent-runtime/agent-runtime/venv/bin/hermes-acp";
+
+    private static String resolveBinary() {
+        String v = System.getProperty("litmus.hermes.bin");
+        if (v == null || v.isBlank()) {
+            v = System.getenv("HERMES_ACP_BIN");
+        }
+        return (v == null || v.isBlank()) ? DEFAULT_BIN : v;
+    }
+
+    private static Path resolveTemplateHome() {
+        String v = System.getProperty("litmus.hermes.home");
+        if (v == null || v.isBlank()) {
+            v = System.getenv("HERMES_ACP_HOME");
+        }
+        return (v == null || v.isBlank())
+                ? Path.of(System.getProperty("user.home"), ".kylin-agent-runtime")
+                : Path.of(v);
+    }
 
     private final String binary;
     private final Path templateHome;
@@ -64,8 +88,8 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
     private final Map<String, AcpSession> sessions = new LinkedHashMap<>();
 
     public HermesAcpAnswerer() {
-        this(DEFAULT_BIN,
-                Path.of(System.getProperty("user.home"), ".kylin-agent-runtime"),
+        this(resolveBinary(),
+                resolveTemplateHome(),
                 Path.of(System.getProperty("java.io.tmpdir"), "litmus-hermes"),
                 System.getProperty("user.dir"),
                 Duration.ofSeconds(120));

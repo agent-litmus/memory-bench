@@ -10,14 +10,5 @@
     "name": "缺陷智能体（degraded）",
     "description": "内置问题样本：总取最早写入的记忆，会复用旧信息、混淆相近信息、泄露不应保留的信息",
     "type": "builtin"
-  },
-  {
-    "id": "employer-toolkit",
-    "name": "AI 岗位影响分析智能体",
-    "description": "Spring AI 岗位分析服务（RAG + 工具调用 + 多轮会话记忆），默认端口 8089；流式接口超时较长故设 180s",
-    "type": "http",
-    "endpoint": "http://127.0.0.1:8089",
-    "path": "/api/analyze/stream",
-    "timeoutSeconds": 180
   }
 ]
