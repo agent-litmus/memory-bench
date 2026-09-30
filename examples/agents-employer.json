@@ -1,0 +1,15 @@
+[
+  {
+    "_optional": true,
+    "_requires": "需先在本机启动独立的 employer-toolkit 服务（另一开源项目，默认端口 8089），本基准不随包分发、评委会不可复现，仅作可选跨场景验证示例；请用 --agents-config examples/agents-employer.json 显式启用",
+    "id": "employer-toolkit",
+    "name": "AI 岗位影响分析智能体（可选·跨场景验证）",
+    "description": "Spring AI 岗位分析服务（RAG + 工具调用 + 多轮会话记忆），默认端口 8089；跨会话 reset 端点为 DELETE /api/memory/{sessionId}。注意：其为垂直岗位分析智能体，而 memory-bench 用例为通用个人助理记忆场景，本次属跨场景对比，低分不代表记忆能力差——作为附加案例（extra）单独展示，不计入通用记忆主对比，也不在默认评测 / 头部结果中。",
+    "type": "http",
+    "endpoint": "http://127.0.0.1:8089",
+    "path": "/api/analyze/stream",
+    "resetPath": "/api/memory/{sessionId}",
+    "timeoutSeconds": 180,
+    "role": "extra"
+  }
+]

@@ -226,6 +226,8 @@ litmus validate-cases
 { "id": "hermes", "type": "builtin", "role": "extra" }
 ```
 
+> **可选跨场景示例**：`examples/agents-employer.json` 提供了一款**独立的 Spring AI 岗位分析服务**（`http` 接入，role=extra）的配置，用于印证「尺子能区分通用记忆型与垂直领域型 agent」——该 agent 在通用记忆任务上低分、但在敏感信息边界识别上高分，属鲁棒性佐证。**需先在 8089 端口启动该外部服务**，非本包内置、评委会不可复现，故不计入默认评测与头部结果，请用 `--agents-config examples/agents-employer.json` 显式启用。
+
 ### 在 openKylin 上一键验证
 
 ```bash
