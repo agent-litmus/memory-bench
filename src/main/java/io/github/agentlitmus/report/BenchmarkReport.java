@@ -1,5 +1,6 @@
 package io.github.agentlitmus.report;
 import io.github.agentlitmus.core.Outcome;
+import io.github.agentlitmus.core.FailureCause;
 import io.github.agentlitmus.core.Dimension;
 import io.github.agentlitmus.core.Judgment;
 
@@ -73,6 +74,26 @@ public record BenchmarkReport(List<Judgment> judgments) {
         return counts;
     }
 
+    /**
+     * 按记忆失败归因统计（无响应 / 保持召回缺失 / 相近混淆 / 边界泄漏 / 旧值未更新）。
+     * <p>
+     * 在五类结果之上再细分：把「评测导管故障（无响应）」与「被测对象真实记忆缺陷」区分开，
+     * 避免限流 429 等服务问题污染分数；同时把"错在哪一类"进一步落到记忆生命周期阶段。
+     */
+    public Map<FailureCause, Long> causeCounts() {
+        Map<FailureCause, Long> counts = new LinkedHashMap<>();
+        for (FailureCause cause : FailureCause.values()) {
+            counts.put(cause, 0L);
+        }
+        for (Judgment judgment : judgments) {
+            FailureCause cause = judgment.cause();
+            if (cause != null) {
+                counts.merge(cause, 1L, Long::sum);
+            }
+        }
+        return counts;
+    }
+
     /** 输出可读报告，便于在终端查看或直接贴进申报材料 */
     public String toText() {
         StringBuilder sb = new StringBuilder();
@@ -91,13 +112,21 @@ public record BenchmarkReport(List<Judgment> judgments) {
             }
         });
         sb.append("-------------------------------------\n");
+        sb.append("失败归因（记忆生命周期阶段 / 可观测信号）:\n");
+        causeCounts().forEach((cause, count) -> {
+            if (count > 0) {
+                sb.append(String.format("  %-10s %d   %s%n", cause.label(), count, cause.description()));
+            }
+        });
+        sb.append("-------------------------------------\n");
         sb.append("明细:\n");
         for (Judgment judgment : judgments) {
-            sb.append(String.format("  [%s] %-6s %-6s %-8s %s%n",
+            sb.append(String.format("  [%s] %-6s %-6s %-8s %-10s %s%n",
                     judgment.passed() ? "通过" : "未过",
                     judgment.caseId(),
                     judgment.dimension().label(),
                     judgment.outcome().label(),
+                    judgment.cause() == null ? "-" : judgment.cause().label(),
                     judgment.reason()));
         }
         sb.append("=====================================\n");

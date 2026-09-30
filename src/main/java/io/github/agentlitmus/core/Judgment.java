@@ -10,6 +10,7 @@ package io.github.agentlitmus.core;
  * @param reason    判定理由（可解释：哪一项没做到、为什么不合格）
  * @param mode      判定方式：rule / llm / rule-degraded
  * @param outcome   结果类别：正确记忆 / 遗漏 / 混淆 / 错误持久化 / 错误复用
+ * @param cause     记忆失败归因：在结果类别之上，指向记忆生命周期阶段 / 可观测信号
  */
 public record Judgment(String caseId,
                        Dimension dimension,
@@ -17,7 +18,8 @@ public record Judgment(String caseId,
                        double score,
                        String reason,
                        String mode,
-                       Outcome outcome) {
+                       Outcome outcome,
+                       FailureCause cause) {
 
     public static final String MODE_RULE = "rule";
     public static final String MODE_LLM = "llm";
@@ -30,12 +32,12 @@ public record Judgment(String caseId,
     }
 
     public static Judgment rule(String caseId, Dimension dimension, boolean passed,
-                                String reason, Outcome outcome) {
-        return new Judgment(caseId, dimension, passed, passed ? 1.0 : 0.0, reason, MODE_RULE, outcome);
+                                String reason, Outcome outcome, FailureCause cause) {
+        return new Judgment(caseId, dimension, passed, passed ? 1.0 : 0.0, reason, MODE_RULE, outcome, cause);
     }
 
     public static Judgment llm(String caseId, Dimension dimension, double score,
-                               String reason, Outcome outcome) {
-        return new Judgment(caseId, dimension, score > 0, score, reason, MODE_LLM, outcome);
+                               String reason, Outcome outcome, FailureCause cause) {
+        return new Judgment(caseId, dimension, score > 0, score, reason, MODE_LLM, outcome, cause);
     }
 }

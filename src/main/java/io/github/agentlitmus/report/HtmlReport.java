@@ -1,6 +1,7 @@
 package io.github.agentlitmus.report;
 import io.github.agentlitmus.core.Judgment;
 import io.github.agentlitmus.core.Dimension;
+import io.github.agentlitmus.core.FailureCause;
 import io.github.agentlitmus.agent.AgentUnderTest;
 
 import java.time.LocalDateTime;
@@ -94,7 +95,14 @@ public final class HtmlReport {
                 }
             });
             sb.append("</p>");
-            sb.append("<table><tr><th>用例</th><th>维度</th><th>结果</th><th>类别</th><th>判定理由</th></tr>");
+            sb.append("<p><b>失败归因：</b>");
+            report.causeCounts().forEach((cause, count) -> {
+                if (count > 0) {
+                    sb.append(escape(cause.label())).append(" <b>").append(count).append("</b>　");
+                }
+            });
+            sb.append("</p>");
+            sb.append("<table><tr><th>用例</th><th>维度</th><th>结果</th><th>类别</th><th>归因</th><th>判定理由</th></tr>");
             sb.append(detailsOf(report));
             sb.append("</table></div>");
         }
@@ -113,6 +121,7 @@ public final class HtmlReport {
             sb.append("<td class=\"").append(judgment.passed() ? "pass" : "fail").append("\">")
                     .append(judgment.passed() ? "通过" : "未过").append("</td>");
             sb.append("<td>").append(judgment.outcome().label()).append("</td>");
+            sb.append("<td>").append(judgment.cause() == null ? "—" : escape(judgment.cause().label())).append("</td>");
             sb.append("<td>").append(escape(judgment.reason())).append("</td>");
             sb.append("</tr>");
         }
