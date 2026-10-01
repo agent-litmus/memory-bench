@@ -23,7 +23,14 @@ public final class RadarChart {
     };
 
     private static final int WIDTH = 640;
-    private static final int HEIGHT = 520;
+    /**
+     * 图例区首行基线 y。图例<b>按可用宽度自动换行</b>，画布总高随行数动态增长——
+     * 此前图例单行横向排列，多款智能体（尤其长名称）会溢出画布被截断。
+     */
+    private static final int LEGEND_TOP = 472;
+    private static final int LEGEND_ROW_H = 26;
+    private static final int LEGEND_LEFT = 40;
+    private static final int RIGHT_MARGIN = 20;
     // 中心与半径参与浮点坐标计算，必须声明为 double：
     // 否则 String.format("%.1f", CX) 会因传入 int 抛出 IllegalFormatConversionException
     private static final double CX = 320;
@@ -40,10 +47,14 @@ public final class RadarChart {
      * @return SVG 字符串
      */
     public static String svg(Map<String, Map<Dimension, Double>> series) {
+        List<String> names = new ArrayList<>(series.keySet());
+        int rows = legendRows(names);
+        int height = LEGEND_TOP + rows * LEGEND_ROW_H + 12;
+
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(
                 "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%d\" height=\"%d\" viewBox=\"0 0 %d %d\">%n",
-                WIDTH, HEIGHT, WIDTH, HEIGHT));
+                WIDTH, height, WIDTH, height));
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>");
         sb.append("<g font-family=\"sans-serif\">");
 
@@ -86,18 +97,23 @@ public final class RadarChart {
             index++;
         }
 
-        // 图例
-        int legendY = HEIGHT - 34;
+        // 图例：按可用宽度自动换行，避免长名称横向溢出被截断
+        int legendY = LEGEND_TOP;
         index = 0;
-        int legendX = 40;
-        for (String name : series.keySet()) {
+        int legendX = LEGEND_LEFT;
+        for (String name : names) {
+            int itemW = 20 + estWidth(name) + 24;
+            if (legendX > LEGEND_LEFT && legendX + itemW > WIDTH - RIGHT_MARGIN) {
+                legendX = LEGEND_LEFT;
+                legendY += LEGEND_ROW_H;
+            }
             String color = COLORS[index % COLORS.length];
             sb.append(String.format(
                     "<rect x=\"%d\" y=\"%d\" width=\"14\" height=\"14\" fill=\"%s\"/>", legendX, legendY - 11, color));
             sb.append(String.format(
                     "<text x=\"%d\" y=\"%d\" font-size=\"14\" fill=\"#333\">%s</text>",
                     legendX + 20, legendY, escape(name)));
-            legendX += 30 + name.length() * 14;
+            legendX += itemW;
             index++;
         }
 
@@ -149,6 +165,37 @@ public final class RadarChart {
     /** 从正上方开始，顺时针均匀分布 */
     private static double angleOf(int index, int total) {
         return -Math.PI / 2 + (2 * Math.PI * index / total);
+    }
+
+    /** 图例需要几行：按可用宽度模拟一次换行，用于推算画布高度 */
+    private static int legendRows(List<String> names) {
+        int rows = 1;
+        int x = LEGEND_LEFT;
+        for (String name : names) {
+            int itemW = 20 + estWidth(name) + 24;
+            if (x > LEGEND_LEFT && x + itemW > WIDTH - RIGHT_MARGIN) {
+                rows++;
+                x = LEGEND_LEFT;
+            }
+            x += itemW;
+        }
+        return rows;
+    }
+
+    /**
+     * 粗略估算文本像素宽度（font-size=14）：中日韩及全角字符按 14px，其余按 7.6px。
+     * 只需保证"不溢出"，无需精确到亚像素。
+     */
+    private static int estWidth(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+        double w = 0;
+        for (char c : s.toCharArray()) {
+            boolean wide = (c >= 0x2E80 && c <= 0x9FFF) || (c >= 0xFF00 && c <= 0xFFEF);
+            w += wide ? 14.0 : 7.6;
+        }
+        return (int) Math.ceil(w);
     }
 
     private static String escape(String text) {
