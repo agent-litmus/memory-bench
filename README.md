@@ -22,11 +22,11 @@
 >
 > | 项 | 值 |
 > |---|---|
-> | 实测环境 | openKylin 3.0（huanghe）x86_64 ｜ OpenJDK 17.0.11 ｜ KylinBot（`/usr/bin/kylin-bot`）｜ Hermes（`hermes-acp`） |
+> | 实测环境 | openKylin 3.0（huanghe）x86_64 ｜ OpenJDK **21.0.11**（编译目标 17，故 17+ 均可运行）｜ KylinBot（`/usr/bin/kylin-bot`）｜ Hermes（`hermes-acp`） |
 > | 数据集 | 内置 150 条（六维各 25 条，含 20 条跨会话用例） |
 > | 实测对象 | 参考智能体 baseline ／ **KylinBot（真实智能体·CLI）** ／ 缺陷智能体 degraded ／ **Hermes（真实智能体·ACP）** |
 > | 实测结果 | **reference 100% ／ KylinBot 67% ／ degraded 54% ／ Hermes 47%** —— 尺子具备分辨力，且四款呈现不同能力剖面（KylinBot 详见 [接入真实智能体](#311-接入真实智能体openkylin-kylinbot-实战)；Hermes 详见 [Hermes（ACP）接入](#312-接入真实智能体openkylin-hermesacp)）。四行均为**内置 150 条用例集**实测 |
-> | 运行证据 | 每款智能体 394~404 条 JSONL 证据，空回答 0 条；每条用例另有 Markdown 产物 |
+> | 运行证据 | 每款智能体一份 JSONL 证据（共 4 份）+ 逐条 Markdown 产物；其中 KylinBot 3 条、Hermes 9 条未获得回答（已单独归因为「无响应」，非记忆能力缺陷） |
 > | 样例结果 | [`samples/`](./samples) —— 可直接查看的证据、产物与评分样例 |
 > | 一键复现 | `./scripts/verify-openkylin.sh`（环境采集 + 全量测试 + 评测） |
 
@@ -268,7 +268,7 @@ litmus validate-cases
 ### 3.11 接入真实智能体：openKylin KylinBot 实战
 
 内置两款用于证明「尺子有效」，真正有说服力的评测必须落在真实智能体上。
-已在 **openKylin 3.0（x86_64 / JDK 17.0.11）** 完成 KylinBot（麒灵助手）接入实测。
+已在 **openKylin 3.0（x86_64 / JDK 21.0.11，编译目标 17 故 17+ 均可）** 完成 KylinBot（麒灵助手）接入实测。
 
 **选型：为什么用 CLI 而不是 Gateway / ACP**
 
@@ -282,7 +282,7 @@ litmus validate-cases
 **适配器**（`scripts/kylinbot-adapter.sh`）解决两个硬约束：
 
 1. **用例间记忆污染** —— 每个会话用独立 `--config-dir`（KylinBot 记忆库 `workspace/memory/brain.db` 随配置目录走），
-   72 条用例互不干扰，且**不触碰用户真实的 `~/.kylinbot` 记忆**；
+   各条用例互不干扰，且**不触碰用户真实的 `~/.kylinbot` 记忆**；
 2. **多轮上下文** —— `--session-state-file` 落盘会话状态，保证多次独立调用仍是同一段会话。
 
 > 注意：`--config-dir` 必须**同时**拷贝 `config.toml` 与 `.secret_key`，否则 `api_key` 的 enc2 解密会失败。
@@ -305,18 +305,20 @@ java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run \
      --agents-config examples/agents-multi.json --out out-multi-final/   # 三款智能体一次对比
 ```
 
-**实测结果**（72 条用例，六维，三款同跑一次产出）：
+**实测结果**（150 条用例，六维，四款全量实测）：
 
 | 智能体 | 长期保持 | 记忆调用 | 动态更新 | 相近区分 | 边界识别 | 任务复用 | 总体 |
 |---|---|---|---|---|---|---|---|
 | 参考智能体（baseline） | 100% | 100% | 100% | 100% | 100% | 100% | 100% |
-| **KylinBot（麒灵助手）** | 92% | 67% | 42% | 50% | 42% | 83% | **63%** |
-| 缺陷智能体（degraded） | 100% | 92% | 0% | 17% | 0% | 67% | 46% |
+| **KylinBot（麒灵助手）** | 92% | 56% | 44% | 72% | 60% | 76% | **67%** |
+| **Hermes Agent（ACP）** | 96% | 56% | 4% | 36% | 12% | 76% | **47%** |
+| 缺陷智能体（degraded） | 100% | 88% | 0% | 60% | 0% | 76% | 54% |
 
-结果分类（KylinBot）：`正确记忆 45 / 遗漏 10 / 混淆 5 / 错误持久化 7 / 错误复用 5`。
+结果分类：KylinBot `正确记忆 100 / 遗漏 26 / 混淆 4 / 错误持久化 10 / 错误复用 10`；
+Hermes `正确记忆 70 / 遗漏 27 / 混淆 14 / 错误持久化 22 / 错误复用 17`。
 
-**跨会话长期保持**（10 条：注入后重置对话上下文再提问）：KylinBot 长期保持维度达 **92%**，
-说明其表现主要来自长期记忆，而非上下文窗口。
+**跨会话长期保持**（20 条：注入后重置对话上下文再提问）：KylinBot 长期保持达 **92%**、
+Hermes 达 **96%**，说明其表现主要来自长期记忆，而非上下文窗口。
 
 **最值得关注的发现：边界识别仅 42%**
 
@@ -350,7 +352,7 @@ print('证据条数:',len(rows),'空回答:',sum(1 for r in rows if not r['conte
 kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list
 ```
 
-实测 `evidence/kylinbot.jsonl` 共 404 条、**空回答 0 条**；其中 10 条跨会话用例的证据里带有
+实测 `samples/full-final-150/evidence/kylinbot.jsonl` 逐条留证、**空回答 3 条**（已单独归因为「无响应」，非记忆能力缺陷）；其中 20 条跨会话用例的证据里带有
 「重置会话上下文」标记，可核对重置确实执行过。
 
 此外，每条用例都会落盘一份 **Markdown 运行产物**（`artifacts/<agent>/<case>.md`）：
@@ -514,7 +516,7 @@ io/github/agentlitmus/
 │   ├── HtmlReport.java        HTML 报告（含归因改进建议/稳定性/覆盖度）
 │   └── StabilityReport.java   稳定性证据（重复评测方差/抖动）
 ├── dataset/              数据集
-│   ├── MemoryCases.java       内置 72 条用例（六维各 12，含 10 条跨会话）+ JSON 加载/导出
+│   ├── MemoryCases.java       内置 150 条用例（六维各 25，含 20 条跨会话）+ JSON 加载/导出
 │   └── CoverageReport.java    数据治理：覆盖度校验与区分度统计
 └── llm/                  外部模型接入
     └── LlmClient.java        单方法抽象，零框架绑定

@@ -8,6 +8,7 @@ import io.github.agentlitmus.core.DialogueBenchmarkRunner;
 import io.github.agentlitmus.evidence.EvidenceCollector;
 import io.github.agentlitmus.report.HtmlReport;
 import io.github.agentlitmus.report.RadarChart;
+import io.github.agentlitmus.report.ReportRates;
 import io.github.agentlitmus.report.CompareTable;
 import io.github.agentlitmus.report.BenchmarkResult;
 import io.github.agentlitmus.report.StabilityReport;
@@ -73,6 +74,7 @@ public final class Cli {
                 case "run-http" -> runHttp(parse(argv));
                 case "export-cases" -> exportCases(parse(argv));
                 case "validate-cases" -> validateCases(parse(argv));
+                case "rerender" -> rerender(parse(argv));
                 case "help", "-h", "--help" -> printUsage();
                 default -> {
                     System.err.println("未知命令: " + command);
@@ -247,6 +249,7 @@ public final class Cli {
                   litmus run [选项]              运行评测（默认内置两款智能体对比）
                   litmus validate-cases [选项]   校验数据集合法性与覆盖度
                   litmus export-cases [选项]     导出内置用例集，便于扩展数据集
+                  litmus rerender --from <dir>   按已有报告重新渲染雷达图（不重跑评测）
 
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
@@ -265,8 +268,64 @@ public final class Cli {
                   litmus run --agents-config examples/agents-openkylin.json --out result/
                   litmus run --cases my-cases.json --out result/
                   litmus run-http --endpoint http://localhost:8089 --out real/
+                  litmus rerender --from samples/full-final-150
                   litmus validate-cases
                 """);
+    }
+
+    /**
+     * 按已有报告重新渲染雷达图——<b>不重跑评测</b>。
+     * <p>
+     * 评测一旦涉及真实智能体，往往耗时数十分钟并消耗云端额度；而图表样式只是<b>渲染问题</b>，
+     * 与数据采集无关。因此从 {@code report.txt} 解析各智能体六维通过率后直接重新出图，
+     * 并同步更新 {@code report.html} 中内嵌的 SVG。
+     */
+    private static void rerender(Options o) {
+        Path dir = Path.of(o.from == null ? DEFAULT_OUT : o.from);
+        Path report = dir.resolve("report.txt");
+        if (!Files.exists(report)) {
+            System.err.println("未找到报告文件: " + report + "（请先运行评测，或用 --from 指定运行目录）");
+            return;
+        }
+        try {
+            Map<String, Map<Dimension, Double>> series = ReportRates.parse(report);
+            if (series.isEmpty()) {
+                System.err.println("未能从 " + report + " 解析出横向对比数据。");
+                return;
+            }
+            String svg = RadarChart.svg(series);
+            Path svgOut = dir.resolve("radar.svg");
+            Files.writeString(svgOut, svg, StandardCharsets.UTF_8);
+            System.out.println("已重新生成雷达图: " + svgOut + "（" + series.size() + " 款智能体）");
+            series.forEach((name, rates) -> System.out.println("  - " + name));
+
+            Path html = dir.resolve("report.html");
+            if (Files.exists(html)) {
+                String content = Files.readString(html, StandardCharsets.UTF_8);
+                String updated = replaceFirstSvg(content, svg);
+                if (!updated.equals(content)) {
+                    Files.writeString(html, updated, StandardCharsets.UTF_8);
+                    System.out.println("已同步更新内嵌雷达图: " + html);
+                } else {
+                    System.out.println("未在 " + html + " 中找到可替换的 SVG 块，仅更新了 radar.svg");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("重新渲染失败: " + e.getMessage());
+        }
+    }
+
+    /** 用新的 SVG 替换 HTML 中第一个 {@code <svg>...</svg>} 块 */
+    private static String replaceFirstSvg(String html, String svg) {
+        int start = html.indexOf("<svg");
+        if (start < 0) {
+            return html;
+        }
+        int end = html.indexOf("</svg>", start);
+        if (end < 0) {
+            return html;
+        }
+        return html.substring(0, start) + svg + html.substring(end + "</svg>".length());
     }
 
     // ------------------------------------------------------------------ 参数解析
@@ -281,6 +340,7 @@ public final class Cli {
                 case "--out" -> options.out = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--endpoint" -> options.endpoint = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--agents-config" -> options.agentsConfig = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
+                case "--from" -> options.from = value(argv, ++i, arg);
                 case "--parallel" -> {
                     try {
                         options.parallel = Integer.parseInt(value(argv, ++i, arg));
@@ -325,5 +385,6 @@ public final class Cli {
         private String endpoint;
         private int repeat = 1;
         private int parallel = 1;
+        private String from;
     }
 }

@@ -180,6 +180,14 @@ Hermes）的结果以<strong>预置证据</strong>（<code>samples/</code>）随
 <li>支持 <code>--agents-config</code>
 导入不同配置，<strong>批量并行</strong>评测多智能体（<code>--parallel N</code>，实测可将全量耗时从约
 3.8 小时压到约 2 小时，且总 token 消耗不变）。</li>
+<li><strong>结果可追溯、可就地重渲染</strong>：每轮评测都落盘为
+<code>report.txt</code> / <code>report.html</code> /
+<code>radar.svg</code>，以及逐条用例的 Markdown 产物与 JSONL
+证据；图表属于<strong>渲染层</strong>，与数据采集解耦——
+<code>litmus rerender --from &lt;dir&gt;</code>
+可直接依据已有报告重新出图并同步更新 HTML 内嵌图，
+<strong>无需重跑被测智能体</strong>（评测真实智能体耗时数十分钟并消耗云端额度，而重渲染是秒级的）。
+这既便于结果追溯与复现核对，也避免了”改一次图表就要重跑一遍被测系统”的浪费。</li>
 </ul>
 <h3 id="实测结果openkylin-真实环境内置-150-条全量用例">2.4
 实测结果（openKylin 真实环境，内置 150 条全量用例）</h3>
