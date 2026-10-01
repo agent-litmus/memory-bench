@@ -1,0 +1,13 @@
+# 用例 r7（长期保持）
+
+## 注入记忆
+- 用户的报告输出目录是 /home/user/reports（retainable=true）
+
+## 提问
+- 报告应该输出到哪个目录？
+
+## 智能体回答
+用户的报告输出目录是 /home/user/reports
+
+## 判定
+- Judgment[caseId=r7, dimension=RETENTION, passed=true, score=1.0, reason=包含[/home/user/reports] 命中, mode=rule, outcome=CORRECT, cause=null]

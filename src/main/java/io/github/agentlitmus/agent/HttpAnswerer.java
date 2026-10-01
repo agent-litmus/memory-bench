@@ -35,7 +35,7 @@ public class HttpAnswerer implements Answerer {
     private final Duration timeout;
 
     public HttpAnswerer(String baseUrl) {
-        this(baseUrl, "/api/analyze/stream", Duration.ofSeconds(120));
+        this(baseUrl, "/api/v1/analyze/stream", Duration.ofSeconds(120));
     }
 
     public HttpAnswerer(String baseUrl, String path, Duration timeout) {
@@ -66,8 +66,8 @@ public class HttpAnswerer implements Answerer {
         }
         try {
             // 兼容两种重置端点形态：
-            //   - 路径参数式（如 /api/memory/{sessionId}，部分 HTTP 智能体采用）
-            //   - 查询参数式（如 /api/reset?sessionId=xxx，历史默认）
+            //   - 路径参数式（如 /api/v1/memory/{sessionId}，部分 HTTP 智能体采用）
+            //   - 查询参数式（如 /api/v1/reset?sessionId=xxx，历史默认）
             String placeholder = "{sessionId}";
             String uri = resetPath.contains(placeholder)
                     ? baseUrl + resetPath.replace(placeholder, encode(sessionId))

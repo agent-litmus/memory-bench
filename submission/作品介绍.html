@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.12" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>面向 openKylin 的智能体长期记忆自动化评测 Benchmark</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style type="text/css">@page { size: A4; margin: 2cm; }
+body { font-family: "Noto Serif CJK SC","Noto Sans CJK SC","国标黑体-GBT2312",serif; font-size: 11pt; line-height: 1.65; }
+h1,h2,h3 { font-family: "Noto Sans CJK SC",sans-serif; color: #1a3a5c; page-break-after: avoid; }
+h1 { font-size: 20pt; } h2 { font-size: 15pt; } h3 { font-size: 12.5pt; }
+table { border-collapse: collapse; width: 100%; font-size: 9.5pt; margin: 8px 0; page-break-inside: avoid; }
+th,td { border: 1px solid #999; padding: 4px 8px; }
+th { background: #eef3f8; }
+code { font-family: monospace; background: #f2f2f2; padding: 1px 3px; }
+pre { background: #f7f7f7; padding: 8px; font-size: 9pt; white-space: pre-wrap; page-break-inside: avoid; }
+blockquote { border-left: 3px solid #bbb; margin-left: 0; padding-left: 12px; color: #555; }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">面向 openKylin 的智能体长期记忆自动化评测
+Benchmark</h1>
+</header>
+<h1 id="面向-openkylin-的智能体长期记忆自动化评测-benchmark">面向
+openKylin 的智能体长期记忆自动化评测 Benchmark</h1>
+<blockquote>
+<p>本作品为 <strong>【开源 AI 工具赛道】openKylin 赛题</strong>
+的参赛交付物。 提交用作品介绍文档（推荐导出为 PDF：可用
+<code>pandoc 作品介绍.md -o 作品介绍.pdf</code> 或浏览器“打印→另存为
+PDF”）。 文中所有模块均已随代码仓库提供可运行实现。</p>
+</blockquote>
+<hr />
+<h2 id="一句话定位">一句话定位</h2>
+<p>一套<strong>黑盒、可解释、可复现</strong>的智能体长期记忆自动化评测基准：把对话、记忆快照、行动轨迹、文件产物统一为“证据”，基于证据做<strong>规则判定
++
+五分类可解释归因</strong>，输出覆盖六种长期记忆能力的多维指标与对比雷达图，并原生集成
+openKylin 生态智能体（KylinBot / Hermes）。</p>
+<hr />
+<h2 id="项目背景">1. 项目背景</h2>
+<h3 id="命题痛点">1.1 命题痛点</h3>
+<p>随着大模型智能体进入办公、研发、个人助理等场景，<strong>长期、稳定、可控地记住用户信息</strong>已成为可用性的关键能力。长期记忆既包括应保留的稳定信息（偏好、路径、模板），也包括需识别并排除的临时信息、敏感信息、风险指令与噪声。</p>
+<p>当前 openKylin 生态已支持 KylinBot、kylin-agent、OpenClaw、Hermes
+Agent
+等主流智能体框架，但<strong>缺乏与之配套的系统级自动化评测工具</strong>，导致不同智能体在
+openKylin 上的记忆能力难以量化比较。现有评测存在三点明显不足：</p>
+<ol type="1">
+<li><strong>依赖人工检查</strong>，难以规模化；</li>
+<li><strong>简单问答式验证项</strong>，无法覆盖真实使用中的冲突更新、相似干扰与行动复用；</li>
+<li><strong>自动评分易语义偏移</strong>，难以稳定判断模型到底是“记住了”“误记了”还是“不该记却记了”。</li>
+</ol>
+<h3 id="本方案目标">1.2 本方案目标</h3>
+<p>围绕通用智能体长期记忆能力，设计一套<strong>尽可能自动化、低人工介入、可复现、可扩展</strong>的评测
+benchmark，重点覆盖命题要求的六种能力：</p>
+<ul>
+<li><strong>长期保持</strong>：应保留的信息是否被稳定记住并在后续使用；</li>
+<li><strong>记忆调用</strong>：后续交互中是否能正确调用相关信息；</li>
+<li><strong>动态更新</strong>：新信息出现后是否正确覆盖或修正旧信息；</li>
+<li><strong>相近区分</strong>：是否能识别相近信息之间的差异；</li>
+<li><strong>边界识别</strong>：不应长期保留或不应复用的信息是否被正确识别；</li>
+<li><strong>任务复用</strong>：实际任务执行中是否合理使用了历史信息。</li>
+</ul>
+<hr />
+<h2 id="技术架构">2. 技术架构</h2>
+<h3 id="总体流程">2.1 总体流程</h3>
+<pre><code>被测智能体 ──适配器──▶ 证据采集 ──▶ 用例引擎 ──▶ 规则评分器 ──▶ 五分类归因 ──▶ 指标聚合 ──▶ 报告/雷达
+ (KylinBot/        (对话/记忆/       (150 例,          (expect /        (正确记忆/      (六维通过率 +   (report.txt
+  Hermes/          行动/文件         六维各 25)         expectAbsent /    遗漏/混淆/      总评)            + report.html)
+  外部HTTP/        统一为Evidence)                     expectUpdate /    错误持久化/
+  内置确定性)                                         expectDiscriminate) 错误复用)</code></pre>
+<h3 id="关键模块">2.2 关键模块</h3>
+<p><strong>（1）证据采集层（适配器）</strong>
+将不同来源的运行产物统一抽象为 <code>Evidence</code>（对话轮次 +
+记忆快照 + 文件产物），做到“证据源无关”：</p>
+<ul>
+<li><code>CliAnswerer</code>：接 openKylin 的
+<strong>KylinBot（命令行）</strong>；</li>
+<li><code>HermesAcpAnswerer</code>：通过 <strong>ACP 协议</strong>接
+<strong>Hermes
+Agent</strong>（二进制/模板目录可通过系统属性或环境变量覆盖）；</li>
+<li><code>HttpAnswerer</code>：通过 HTTP 接外部独立智能体服务；</li>
+<li><code>BuiltinAnswerer</code>：接内置<strong>确定性智能体</strong>（reference
+/ degraded），用于标定与离线复现。</li>
+</ul>
+<p><strong>（2）用例引擎（<code>MemoryCases</code>）</strong> 内置
+<strong>150 条</strong>用例，六种维度<strong>各 25
+条</strong>，均衡覆盖；含三类针对性设计： -
+<strong>跨会话用例</strong>：注入后重置会话上下文，答对只能来自长期记忆而非上下文窗口；
+-
+<strong>噪声干扰样本</strong>：干扰项与提问无检索词重合，检验在干扰中仍能取对目标；
+-
+<strong>反向用例</strong>：记住禁忌后应在输出中回避（期望“不出现”）。</p>
+<p>用例可外置为 JSON（<code>loadFrom</code> /
+<code>exportTo</code>），支持增补样本、扩展记忆类型。</p>
+<p><strong>（3）规则评分器</strong>
+全部使用<strong>规则判定</strong>（无 API Key
+也能跑完整套），在闭合证据上判定：</p>
+<ul>
+<li><code>expect</code>：期望证据 token 是否出现；</li>
+<li><code>expectAbsent</code>：敏感/临时/风险信息是否<strong>未</strong>出现（边界识别与反向调用）；</li>
+<li><code>expectUpdate</code>：新值出现且旧值消失（动态更新）；</li>
+<li><code>expectDiscriminate</code>：命中目标且避开干扰（相近区分）。</li>
+</ul>
+<p><strong>（4）五分类可解释归因</strong>
+每条用例产出一种结果分类，并附<strong>可解释原因</strong>，直接对应命题“区分正确记忆、遗漏、混淆、错误持久化和错误复用”的要求：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>分类</th>
+<th>含义</th>
+<th>典型触发</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正确记忆</td>
+<td>应记的被正确记住并使用</td>
+<td>expect / update 命中</td>
+</tr>
+<tr>
+<td>遗漏</td>
+<td>应记的没记住</td>
+<td>expect 未命中</td>
+</tr>
+<tr>
+<td>混淆</td>
+<td>相近信息被搞混</td>
+<td>discriminate 命中干扰项</td>
+</tr>
+<tr>
+<td>错误持久化</td>
+<td>不该留的被留下 / 更新失败</td>
+<td>absent 误出现 / update 旧值残留</td>
+</tr>
+<tr>
+<td>错误复用</td>
+<td>历史信息被错误使用</td>
+<td>reuse 用错目标</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（5）指标聚合与报告</strong> -
+<code>report.txt</code>：六维通过率 + 总评 +
+每条用例的五分类归因与原因（结构化、可解释）； -
+<code>report.html</code>：多智能体<strong>六维雷达对比图</strong>，支持批量横向比较。</p>
+<h3 id="可复现性与稳定性设计">2.3 可复现性与稳定性设计</h3>
+<ul>
+<li>内置<strong>确定性智能体</strong>作为标定对照组：<strong>reference（参考）六维
+100%</strong>（上界），<strong>degraded（缺陷）总体 54%</strong>，且
+degraded 在其被设计失败的维度上为 <strong>0%</strong>（动态更新
+0%、边界识别
+0%）——“能力健全者满分”与”有缺陷者必被抓到”同时成立，证明评分链路有效；二者<strong>离线可跑、零外部依赖、重复运行
+σ=0</strong>，保证核心 benchmark 可复现；</li>
+<li>真实智能体（KylinBot /
+Hermes）的结果以<strong>预置证据</strong>（<code>samples/</code>）随包提供，证明“真跑过真实系统”，不要求评委复跑；</li>
+<li>支持 <code>--agents-config</code>
+导入不同配置，<strong>批量并行</strong>评测多智能体（<code>--parallel N</code>，实测可将全量耗时从约
+3.8 小时压到约 2 小时，且总 token 消耗不变）。</li>
+</ul>
+<h3 id="实测结果openkylin-真实环境内置-150-条全量用例">2.4
+实测结果（openKylin 真实环境，内置 150 条全量用例）</h3>
+<p>测试环境：openKylin（x86_64）／OpenJDK 21；被测对象为 openKylin
+生态自带的 <strong>KylinBot</strong>（CLI 适配器）与
+<strong>Hermes</strong>（ACP 协议），外加内置确定性对照组。</p>
+<pre><code>智能体                   长期保持  记忆调用  动态更新  相近区分  边界识别  任务复用  总体
+参考智能体（baseline）      100%     100%     100%     100%     100%     100%    100%
+KylinBot（麒灵助手）         92%      56%      44%      72%      60%      76%     67%
+缺陷智能体（degraded）      100%      88%       0%      60%       0%      76%     54%
+Hermes Agent（ACP）         96%      56%       4%      36%      12%      76%     47%</code></pre>
+<p><strong>结果如何读（可解释性）</strong>：两款真实智能体都显著低于”能力健全”的
+reference（100%），且呈现出<strong>不同的能力剖面</strong>——KylinBot
+在相近区分（72%）上明显强于 Hermes（36%），而 Hermes
+在长期保持（96%）上接近满分却在动态更新（4%）与边界识别（12%）上几乎失效。这正是”多维指标”而非单一总分的价值：能指出<strong>每款智能体具体弱在哪个记忆环节</strong>。</p>
+<p><strong>稳定性</strong>：内置 <code>reference</code> /
+<code>degraded</code>
+两次运行完全一致（σ=0），证明”尺子本身”稳定；两款真实智能体两轮独立重跑分别为
+68%/67%（KylinBot）与
+45%/47%（Hermes），波动来自被测对象自身（其调用云端模型）而非评测工具。</p>
+<blockquote>
+<p><strong>关于”未回答”的说明（如实披露）</strong>：真实智能体在个别回合会出现长尾延迟——本轮
+Hermes 有 <strong>9/150</strong> 条用例、KylinBot 有
+<strong>3/150</strong> 条用例在 300 秒内未返回答案（约占 Hermes 回合数的
+4%），这些按规则计为未通过。
+这是<strong>被测智能体在持续高强度对话下的可用性/稳定性问题</strong>，并不完全等同于其”记忆能力”不足；后续可将”超时未回答”单列为一类结果而不计入通过率分母，使评分更严谨。</p>
+</blockquote>
+<h4 id="附一次由本-benchmark-定位出的可复现缺陷诊断价值示例">2.4.1
+附：一次由本 benchmark 定位出的可复现缺陷（诊断价值示例）</h4>
+<p>两轮<strong>独立</strong>全量重跑（并行度分别为 8 与
+4、超时阈值分别为 240 s 与 300 s）的超时用例清单并不随机：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 轮超时用例</td>
+<td>25 条</td>
+</tr>
+<tr>
+<td>第 2 轮超时用例</td>
+<td>22 条</td>
+</tr>
+<tr>
+<td><strong>两轮均超时（重合）</strong></td>
+<td><strong>12 条</strong></td>
+</tr>
+<tr>
+<td>若纯属随机抖动，重合的期望值</td>
+<td>约 3.7 条（25×22/150）</td>
+</tr>
+</tbody>
+</table>
+<p>实际重合数为随机水平的 <strong>约 3.2
+倍</strong>，说明除随机长尾外，还存在<strong>可复现的、由输入触发</strong>的因素——即<strong>不是</strong>模型
+API 的偶发抖动。</p>
+<p><strong>针对这 12 条的专项验证</strong>（超时阈值放宽至 600 s
+并开启协议层调试日志）结果如下：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>验证项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12 条是否最终产出回答</td>
+<td><strong>全部产出，空回答 0 条</strong>（2 条触及 600 s
+上限，且发生在”注入事实”回合，后续提问回合仍正常返回）</td>
+</tr>
+<tr>
+<td>是否死循环 / 崩溃</td>
+<td><strong>否</strong>——是”极慢”而非”卡死”</td>
+</tr>
+<tr>
+<td>单回合耗时分布</td>
+<td>54 s ~ 600 s（正常中位数约 25–30 s，即慢 5~20 倍）</td>
+</tr>
+<tr>
+<td>协议层事件统计</td>
+<td>思考片段 <strong>57,420</strong> 条 ／ 回答片段
+<strong>7,875</strong> 条（约 7:1）／ <strong>工具调用仅 2
+次</strong></td>
+</tr>
+<tr>
+<td>单回合上下文用量</td>
+<td>8,026 → 46,094 token（均值约 13,798）；单用例累计约 32,687
+token</td>
+</tr>
+</tbody>
+</table>
+<p>据此定位（<strong>已有协议层数据支撑</strong>）：慢的成因并非文件工具调用（仅
+2 次），而是 Hermes
+在这类请求上会生成<strong>极长的内部思考链</strong>——思考片段量约为回答片段的
+7
+倍，导致单回合达到分钟级。这属于<strong>被测智能体内部可复现的性能病态</strong>：与具体输入相关、跨轮稳定复现，既非模型
+API 抖动，也非评测工具的缺陷。</p>
+<blockquote>
+<p>说明：本 benchmark
+在此不止给出分数，还<strong>定位到被测智能体一处可复现的缺陷</strong>——这类问题在少量样例的冒烟测试（如
+4
+条用例）中不会暴露，只有在全量、多回合、持续对话的压力下才会显现。这正是自动化、可规模化的评测相对于人工抽查的价值所在。</p>
+</blockquote>
+<hr />
+<h2 id="应用场景">3. 应用场景</h2>
+<ol type="1">
+<li><strong>openKylin
+社区智能体能力持续评估</strong>：作为社区基准，周期性评估各智能体记忆能力；</li>
+<li><strong>多智能体横向对比</strong>：六维雷达图直观比较 KylinBot /
+Hermes / 外部系统等差异；</li>
+<li><strong>版本迭代回归测试</strong>：智能体升级后重跑，监控记忆能力是否退化；</li>
+<li><strong>新智能体接入评测</strong>：通过 CLI / ACP / HTTP
+适配器快速纳入评测；</li>
+<li><strong>教学与基准参考</strong>：可解释归因帮助开发者定位记忆缺陷的具体环节。</li>
+</ol>
+<hr />
+<h2 id="创新点">4. 创新点</h2>
+<ol type="1">
+<li><strong>黑盒 +
+证据闭环</strong>：不依赖被测对象内部实现，统一证据模型，天然支持异构智能体；</li>
+<li><strong>五分类可解释归因</strong>：不止给总分，区分五种失败模式并逐条给出原因，直接命中命题“自动评分能力”要求；</li>
+<li><strong>跨会话验证</strong>：重置会话上下文，严格证明“答对来自长期记忆”；</li>
+<li><strong>检索词隔离设计</strong>：相近区分用例的干扰项刻意不含提问检索词，避免“测到检索巧合”而非真实区分能力；</li>
+<li><strong>内置确定性智能体</strong>：既做评分器标定，又保证离线零依赖可复现（对应“稳定性与可复现性”）；</li>
+<li><strong>openKylin 原生集成</strong>：真实接入 openKylin 生态自带的
+KylinBot 与 Hermes，而非外挂玩具，具备社区落地价值。</li>
+</ol>
+<hr />
+<h2 id="附录-a交付物与评分标准对照">附录 A：交付物与评分标准对照</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>评审维度（权重）</th>
+<th>本作品对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务定义与通用性（15%）</td>
+<td>多智能体（KylinBot/Hermes/HTTP）、证据源无关、openKylin
+原生集成</td>
+</tr>
+<tr>
+<td>数据设计质量（25%）</td>
+<td>150 例六维均衡、多记忆类型、检索词隔离抗巧合、JSON 可外扩</td>
+</tr>
+<tr>
+<td>自动评分能力（25%）</td>
+<td>五分类可解释归因、规则判定零人工、证据+原因</td>
+</tr>
+<tr>
+<td>稳定性与可复现性（15%）</td>
+<td>确定性智能体离线可跑、σ=0、批量、证据可追踪</td>
+</tr>
+<tr>
+<td>指标完整性（10%）</td>
+<td>六维雷达 + 五分类，非单一总分</td>
+</tr>
+<tr>
+<td>创新性与工程可落地性（10%）</td>
+<td>.deb + CLI + 零依赖核心 + openKylin 针对性集成</td>
+</tr>
+</tbody>
+</table>
+<p><strong>交付要求对照</strong>：a 方案说明文档（本文）、b
+样例数据与结果（<code>samples/</code>）、c
+可复现材料（代码/配置/README）、d 工具化封装（CLI 一键 +
+<code>.deb</code> + 批量对比）、e 演示视频（见随包脚本）。</p>
+<h2 id="附录-b局限与后续方向诚实说明">附录
+B：局限与后续方向（诚实说明）</h2>
+<ul>
+<li>规则判定对<strong>同义词 / 改写</strong>敏感，可能误判；后续可引入
+LLM-judge 做混合评分；</li>
+<li>证据目前以<strong>文本对话</strong>为主，行动轨迹 /
+文件类证据为设计预留，样例较少；</li>
+<li>真实智能体结果依赖其可用性，故以预置证据形式提供。</li>
+</ul>
+<h2 id="附录-c关于原创性与工具使用建议保留可据实修改">附录
+C：关于原创性与工具使用（建议保留，可据实修改）</h2>
+<p>本作品的方法学设计、评测维度划分、数据集构造原则与实验结论均由参赛团队独立提出与验证；实现过程使用了
+AI 编程辅助工具以提升开发效率，核心算法与方案决策由团队完成。</p>
+</body>
+</html>

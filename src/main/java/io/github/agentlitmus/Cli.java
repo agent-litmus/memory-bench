@@ -127,6 +127,7 @@ public final class Cli {
 
         // 3) 批量评测（规则判定，无需模型）；产物目录用于逐条用例落盘
         int repeat = Math.max(1, options.repeat);
+        int parallel = Math.max(1, options.parallel);
         BenchmarkResult result;
         StabilityReport stability = null;
         if (repeat > 1) {
@@ -138,7 +139,7 @@ public final class Cli {
             stability = StabilityReport.of(repeated.reports());
             System.out.println("稳定性评测：同输入重复 " + repeat + " 次完成");
         } else {
-            result = MultiAgentBenchmark.run(cases, agents, new CaseJudge(), outDir.resolve("artifacts"));
+            result = MultiAgentBenchmark.run(cases, agents, new CaseJudge(), outDir.resolve("artifacts"), parallel);
         }
 
         // 4) 控制台输出
@@ -250,10 +251,11 @@ public final class Cli {
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
                   --agents-config <file> 从 JSON 文件导入智能体配置（http/command/builtin），可标注 role
-                  --cases <file>         使用外部用例集 JSON（默认内置 72 条）
+                  --cases <file>         使用外部用例集 JSON（默认内置 150 条）
                   --out <dir>            输出目录（默认 litmus-out）
                   --endpoint <url>       真实智能体地址（run-http 使用）
                   --repeat <N>           同输入重复评测 N 次，产出稳定性证据（默认 1）
+                  --parallel <N>         用例并行度，加速真实智能体评测（默认 1 串行；总 token 消耗不变）
                   --help                 显示帮助
 
                 示例:
@@ -279,6 +281,13 @@ public final class Cli {
                 case "--out" -> options.out = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--endpoint" -> options.endpoint = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
                 case "--agents-config" -> options.agentsConfig = value(argv, i + 1 > argv.size() - 1 ? i : i + 1, arg);
+                case "--parallel" -> {
+                    try {
+                        options.parallel = Integer.parseInt(value(argv, ++i, arg));
+                    } catch (NumberFormatException e) {
+                        System.err.println("警告: --parallel 参数无效，已忽略（使用默认 1）");
+                    }
+                }
                 case "--repeat" -> {
                     try {
                         options.repeat = Integer.parseInt(value(argv, ++i, arg));
@@ -315,5 +324,6 @@ public final class Cli {
         private String out = DEFAULT_OUT;
         private String endpoint;
         private int repeat = 1;
+        private int parallel = 1;
     }
 }

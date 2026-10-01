@@ -9,6 +9,10 @@ import io.github.agentlitmus.report.BenchmarkReport;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * 对话式评测执行器——面向<b>真实智能体</b>。
@@ -53,11 +57,49 @@ public class DialogueBenchmarkRunner {
     }
 
     public BenchmarkReport run(List<MemoryCase> cases) {
-        List<Judgment> judgments = new ArrayList<>();
-        for (MemoryCase kase : cases) {
-            judgments.add(runOne(kase));
+        return run(cases, 1);
+    }
+
+    /**
+     * 并行执行用例。
+     * <p>
+     * 用例之间彼此独立——各自独占 sessionId 与隔离的记忆目录，因此可安全并发。
+     * 瓶颈在等待模型响应（I/O 密集），并发能把墙钟时间近乎线性地压下来；
+     * 而<b>总 token 消耗不变</b>：回合数不变，只是从「排队等」变成「同时等」。
+     * <p>
+     * 结果严格按用例原顺序收集，输出与串行完全一致，可复现性不受影响。
+     *
+     * @param parallelism 并行度（{@code <=1} 表示串行）
+     */
+    public BenchmarkReport run(List<MemoryCase> cases, int parallelism) {
+        int n = Math.max(1, parallelism);
+        if (n == 1 || cases.size() <= 1) {
+            List<Judgment> judgments = new ArrayList<>();
+            for (MemoryCase kase : cases) {
+                judgments.add(runOne(kase));
+            }
+            return new BenchmarkReport(judgments);
         }
-        return new BenchmarkReport(judgments);
+        ExecutorService pool = Executors.newFixedThreadPool(n);
+        try {
+            List<Future<Judgment>> futures = new ArrayList<>(cases.size());
+            for (MemoryCase kase : cases) {
+                futures.add(pool.submit(() -> runOne(kase)));
+            }
+            List<Judgment> judgments = new ArrayList<>(cases.size());
+            for (Future<Judgment> f : futures) {
+                judgments.add(f.get());
+            }
+            return new BenchmarkReport(judgments);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("并行评测被中断", e);
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause() == null ? e : e.getCause();
+            throw new IllegalStateException("并行评测失败: " + cause.getMessage(), cause);
+        } finally {
+            pool.shutdown();
+        }
     }
 
     public Judgment runOne(MemoryCase kase) {

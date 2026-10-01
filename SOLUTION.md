@@ -307,7 +307,7 @@ public interface Answerer {
 
 这正是"边界识别"维度能被稳定评测的原因——它衡量的不是模型"想不想起来"，而是**系统层面是否建立了正确的保留策略**。用结构性约束替代对模型自觉的依赖，是本方案一贯的方法论。
 
-### 6.5 LLM 判定的定位
+### 6.9 LLM 判定的定位
 
 仅用于关键词无法表达的标准（如语气、得体性、开放性任务）：
 
@@ -317,7 +317,7 @@ public interface Answerer {
 - **无模型时降级**为规则判定并标注 `rule-degraded`，流程不中断；
 - LLM 接入通过 `LlmClient`（单方法接口），不绑定任何框架。
 
-### 6.6 指标产出
+### 6.10 指标产出
 
 自动产出**多维指标**（非单一总分）：
 
@@ -373,7 +373,7 @@ KylinBot（麒灵助手）         83%      75%      50%      58%      50%      
 
 本方案已实测接入 openKylin 生态的两款真实智能体：
 - **KylinBot（麒灵助手）**——经 `command` 类型 + `kylinbot-adapter.sh` 以 CLI 单消息模式驱动；
-- **Hermes**——经 ACP（JSON-RPC over stdio）驱动其官方智能体循环（详见 README「接入真实智能体：openKylin Hermes（ACP）」）。
+- **Hermes**——经 ACP（JSON-RPC over stdio）驱动其官方智能体循环（详见 README「3.12 接入真实智能体：openKylin Hermes（ACP）」）。
 
 二者均通过各自官方接口运行**真实的智能体循环**，会话与长期记忆在智能体内部，正是长期记忆评测要测的对象。
 （早期还以 HTTP 方式对一款独立的 Spring AI 岗位分析服务做过跨场景验证，属「尺子能否评垂直领域 agent」的鲁棒性佐证，非本包内置，不在默认评测范围内。可选配置见 `examples/agents-employer.json`，role=extra，需先启动该外部服务，请用 `--agents-config` 显式启用。）

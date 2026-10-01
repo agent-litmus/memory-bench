@@ -28,7 +28,7 @@ class HttpAnswererTest {
     @BeforeEach
     void startServer() throws Exception {
         server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
-        server.createContext("/api/analyze/stream", exchange -> {
+        server.createContext("/api/v1/analyze/stream", exchange -> {
             byte[] body = exchange.getRequestBody().readAllBytes();
             receivedBodies.add(new String(body, StandardCharsets.UTF_8));
             byte[] out = responseBody.getBytes(StandardCharsets.UTF_8);
@@ -50,7 +50,7 @@ class HttpAnswererTest {
 
     private HttpAnswerer answerer() {
         String base = "http://127.0.0.1:" + server.getAddress().getPort();
-        return new HttpAnswerer(base, "/api/analyze/stream", java.time.Duration.ofSeconds(10));
+        return new HttpAnswerer(base, "/api/v1/analyze/stream", java.time.Duration.ofSeconds(10));
     }
 
     @Test

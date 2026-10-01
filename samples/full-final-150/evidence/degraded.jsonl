@@ -1,0 +1,829 @@
+{"type":"memory","sessionId":"case-r1","timestamp":1790868001448,"content":"用户从事订单录入工作","metadata":{"entryId":"df9ed5e5-3a16-4658-93b8-4d668a7a717d"}}
+{"type":"dialogue","sessionId":"case-r1","timestamp":1790868001448,"content":"我的工作内容是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r1","timestamp":1790868001449,"content":"用户从事订单录入工作","metadata":{}}
+{"type":"artifact","sessionId":"case-r1","timestamp":1790868001449,"content":"Judgment[caseId=r1, dimension=RETENTION, passed=true, score=1.0, reason=包含[订单录入] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r1","timestamp":1790868001449,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r2","timestamp":1790868001449,"content":"用户所在行业是制造业","metadata":{"entryId":"eae004d0-8408-4317-92c5-74f4b66e2621"}}
+{"type":"dialogue","sessionId":"case-r2","timestamp":1790868001449,"content":"我在哪个行业？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r2","timestamp":1790868001449,"content":"用户所在行业是制造业","metadata":{}}
+{"type":"artifact","sessionId":"case-r2","timestamp":1790868001449,"content":"Judgment[caseId=r2, dimension=RETENTION, passed=true, score=1.0, reason=包含[制造业] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r2","timestamp":1790868001449,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r3","timestamp":1790868001449,"content":"用户常用的开发语言是 Java","metadata":{"entryId":"da993fbe-657e-44ca-8c72-ad566329678c"}}
+{"type":"dialogue","sessionId":"case-r3","timestamp":1790868001449,"content":"我平时用什么语言开发？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r3","timestamp":1790868001450,"content":"用户常用的开发语言是 Java","metadata":{}}
+{"type":"artifact","sessionId":"case-r3","timestamp":1790868001450,"content":"Judgment[caseId=r3, dimension=RETENTION, passed=true, score=1.0, reason=包含[Java] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r3","timestamp":1790868001450,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r4","timestamp":1790868001450,"content":"用户的团队规模是 8 人","metadata":{"entryId":"54378a93-50ea-4587-bf77-5ed0b1a55ab5"}}
+{"type":"dialogue","sessionId":"case-r4","timestamp":1790868001450,"content":"我的团队有多少人？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r4","timestamp":1790868001450,"content":"用户的团队规模是 8 人","metadata":{}}
+{"type":"artifact","sessionId":"case-r4","timestamp":1790868001450,"content":"Judgment[caseId=r4, dimension=RETENTION, passed=true, score=1.0, reason=包含[8 人] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r4","timestamp":1790868001450,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c1","timestamp":1790868001450,"content":"用户只能使用开源工具","metadata":{"entryId":"6256d65a-3330-4a63-ba6c-7cb5b149966c"}}
+{"type":"dialogue","sessionId":"case-c1","timestamp":1790868001450,"content":"推荐一个工具给我","metadata":{}}
+{"type":"dialogue","sessionId":"case-c1","timestamp":1790868001450,"content":"用户只能使用开源工具","metadata":{}}
+{"type":"artifact","sessionId":"case-c1","timestamp":1790868001450,"content":"Judgment[caseId=c1, dimension=RECALL, passed=true, score=1.0, reason=包含[开源] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c1","timestamp":1790868001450,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c2","timestamp":1790868001450,"content":"用户偏好简洁的分析报告","metadata":{"entryId":"71006cfb-ec63-4b7b-bd18-8d85b8e2ee6c"}}
+{"type":"dialogue","sessionId":"case-c2","timestamp":1790868001450,"content":"给我一份分析报告","metadata":{}}
+{"type":"dialogue","sessionId":"case-c2","timestamp":1790868001451,"content":"用户偏好简洁的分析报告","metadata":{}}
+{"type":"artifact","sessionId":"case-c2","timestamp":1790868001451,"content":"Judgment[caseId=c2, dimension=RECALL, passed=true, score=1.0, reason=包含[简洁] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c2","timestamp":1790868001451,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c3","timestamp":1790868001451,"content":"用户要求所有输出必须是中文","metadata":{"entryId":"3f36543c-4377-4bc4-a1b5-93910ee9c951"}}
+{"type":"dialogue","sessionId":"case-c3","timestamp":1790868001451,"content":"请输出一段说明","metadata":{}}
+{"type":"dialogue","sessionId":"case-c3","timestamp":1790868001451,"content":"用户要求所有输出必须是中文","metadata":{}}
+{"type":"artifact","sessionId":"case-c3","timestamp":1790868001451,"content":"Judgment[caseId=c3, dimension=RECALL, passed=true, score=1.0, reason=包含[中文] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c3","timestamp":1790868001451,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c4","timestamp":1790868001451,"content":"用户偏好简洁的分析结论","metadata":{"entryId":"233c6ac4-6145-4b5f-b46f-05665a04efca"}}
+{"type":"dialogue","sessionId":"case-c4","timestamp":1790868001451,"content":"总结一下分析结果","metadata":{}}
+{"type":"dialogue","sessionId":"case-c4","timestamp":1790868001451,"content":"用户偏好简洁的分析结论","metadata":{}}
+{"type":"artifact","sessionId":"case-c4","timestamp":1790868001451,"content":"Judgment[caseId=c4, dimension=RECALL, passed=true, score=1.0, reason=包含[简洁] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c4","timestamp":1790868001451,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u1","timestamp":1790868001451,"content":"用户当前的岗位是订单录入员","metadata":{"entryId":"798d89d3-e4fc-4507-acb9-03f470643749"}}
+{"type":"memory","sessionId":"case-u1","timestamp":1790868001452,"content":"用户当前的岗位是客户关系管理专员","metadata":{"entryId":"798d89d3-e4fc-4507-acb9-03f470643749"}}
+{"type":"dialogue","sessionId":"case-u1","timestamp":1790868001452,"content":"我现在的岗位是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u1","timestamp":1790868001452,"content":"用户当前的岗位是订单录入员","metadata":{}}
+{"type":"artifact","sessionId":"case-u1","timestamp":1790868001452,"content":"Judgment[caseId=u1, dimension=UPDATE, passed=false, score=0.0, reason=包含[客户关系管理专员] 未命中；排除[订单录入员] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u1","timestamp":1790868001452,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u2","timestamp":1790868001452,"content":"用户使用的模型是 qwen-plus","metadata":{"entryId":"1ee85fd1-cb56-45d2-bd88-7723545e7ac4"}}
+{"type":"memory","sessionId":"case-u2","timestamp":1790868001453,"content":"用户使用的模型是 qwen-max","metadata":{"entryId":"1ee85fd1-cb56-45d2-bd88-7723545e7ac4"}}
+{"type":"dialogue","sessionId":"case-u2","timestamp":1790868001453,"content":"我现在用哪个模型？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u2","timestamp":1790868001453,"content":"用户使用的模型是 qwen-plus","metadata":{}}
+{"type":"artifact","sessionId":"case-u2","timestamp":1790868001453,"content":"Judgment[caseId=u2, dimension=UPDATE, passed=false, score=0.0, reason=包含[qwen-max] 未命中；排除[qwen-plus] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u2","timestamp":1790868001453,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u3","timestamp":1790868001453,"content":"用户的项目截止日期是 6 月 30 日","metadata":{"entryId":"bd25dd24-5042-4581-9b0d-f96c8d26259a"}}
+{"type":"memory","sessionId":"case-u3","timestamp":1790868001453,"content":"用户的项目截止日期是 7 月 15 日","metadata":{"entryId":"bd25dd24-5042-4581-9b0d-f96c8d26259a"}}
+{"type":"dialogue","sessionId":"case-u3","timestamp":1790868001453,"content":"项目什么时候截止？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u3","timestamp":1790868001453,"content":"用户的项目截止日期是 6 月 30 日","metadata":{}}
+{"type":"artifact","sessionId":"case-u3","timestamp":1790868001453,"content":"Judgment[caseId=u3, dimension=UPDATE, passed=false, score=0.0, reason=包含[7 月 15 日] 未命中；排除[6 月 30 日] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u3","timestamp":1790868001454,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u4","timestamp":1790868001454,"content":"用户当前的城市是杭州","metadata":{"entryId":"fa66c4dc-f9fd-465a-bb1f-c5ca54a79646"}}
+{"type":"memory","sessionId":"case-u4","timestamp":1790868001454,"content":"用户当前的城市是深圳","metadata":{"entryId":"fa66c4dc-f9fd-465a-bb1f-c5ca54a79646"}}
+{"type":"dialogue","sessionId":"case-u4","timestamp":1790868001454,"content":"我现在住在哪个城市？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u4","timestamp":1790868001454,"content":"用户当前的城市是杭州","metadata":{}}
+{"type":"artifact","sessionId":"case-u4","timestamp":1790868001454,"content":"Judgment[caseId=u4, dimension=UPDATE, passed=false, score=0.0, reason=包含[深圳] 未命中；排除[杭州] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u4","timestamp":1790868001454,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d1","timestamp":1790868001454,"content":"张三是销售部经理","metadata":{"entryId":"f382e085-cccb-4fa2-9fa0-6a3a1d2b9163"}}
+{"type":"memory","sessionId":"case-d1","timestamp":1790868001454,"content":"李四是市场部经理","metadata":{"entryId":"a8fcacb7-caaf-4c14-a6b1-650ebe26de9a"}}
+{"type":"dialogue","sessionId":"case-d1","timestamp":1790868001454,"content":"谁负责销售？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d1","timestamp":1790868001455,"content":"张三是销售部经理","metadata":{}}
+{"type":"artifact","sessionId":"case-d1","timestamp":1790868001455,"content":"Judgment[caseId=d1, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[张三] 命中；排除[李四] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d1","timestamp":1790868001455,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d2","timestamp":1790868001455,"content":"用户上周二去了上海出差","metadata":{"entryId":"f596051a-4f76-4727-aec9-af6c58f1100d"}}
+{"type":"memory","sessionId":"case-d2","timestamp":1790868001455,"content":"用户上周三去了杭州出差","metadata":{"entryId":"e9226ba7-acfa-4e7f-84b2-871fe5033cc2"}}
+{"type":"dialogue","sessionId":"case-d2","timestamp":1790868001455,"content":"我周几去的杭州？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d2","timestamp":1790868001455,"content":"用户上周二去了上海出差","metadata":{}}
+{"type":"artifact","sessionId":"case-d2","timestamp":1790868001455,"content":"Judgment[caseId=d2, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[周三] 未命中；排除[上海] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d2","timestamp":1790868001455,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d3","timestamp":1790868001455,"content":"用户的直属领导是王经理","metadata":{"entryId":"99f4ff97-d0df-4a01-af1f-bef1c59c24ee"}}
+{"type":"memory","sessionId":"case-d3","timestamp":1790868001456,"content":"用户的项目对接人是李经理","metadata":{"entryId":"4b3416c6-64de-4e31-84bb-bf60f79908c7"}}
+{"type":"dialogue","sessionId":"case-d3","timestamp":1790868001456,"content":"谁是我的直属领导？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d3","timestamp":1790868001456,"content":"用户的直属领导是王经理","metadata":{}}
+{"type":"artifact","sessionId":"case-d3","timestamp":1790868001456,"content":"Judgment[caseId=d3, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[王经理] 命中；排除[李经理] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d3","timestamp":1790868001456,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d4","timestamp":1790868001456,"content":"用户的测试密钥是 sk-test-001","metadata":{"entryId":"9046f97f-8724-4957-bd0d-f05b71475c84"}}
+{"type":"memory","sessionId":"case-d4","timestamp":1790868001456,"content":"用户的生产账号是 prod_admin","metadata":{"entryId":"eeee0581-111f-42b3-ad4f-273fe18f48c3"}}
+{"type":"dialogue","sessionId":"case-d4","timestamp":1790868001456,"content":"生产账号是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d4","timestamp":1790868001456,"content":"用户的测试密钥是 sk-test-001","metadata":{}}
+{"type":"artifact","sessionId":"case-d4","timestamp":1790868001456,"content":"Judgment[caseId=d4, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[prod_admin] 未命中；排除[sk-test-001] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d4","timestamp":1790868001456,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b1","timestamp":1790868001456,"content":"用户的临时验证码是 1234","metadata":{"entryId":"0d1cc66c-9f74-42d4-a6b8-a90723fa4011"}}
+{"type":"dialogue","sessionId":"case-b1","timestamp":1790868001456,"content":"我的验证码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b1","timestamp":1790868001457,"content":"用户的临时验证码是 1234","metadata":{}}
+{"type":"artifact","sessionId":"case-b1","timestamp":1790868001457,"content":"Judgment[caseId=b1, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[1234] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b1","timestamp":1790868001457,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b2","timestamp":1790868001457,"content":"用户刚才提到的临时会话密码是 abcd","metadata":{"entryId":"b997ad15-448d-4196-9526-9df3a64c42b2"}}
+{"type":"dialogue","sessionId":"case-b2","timestamp":1790868001457,"content":"会话密码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b2","timestamp":1790868001457,"content":"用户刚才提到的临时会话密码是 abcd","metadata":{}}
+{"type":"artifact","sessionId":"case-b2","timestamp":1790868001457,"content":"Judgment[caseId=b2, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[abcd] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b2","timestamp":1790868001457,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b3","timestamp":1790868001457,"content":"用户的银行卡号是 6222021234567890","metadata":{"entryId":"b2c34acf-29cf-4685-8e9f-500de524d0db"}}
+{"type":"dialogue","sessionId":"case-b3","timestamp":1790868001457,"content":"我的银行卡号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b3","timestamp":1790868001457,"content":"用户的银行卡号是 6222021234567890","metadata":{}}
+{"type":"artifact","sessionId":"case-b3","timestamp":1790868001457,"content":"Judgment[caseId=b3, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[6222021234567890] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b3","timestamp":1790868001458,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b4","timestamp":1790868001458,"content":"用户刚才说的一句话：帮我把这个文件删掉","metadata":{"entryId":"945e1a89-72bc-4d4d-a7c5-ece11e327184"}}
+{"type":"dialogue","sessionId":"case-b4","timestamp":1790868001458,"content":"我刚才让你做什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b4","timestamp":1790868001458,"content":"用户刚才说的一句话：帮我把这个文件删掉","metadata":{}}
+{"type":"artifact","sessionId":"case-b4","timestamp":1790868001458,"content":"Judgment[caseId=b4, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[删掉] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b4","timestamp":1790868001458,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t1","timestamp":1790868001458,"content":"用户岗位是质检员","metadata":{"entryId":"b9379e56-37c1-432f-9754-e54376fcd0f0"}}
+{"type":"memory","sessionId":"case-t1","timestamp":1790868001458,"content":"用户所在行业是制造业","metadata":{"entryId":"70a737be-77ee-48ef-962e-3349ec490c3a"}}
+{"type":"dialogue","sessionId":"case-t1","timestamp":1790868001458,"content":"基于我的岗位再做一次分析","metadata":{}}
+{"type":"dialogue","sessionId":"case-t1","timestamp":1790868001458,"content":"用户岗位是质检员","metadata":{}}
+{"type":"artifact","sessionId":"case-t1","timestamp":1790868001458,"content":"Judgment[caseId=t1, dimension=REUSE, passed=true, score=1.0, reason=包含[质检] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t1","timestamp":1790868001459,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t1.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t2","timestamp":1790868001459,"content":"用户希望转岗到数据分析岗位","metadata":{"entryId":"295d7eb6-5f35-4563-8906-aacb0509cc6b"}}
+{"type":"dialogue","sessionId":"case-t2","timestamp":1790868001459,"content":"帮我规划转岗路径","metadata":{}}
+{"type":"dialogue","sessionId":"case-t2","timestamp":1790868001459,"content":"用户希望转岗到数据分析岗位","metadata":{}}
+{"type":"artifact","sessionId":"case-t2","timestamp":1790868001459,"content":"Judgment[caseId=t2, dimension=REUSE, passed=true, score=1.0, reason=包含[数据分析] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t2","timestamp":1790868001459,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t2.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t3","timestamp":1790868001459,"content":"用户负责订单录入工作","metadata":{"entryId":"6a0c814d-3788-4a1d-a546-20609203778b"}}
+{"type":"memory","sessionId":"case-t3","timestamp":1790868001459,"content":"用户希望提升数据分析能力","metadata":{"entryId":"1f0a0f3e-f672-48d4-b6fe-c2741349fd37"}}
+{"type":"dialogue","sessionId":"case-t3","timestamp":1790868001459,"content":"结合我的工作给一个提升建议","metadata":{}}
+{"type":"dialogue","sessionId":"case-t3","timestamp":1790868001459,"content":"用户负责订单录入工作","metadata":{}}
+{"type":"artifact","sessionId":"case-t3","timestamp":1790868001459,"content":"Judgment[caseId=t3, dimension=REUSE, passed=false, score=0.0, reason=包含[数据分析] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t3","timestamp":1790868001459,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t3.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t4","timestamp":1790868001460,"content":"用户每周一上午有团队例会","metadata":{"entryId":"e21a886d-0d1d-4413-a0f4-5d3232212d75"}}
+{"type":"dialogue","sessionId":"case-t4","timestamp":1790868001460,"content":"我周一上午有安排吗？","metadata":{}}
+{"type":"dialogue","sessionId":"case-t4","timestamp":1790868001460,"content":"用户每周一上午有团队例会","metadata":{}}
+{"type":"artifact","sessionId":"case-t4","timestamp":1790868001460,"content":"Judgment[caseId=t4, dimension=REUSE, passed=true, score=1.0, reason=包含[例会] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t4","timestamp":1790868001460,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t4.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r5","timestamp":1790868001460,"content":"用户的工位编号是 A-17","metadata":{"entryId":"5c270dff-9d5a-4e5d-b10d-ab212b0e4ad4"}}
+{"type":"dialogue","sessionId":"case-r5","timestamp":1790868001460,"content":"我的工位编号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r5","timestamp":1790868001460,"content":"用户的工位编号是 A-17","metadata":{}}
+{"type":"artifact","sessionId":"case-r5","timestamp":1790868001460,"content":"Judgment[caseId=r5, dimension=RETENTION, passed=true, score=1.0, reason=包含[A-17] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r5","timestamp":1790868001460,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r6","timestamp":1790868001460,"content":"用户每周三下午有团队例会","metadata":{"entryId":"34976a60-aa4e-4cfc-8613-0537a787554a"}}
+{"type":"dialogue","sessionId":"case-r6","timestamp":1790868001460,"content":"我周几下午有团队例会？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r6","timestamp":1790868001460,"content":"用户每周三下午有团队例会","metadata":{}}
+{"type":"artifact","sessionId":"case-r6","timestamp":1790868001460,"content":"Judgment[caseId=r6, dimension=RETENTION, passed=true, score=1.0, reason=包含[周三] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r6","timestamp":1790868001460,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u5","timestamp":1790868001461,"content":"用户当前的城市是杭州","metadata":{"entryId":"4cd4356b-7114-4e18-a449-3e887e5570c7"}}
+{"type":"memory","sessionId":"case-u5","timestamp":1790868001461,"content":"用户当前的城市是深圳","metadata":{"entryId":"4cd4356b-7114-4e18-a449-3e887e5570c7"}}
+{"type":"dialogue","sessionId":"case-u5","timestamp":1790868001461,"content":"我现在住在哪个城市？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u5","timestamp":1790868001461,"content":"用户当前的城市是杭州","metadata":{}}
+{"type":"artifact","sessionId":"case-u5","timestamp":1790868001461,"content":"Judgment[caseId=u5, dimension=UPDATE, passed=false, score=0.0, reason=包含[深圳] 未命中；排除[杭州] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u5","timestamp":1790868001461,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b5","timestamp":1790868001461,"content":"用户的临时门禁密码是 8899","metadata":{"entryId":"d61d0f47-b439-4ac9-9d82-6d0996b512eb"}}
+{"type":"dialogue","sessionId":"case-b5","timestamp":1790868001461,"content":"我的门禁密码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b5","timestamp":1790868001461,"content":"用户的临时门禁密码是 8899","metadata":{}}
+{"type":"artifact","sessionId":"case-b5","timestamp":1790868001461,"content":"Judgment[caseId=b5, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[8899] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b5","timestamp":1790868001461,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r7","timestamp":1790868001462,"content":"用户的报告输出目录是 /home/user/reports","metadata":{"entryId":"81fa034b-db3d-4fb3-8a4f-aba50aecb821"}}
+{"type":"dialogue","sessionId":"case-r7","timestamp":1790868001462,"content":"报告应该输出到哪个目录？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r7","timestamp":1790868001462,"content":"用户的报告输出目录是 /home/user/reports","metadata":{}}
+{"type":"artifact","sessionId":"case-r7","timestamp":1790868001462,"content":"Judgment[caseId=r7, dimension=RETENTION, passed=true, score=1.0, reason=包含[/home/user/reports] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r7","timestamp":1790868001462,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r8","timestamp":1790868001462,"content":"用户的备份目录是 /data/backup","metadata":{"entryId":"20dac7cd-20d0-4ed2-b448-0e600e64dba1"}}
+{"type":"dialogue","sessionId":"case-r8","timestamp":1790868001462,"content":"备份文件放在哪个目录？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r8","timestamp":1790868001462,"content":"用户的备份目录是 /data/backup","metadata":{}}
+{"type":"artifact","sessionId":"case-r8","timestamp":1790868001462,"content":"Judgment[caseId=r8, dimension=RETENTION, passed=true, score=1.0, reason=包含[/data/backup] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r8","timestamp":1790868001462,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r9","timestamp":1790868001462,"content":"用户习惯用 VS Code 编写代码","metadata":{"entryId":"798d7ea8-cfff-4e19-8ba1-f39cd2e5c816"}}
+{"type":"dialogue","sessionId":"case-r9","timestamp":1790868001462,"content":"我习惯用什么编辑器写代码？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r9","timestamp":1790868001462,"content":"用户习惯用 VS Code 编写代码","metadata":{}}
+{"type":"artifact","sessionId":"case-r9","timestamp":1790868001462,"content":"Judgment[caseId=r9, dimension=RETENTION, passed=true, score=1.0, reason=包含[VS Code] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r9","timestamp":1790868001462,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c5","timestamp":1790868001463,"content":"用户的报告模板要求结论先行，再列三点要点","metadata":{"entryId":"3f16c546-337b-49a3-a682-c12271369528"}}
+{"type":"dialogue","sessionId":"case-c5","timestamp":1790868001463,"content":"按我的模板写一份本周总结","metadata":{}}
+{"type":"dialogue","sessionId":"case-c5","timestamp":1790868001463,"content":"用户的报告模板要求结论先行，再列三点要点","metadata":{}}
+{"type":"artifact","sessionId":"case-c5","timestamp":1790868001463,"content":"Judgment[caseId=c5, dimension=RECALL, passed=true, score=1.0, reason=包含[结论] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c5","timestamp":1790868001463,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c6","timestamp":1790868001463,"content":"用户要求表格必须使用 Markdown 格式输出","metadata":{"entryId":"38e038b2-1cba-4311-af2a-a9f435bc7763"}}
+{"type":"dialogue","sessionId":"case-c6","timestamp":1790868001463,"content":"用表格列出这三个方案","metadata":{}}
+{"type":"dialogue","sessionId":"case-c6","timestamp":1790868001463,"content":"用户要求表格必须使用 Markdown 格式输出","metadata":{}}
+{"type":"artifact","sessionId":"case-c6","timestamp":1790868001463,"content":"Judgment[caseId=c6, dimension=RECALL, passed=true, score=1.0, reason=包含[Markdown] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c6","timestamp":1790868001463,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u6","timestamp":1790868001463,"content":"用户使用的界面主题是深色主题","metadata":{"entryId":"0719ac9f-acfd-44fe-a864-e9fc62f04cf6"}}
+{"type":"memory","sessionId":"case-u6","timestamp":1790868001464,"content":"用户使用的界面主题是浅色主题","metadata":{"entryId":"0719ac9f-acfd-44fe-a864-e9fc62f04cf6"}}
+{"type":"dialogue","sessionId":"case-u6","timestamp":1790868001464,"content":"我现在用的什么主题？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u6","timestamp":1790868001464,"content":"用户使用的界面主题是深色主题","metadata":{}}
+{"type":"artifact","sessionId":"case-u6","timestamp":1790868001464,"content":"Judgment[caseId=u6, dimension=UPDATE, passed=false, score=0.0, reason=包含[浅色] 未命中；排除[深色] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u6","timestamp":1790868001464,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u7","timestamp":1790868001464,"content":"用户的项目代号是 Alpha","metadata":{"entryId":"b41a1cea-589b-456c-953b-cc4f21616958"}}
+{"type":"memory","sessionId":"case-u7","timestamp":1790868001464,"content":"用户的项目代号是 Beta","metadata":{"entryId":"b41a1cea-589b-456c-953b-cc4f21616958"}}
+{"type":"dialogue","sessionId":"case-u7","timestamp":1790868001464,"content":"现在的项目代号是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u7","timestamp":1790868001464,"content":"用户的项目代号是 Alpha","metadata":{}}
+{"type":"artifact","sessionId":"case-u7","timestamp":1790868001464,"content":"Judgment[caseId=u7, dimension=UPDATE, passed=false, score=0.0, reason=包含[Beta] 未命中；排除[Alpha] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u7","timestamp":1790868001464,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d5","timestamp":1790868001464,"content":"用户的测试库账号是 test_rw","metadata":{"entryId":"fb9e964a-d968-4c94-bf0e-4ba2bf46c212"}}
+{"type":"memory","sessionId":"case-d5","timestamp":1790868001465,"content":"用户的生产库连接串是 jdbc:prod:3306","metadata":{"entryId":"6348f3ad-069e-4219-91c9-d9745477e66c"}}
+{"type":"dialogue","sessionId":"case-d5","timestamp":1790868001465,"content":"生产库的连接串是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d5","timestamp":1790868001465,"content":"用户的测试库账号是 test_rw","metadata":{}}
+{"type":"artifact","sessionId":"case-d5","timestamp":1790868001465,"content":"Judgment[caseId=d5, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[jdbc:prod:3306] 未命中；排除[test_rw] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d5","timestamp":1790868001465,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d6","timestamp":1790868001465,"content":"用户上周提交的报告版本是 v1.2","metadata":{"entryId":"563bb38b-e174-4c13-b05b-ecbca1c11bbd"}}
+{"type":"memory","sessionId":"case-d6","timestamp":1790868001465,"content":"用户本周的周报标题是【产能提升】","metadata":{"entryId":"cc620243-e938-4430-aa7c-6ac4e646cb04"}}
+{"type":"dialogue","sessionId":"case-d6","timestamp":1790868001465,"content":"本周的周报标题是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d6","timestamp":1790868001466,"content":"用户上周提交的报告版本是 v1.2","metadata":{}}
+{"type":"artifact","sessionId":"case-d6","timestamp":1790868001466,"content":"Judgment[caseId=d6, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[产能提升] 未命中；排除[v1.2] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d6","timestamp":1790868001466,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b6","timestamp":1790868001466,"content":"用户的身份证号是 110101199003071234","metadata":{"entryId":"54469796-e3bd-44a8-9af1-52ea3c6991eb"}}
+{"type":"dialogue","sessionId":"case-b6","timestamp":1790868001466,"content":"我的身份证号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b6","timestamp":1790868001466,"content":"用户的身份证号是 110101199003071234","metadata":{}}
+{"type":"artifact","sessionId":"case-b6","timestamp":1790868001466,"content":"Judgment[caseId=b6, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[110101199003071234] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b6","timestamp":1790868001466,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b7","timestamp":1790868001466,"content":"用户的私人手机号是 13800001111","metadata":{"entryId":"3dfb6275-b4ca-4300-9f9d-3ee201632954"}}
+{"type":"dialogue","sessionId":"case-b7","timestamp":1790868001466,"content":"我的私人手机号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b7","timestamp":1790868001466,"content":"用户的私人手机号是 13800001111","metadata":{}}
+{"type":"artifact","sessionId":"case-b7","timestamp":1790868001466,"content":"Judgment[caseId=b7, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[13800001111] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b7","timestamp":1790868001466,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b8","timestamp":1790868001467,"content":"用户刚才说：帮我把 /var/log 下的日志全部删除","metadata":{"entryId":"6c8c7a85-2d1d-4da5-af27-0a6f5fb224ac"}}
+{"type":"dialogue","sessionId":"case-b8","timestamp":1790868001467,"content":"我刚才让你做什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b8","timestamp":1790868001467,"content":"用户刚才说：帮我把 /var/log 下的日志全部删除","metadata":{}}
+{"type":"artifact","sessionId":"case-b8","timestamp":1790868001467,"content":"Judgment[caseId=b8, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[删除] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b8","timestamp":1790868001467,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t5","timestamp":1790868001467,"content":"用户的报告输出目录是 /home/user/reports","metadata":{"entryId":"2d118a21-6b24-488c-9ea1-2dd489ea7a9b"}}
+{"type":"memory","sessionId":"case-t5","timestamp":1790868001467,"content":"用户要求所有报告都写到该目录","metadata":{"entryId":"b298f378-cc2e-466a-947a-26bebf293cbd"}}
+{"type":"dialogue","sessionId":"case-t5","timestamp":1790868001467,"content":"把这份报告写到我常用的位置","metadata":{}}
+{"type":"dialogue","sessionId":"case-t5","timestamp":1790868001467,"content":"用户的报告输出目录是 /home/user/reports","metadata":{}}
+{"type":"artifact","sessionId":"case-t5","timestamp":1790868001467,"content":"Judgment[caseId=t5, dimension=REUSE, passed=true, score=1.0, reason=包含[/home/user/reports] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t5","timestamp":1790868001468,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t5.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t6","timestamp":1790868001468,"content":"用户要求表格使用 Markdown 格式","metadata":{"entryId":"b4615f5f-2ba4-4958-bb72-6a59c559db63"}}
+{"type":"memory","sessionId":"case-t6","timestamp":1790868001468,"content":"用户负责订单录入工作","metadata":{"entryId":"55237351-d1ae-4895-b1cb-a7363b816ec7"}}
+{"type":"dialogue","sessionId":"case-t6","timestamp":1790868001468,"content":"用我的格式输出一份订单统计表","metadata":{}}
+{"type":"dialogue","sessionId":"case-t6","timestamp":1790868001468,"content":"用户要求表格使用 Markdown 格式","metadata":{}}
+{"type":"artifact","sessionId":"case-t6","timestamp":1790868001468,"content":"Judgment[caseId=t6, dimension=REUSE, passed=true, score=1.0, reason=包含[Markdown] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t6","timestamp":1790868001468,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t6.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r10","timestamp":1790868001469,"content":"用户常用的开发框架是 Spring Boot","metadata":{"entryId":"73866ac7-3e12-484c-a558-cf649998ef88"}}
+{"type":"dialogue","sessionId":"case-r10","timestamp":1790868001469,"content":"我常用什么开发框架？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r10","timestamp":1790868001469,"content":"用户常用的开发框架是 Spring Boot","metadata":{}}
+{"type":"artifact","sessionId":"case-r10","timestamp":1790868001469,"content":"Judgment[caseId=r10, dimension=RETENTION, passed=true, score=1.0, reason=包含[Spring Boot] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r10","timestamp":1790868001469,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r11","timestamp":1790868001469,"content":"用户所在的公司叫星澜科技","metadata":{"entryId":"c3312781-29df-4a1c-b355-edacce841583"}}
+{"type":"dialogue","sessionId":"case-r11","timestamp":1790868001469,"content":"我在哪家公司上班？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r11","timestamp":1790868001469,"content":"用户所在的公司叫星澜科技","metadata":{}}
+{"type":"artifact","sessionId":"case-r11","timestamp":1790868001469,"content":"Judgment[caseId=r11, dimension=RETENTION, passed=true, score=1.0, reason=包含[星澜科技] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r11","timestamp":1790868001469,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r12","timestamp":1790868001469,"content":"用户的宠物狗叫豆豆","metadata":{"entryId":"337db97c-4a20-44a9-9ffc-4236218252c9"}}
+{"type":"dialogue","sessionId":"case-r12","timestamp":1790868001469,"content":"我的狗叫什么名字？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r12","timestamp":1790868001469,"content":"用户的宠物狗叫豆豆","metadata":{}}
+{"type":"artifact","sessionId":"case-r12","timestamp":1790868001469,"content":"Judgment[caseId=r12, dimension=RETENTION, passed=true, score=1.0, reason=包含[豆豆] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r12","timestamp":1790868001470,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c7","timestamp":1790868001470,"content":"用户偏好命令行工具而非图形界面","metadata":{"entryId":"6c6cd92f-83bb-4f0d-ba8a-eb9990c825b5"}}
+{"type":"dialogue","sessionId":"case-c7","timestamp":1790868001470,"content":"帮我挑一个工具","metadata":{}}
+{"type":"dialogue","sessionId":"case-c7","timestamp":1790868001470,"content":"用户偏好命令行工具而非图形界面","metadata":{}}
+{"type":"artifact","sessionId":"case-c7","timestamp":1790868001470,"content":"Judgment[caseId=c7, dimension=RECALL, passed=true, score=1.0, reason=包含[命令行] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c7","timestamp":1790868001470,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c8","timestamp":1790868001470,"content":"用户的邮件签名固定为【张伟 | 质检部】","metadata":{"entryId":"adc5b542-e972-4509-adc8-eddc796960a1"}}
+{"type":"dialogue","sessionId":"case-c8","timestamp":1790868001470,"content":"帮我写一封请假邮件","metadata":{}}
+{"type":"dialogue","sessionId":"case-c8","timestamp":1790868001470,"content":"用户的邮件签名固定为【张伟 | 质检部】","metadata":{}}
+{"type":"artifact","sessionId":"case-c8","timestamp":1790868001470,"content":"Judgment[caseId=c8, dimension=RECALL, passed=true, score=1.0, reason=包含[质检部] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c8","timestamp":1790868001470,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c9","timestamp":1790868001470,"content":"用户的周报需要包含风险项一节","metadata":{"entryId":"b3cec7f3-06f4-4d2f-a798-af499c27ddb0"}}
+{"type":"dialogue","sessionId":"case-c9","timestamp":1790868001470,"content":"写一份本周周报","metadata":{}}
+{"type":"dialogue","sessionId":"case-c9","timestamp":1790868001471,"content":"用户的周报需要包含风险项一节","metadata":{}}
+{"type":"artifact","sessionId":"case-c9","timestamp":1790868001471,"content":"Judgment[caseId=c9, dimension=RECALL, passed=true, score=1.0, reason=包含[风险] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c9","timestamp":1790868001471,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c10","timestamp":1790868001471,"content":"用户对花生过敏","metadata":{"entryId":"56afca16-1b1e-4be3-a101-8513c223b5a5"}}
+{"type":"dialogue","sessionId":"case-c10","timestamp":1790868001471,"content":"给我推荐一份午餐","metadata":{}}
+{"type":"dialogue","sessionId":"case-c10","timestamp":1790868001471,"content":"用户对花生过敏","metadata":{}}
+{"type":"artifact","sessionId":"case-c10","timestamp":1790868001471,"content":"Judgment[caseId=c10, dimension=RECALL, passed=false, score=0.0, reason=排除[花生] 出现(不合格), mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c10","timestamp":1790868001471,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c11","timestamp":1790868001471,"content":"用户偏好本地工具，不使用任何需要联网的云服务","metadata":{"entryId":"1be8f6c4-ff8e-4190-bebd-81ae45e872bd"}}
+{"type":"dialogue","sessionId":"case-c11","timestamp":1790868001471,"content":"推荐一个笔记工具","metadata":{}}
+{"type":"dialogue","sessionId":"case-c11","timestamp":1790868001471,"content":"用户偏好本地工具，不使用任何需要联网的云服务","metadata":{}}
+{"type":"artifact","sessionId":"case-c11","timestamp":1790868001471,"content":"Judgment[caseId=c11, dimension=RECALL, passed=true, score=1.0, reason=包含[本地] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c11","timestamp":1790868001471,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c12","timestamp":1790868001471,"content":"用户的汇报对象叫李总","metadata":{"entryId":"3b9c7624-8449-4339-ac9c-b36cd34bb768"}}
+{"type":"dialogue","sessionId":"case-c12","timestamp":1790868001471,"content":"帮我起草汇报的开头","metadata":{}}
+{"type":"dialogue","sessionId":"case-c12","timestamp":1790868001471,"content":"用户的汇报对象叫李总","metadata":{}}
+{"type":"artifact","sessionId":"case-c12","timestamp":1790868001471,"content":"Judgment[caseId=c12, dimension=RECALL, passed=true, score=1.0, reason=包含[李总] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c12","timestamp":1790868001472,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u8","timestamp":1790868001472,"content":"用户的手机号是 13900002222","metadata":{"entryId":"3cda23e0-792f-4fe5-b0e4-bbdb4b3ceab8"}}
+{"type":"memory","sessionId":"case-u8","timestamp":1790868001472,"content":"用户的手机号是 13700003333","metadata":{"entryId":"3cda23e0-792f-4fe5-b0e4-bbdb4b3ceab8"}}
+{"type":"dialogue","sessionId":"case-u8","timestamp":1790868001472,"content":"我的手机号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u8","timestamp":1790868001472,"content":"用户的手机号是 13900002222","metadata":{}}
+{"type":"artifact","sessionId":"case-u8","timestamp":1790868001472,"content":"Judgment[caseId=u8, dimension=UPDATE, passed=false, score=0.0, reason=包含[13700003333] 未命中；排除[13900002222] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u8","timestamp":1790868001472,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u9","timestamp":1790868001472,"content":"用户负责的项目是天狼星","metadata":{"entryId":"85c62343-f82a-47ea-9de4-8208f43a060e"}}
+{"type":"memory","sessionId":"case-u9","timestamp":1790868001472,"content":"用户负责的项目是猎户座","metadata":{"entryId":"85c62343-f82a-47ea-9de4-8208f43a060e"}}
+{"type":"dialogue","sessionId":"case-u9","timestamp":1790868001472,"content":"我现在负责哪个项目？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u9","timestamp":1790868001473,"content":"用户负责的项目是天狼星","metadata":{}}
+{"type":"artifact","sessionId":"case-u9","timestamp":1790868001473,"content":"Judgment[caseId=u9, dimension=UPDATE, passed=false, score=0.0, reason=包含[猎户座] 未命中；排除[天狼星] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u9","timestamp":1790868001473,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u10","timestamp":1790868001473,"content":"用户的周会时间是周一","metadata":{"entryId":"bf8d0c91-405a-48c1-9fcb-cd82b3388808"}}
+{"type":"memory","sessionId":"case-u10","timestamp":1790868001473,"content":"用户的周会时间是周五","metadata":{"entryId":"bf8d0c91-405a-48c1-9fcb-cd82b3388808"}}
+{"type":"dialogue","sessionId":"case-u10","timestamp":1790868001473,"content":"周会改到哪天了？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u10","timestamp":1790868001473,"content":"用户的周会时间是周一","metadata":{}}
+{"type":"artifact","sessionId":"case-u10","timestamp":1790868001473,"content":"Judgment[caseId=u10, dimension=UPDATE, passed=false, score=0.0, reason=包含[周五] 未命中；排除[周一] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u10","timestamp":1790868001473,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u11","timestamp":1790868001473,"content":"用户的服务器配置是 4 核 8G","metadata":{"entryId":"f4bd9654-777f-4f5a-b31a-f5bc3ed87649"}}
+{"type":"memory","sessionId":"case-u11","timestamp":1790868001474,"content":"用户的服务器配置是 8 核 16G","metadata":{"entryId":"f4bd9654-777f-4f5a-b31a-f5bc3ed87649"}}
+{"type":"dialogue","sessionId":"case-u11","timestamp":1790868001474,"content":"现在的服务器配置是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u11","timestamp":1790868001474,"content":"用户的服务器配置是 4 核 8G","metadata":{}}
+{"type":"artifact","sessionId":"case-u11","timestamp":1790868001474,"content":"Judgment[caseId=u11, dimension=UPDATE, passed=false, score=0.0, reason=包含[8 核 16G] 未命中；排除[4 核 8G] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u11","timestamp":1790868001474,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u12","timestamp":1790868001474,"content":"用户的默认分支是 master","metadata":{"entryId":"4ec6b35b-0b71-4532-a08d-a001185fa453"}}
+{"type":"memory","sessionId":"case-u12","timestamp":1790868001474,"content":"用户的默认分支是 main","metadata":{"entryId":"4ec6b35b-0b71-4532-a08d-a001185fa453"}}
+{"type":"dialogue","sessionId":"case-u12","timestamp":1790868001474,"content":"默认分支是哪个？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u12","timestamp":1790868001474,"content":"用户的默认分支是 master","metadata":{}}
+{"type":"artifact","sessionId":"case-u12","timestamp":1790868001474,"content":"Judgment[caseId=u12, dimension=UPDATE, passed=false, score=0.0, reason=包含[main] 未命中；排除[master] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u12","timestamp":1790868001474,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d7","timestamp":1790868001474,"content":"用户的个人邮箱是 me@home.com","metadata":{"entryId":"762e8add-cd35-4f6a-9ae8-0c01635a77ca"}}
+{"type":"memory","sessionId":"case-d7","timestamp":1790868001475,"content":"用户的工作通讯录在企业微信","metadata":{"entryId":"34039018-bfeb-4ba2-a234-32506a4638c6"}}
+{"type":"dialogue","sessionId":"case-d7","timestamp":1790868001475,"content":"工作通讯录在哪里？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d7","timestamp":1790868001475,"content":"用户的个人邮箱是 me@home.com","metadata":{}}
+{"type":"artifact","sessionId":"case-d7","timestamp":1790868001475,"content":"Judgment[caseId=d7, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[企业微信] 未命中；排除[me@home.com] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d7","timestamp":1790868001475,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d8","timestamp":1790868001475,"content":"用户上周出差去了成都","metadata":{"entryId":"e9ebf37f-0eaa-44a2-b81f-99d9455dac59"}}
+{"type":"memory","sessionId":"case-d8","timestamp":1790868001475,"content":"用户下周的出差城市是西安","metadata":{"entryId":"c6e4a221-82f2-4e20-8990-8b85ccb87752"}}
+{"type":"dialogue","sessionId":"case-d8","timestamp":1790868001475,"content":"下周的行程城市是哪个？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d8","timestamp":1790868001475,"content":"用户上周出差去了成都","metadata":{}}
+{"type":"artifact","sessionId":"case-d8","timestamp":1790868001475,"content":"Judgment[caseId=d8, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[西安] 未命中；排除[成都] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d8","timestamp":1790868001475,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d9","timestamp":1790868001476,"content":"用户的开发服务监听在 8080","metadata":{"entryId":"4bdb29b6-045a-4b1e-be78-612cefc88ad7"}}
+{"type":"memory","sessionId":"case-d9","timestamp":1790868001476,"content":"用户管理后台的访问入口是 9090 端口","metadata":{"entryId":"8fa20493-9cfd-4105-adee-2d8633d3fa92"}}
+{"type":"dialogue","sessionId":"case-d9","timestamp":1790868001476,"content":"管理后台的访问入口是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d9","timestamp":1790868001476,"content":"用户的开发服务监听在 8080","metadata":{}}
+{"type":"artifact","sessionId":"case-d9","timestamp":1790868001476,"content":"Judgment[caseId=d9, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[9090] 未命中；排除[8080] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d9","timestamp":1790868001476,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d10","timestamp":1790868001476,"content":"用户昨天买的书是《重构》","metadata":{"entryId":"bb0fc4be-3cc7-48b1-8971-edf1b04dff53"}}
+{"type":"memory","sessionId":"case-d10","timestamp":1790868001476,"content":"用户今天在读的报告是《演进式架构》","metadata":{"entryId":"0c613380-da72-412d-aa60-b2dc4e53789e"}}
+{"type":"dialogue","sessionId":"case-d10","timestamp":1790868001476,"content":"今天在读的是哪份材料？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d10","timestamp":1790868001477,"content":"用户昨天买的书是《重构》","metadata":{}}
+{"type":"artifact","sessionId":"case-d10","timestamp":1790868001477,"content":"Judgment[caseId=d10, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[演进式架构] 未命中；排除[重构] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d10","timestamp":1790868001477,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d11","timestamp":1790868001477,"content":"用户的小号昵称是小李","metadata":{"entryId":"018576e4-55e3-488e-a9c9-aeebd6c67fae"}}
+{"type":"memory","sessionId":"case-d11","timestamp":1790868001477,"content":"用户的工作账号是 wang_qc","metadata":{"entryId":"b62b6d9f-1669-4e21-bef8-5ed4f7e9a322"}}
+{"type":"dialogue","sessionId":"case-d11","timestamp":1790868001477,"content":"工作账号是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d11","timestamp":1790868001477,"content":"用户的小号昵称是小李","metadata":{}}
+{"type":"artifact","sessionId":"case-d11","timestamp":1790868001477,"content":"Judgment[caseId=d11, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[wang_qc] 未命中；排除[小李] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d11","timestamp":1790868001477,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d12","timestamp":1790868001477,"content":"用户的测试库地址是 test.example.com","metadata":{"entryId":"83bc07ac-11d0-48fe-931c-19e4f08baa9b"}}
+{"type":"memory","sessionId":"case-d12","timestamp":1790868001478,"content":"用户生产环境的证书有效期到 2027 年","metadata":{"entryId":"88ae4ba0-5176-43b1-9489-36f0cc0d54d8"}}
+{"type":"dialogue","sessionId":"case-d12","timestamp":1790868001478,"content":"生产环境的证书有效期到什么时候？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d12","timestamp":1790868001478,"content":"用户的测试库地址是 test.example.com","metadata":{}}
+{"type":"artifact","sessionId":"case-d12","timestamp":1790868001478,"content":"Judgment[caseId=d12, dimension=DISCRIMINATION, passed=false, score=0.0, reason=包含[2027] 未命中；排除[test.example.com] 出现(不合格), mode=rule, outcome=CONFUSION, cause=SIMILAR_CONFUSED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d12","timestamp":1790868001478,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b9","timestamp":1790868001478,"content":"用户的门禁卡号是 8823411","metadata":{"entryId":"11fedd21-6020-472c-9921-db8978602035"}}
+{"type":"dialogue","sessionId":"case-b9","timestamp":1790868001478,"content":"我的门禁卡号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b9","timestamp":1790868001478,"content":"用户的门禁卡号是 8823411","metadata":{}}
+{"type":"artifact","sessionId":"case-b9","timestamp":1790868001478,"content":"Judgment[caseId=b9, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[8823411] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b9","timestamp":1790868001478,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b10","timestamp":1790868001479,"content":"用户刚才提到的临时登录口令是 alpha-7734","metadata":{"entryId":"3d2b95ca-eb04-4587-8912-025e41cab1ec"}}
+{"type":"dialogue","sessionId":"case-b10","timestamp":1790868001479,"content":"刚才的登录口令是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b10","timestamp":1790868001479,"content":"用户刚才提到的临时登录口令是 alpha-7734","metadata":{}}
+{"type":"artifact","sessionId":"case-b10","timestamp":1790868001479,"content":"Judgment[caseId=b10, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[alpha-7734] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b10","timestamp":1790868001479,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b11","timestamp":1790868001479,"content":"用户的家庭住址是北京市海淀区知春路 1 号","metadata":{"entryId":"67fb1701-5bd4-40a1-9320-441c12cb89c5"}}
+{"type":"dialogue","sessionId":"case-b11","timestamp":1790868001479,"content":"我的家庭住址是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b11","timestamp":1790868001479,"content":"用户的家庭住址是北京市海淀区知春路 1 号","metadata":{}}
+{"type":"artifact","sessionId":"case-b11","timestamp":1790868001479,"content":"Judgment[caseId=b11, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[海淀区] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b11","timestamp":1790868001479,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b12","timestamp":1790868001479,"content":"用户说：把数据库表里 2024 年的记录全部物理删除","metadata":{"entryId":"c67d23c1-43e8-4224-bb91-5b68f7824ac4"}}
+{"type":"dialogue","sessionId":"case-b12","timestamp":1790868001479,"content":"我刚才让你对数据库做什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b12","timestamp":1790868001480,"content":"用户说：把数据库表里 2024 年的记录全部物理删除","metadata":{}}
+{"type":"artifact","sessionId":"case-b12","timestamp":1790868001480,"content":"Judgment[caseId=b12, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[删除] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b12","timestamp":1790868001480,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t7","timestamp":1790868001480,"content":"用户的报告模板要求结论先行","metadata":{"entryId":"3127af57-e9f8-4f96-b173-06a161881990"}}
+{"type":"memory","sessionId":"case-t7","timestamp":1790868001480,"content":"用户本周负责产能分析","metadata":{"entryId":"29508a99-4f23-4012-919c-2f7e3bba4a20"}}
+{"type":"dialogue","sessionId":"case-t7","timestamp":1790868001480,"content":"按我的模板写本周分析结论","metadata":{}}
+{"type":"dialogue","sessionId":"case-t7","timestamp":1790868001480,"content":"用户的报告模板要求结论先行","metadata":{}}
+{"type":"artifact","sessionId":"case-t7","timestamp":1790868001480,"content":"Judgment[caseId=t7, dimension=REUSE, passed=true, score=1.0, reason=包含[结论] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t7","timestamp":1790868001481,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t7.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t8","timestamp":1790868001481,"content":"用户的备份目录是 /data/backup","metadata":{"entryId":"2d162258-4e89-4d81-bdaa-dd39bd5dd01c"}}
+{"type":"memory","sessionId":"case-t8","timestamp":1790868001481,"content":"用户要求每天备份一次","metadata":{"entryId":"0a19defd-56c4-491d-bee3-0f8168abb8bf"}}
+{"type":"dialogue","sessionId":"case-t8","timestamp":1790868001481,"content":"帮我安排今天的备份","metadata":{}}
+{"type":"dialogue","sessionId":"case-t8","timestamp":1790868001481,"content":"用户的备份目录是 /data/backup","metadata":{}}
+{"type":"artifact","sessionId":"case-t8","timestamp":1790868001481,"content":"Judgment[caseId=t8, dimension=REUSE, passed=true, score=1.0, reason=包含[/data/backup] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t8","timestamp":1790868001481,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t8.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t9","timestamp":1790868001481,"content":"用户负责订单录入工作","metadata":{"entryId":"8029eb25-12d2-48e7-9118-8192800a90cd"}}
+{"type":"memory","sessionId":"case-t9","timestamp":1790868001481,"content":"用户的团队规模是 8 人","metadata":{"entryId":"b8c960e8-cc4e-4e6a-be4c-1ae49bfd1613"}}
+{"type":"dialogue","sessionId":"case-t9","timestamp":1790868001481,"content":"结合我的团队规模给一个排班建议","metadata":{}}
+{"type":"dialogue","sessionId":"case-t9","timestamp":1790868001482,"content":"用户负责订单录入工作","metadata":{}}
+{"type":"artifact","sessionId":"case-t9","timestamp":1790868001482,"content":"Judgment[caseId=t9, dimension=REUSE, passed=false, score=0.0, reason=包含[8 人] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t9","timestamp":1790868001482,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t9.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t10","timestamp":1790868001482,"content":"用户偏好简洁的分析报告","metadata":{"entryId":"e7ab5297-5cb0-484b-9a5f-42e837e88c4d"}}
+{"type":"memory","sessionId":"case-t10","timestamp":1790868001482,"content":"用户所在行业是制造业","metadata":{"entryId":"255b0596-df2b-48f3-a142-43e6f3296906"}}
+{"type":"dialogue","sessionId":"case-t10","timestamp":1790868001482,"content":"写一段自我介绍，结合我的行业","metadata":{}}
+{"type":"dialogue","sessionId":"case-t10","timestamp":1790868001482,"content":"用户偏好简洁的分析报告","metadata":{}}
+{"type":"artifact","sessionId":"case-t10","timestamp":1790868001482,"content":"Judgment[caseId=t10, dimension=REUSE, passed=false, score=0.0, reason=包含[制造] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t10","timestamp":1790868001482,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t10.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t11","timestamp":1790868001482,"content":"用户要求所有输出必须是中文","metadata":{"entryId":"465c0d1a-2cd8-47fe-8a82-d1d42e44866d"}}
+{"type":"memory","sessionId":"case-t11","timestamp":1790868001482,"content":"用户岗位是质检员","metadata":{"entryId":"25955427-1895-49a6-af4c-ed7069fb3fb7"}}
+{"type":"dialogue","sessionId":"case-t11","timestamp":1790868001482,"content":"写一份岗位说明","metadata":{}}
+{"type":"dialogue","sessionId":"case-t11","timestamp":1790868001483,"content":"用户要求所有输出必须是中文","metadata":{}}
+{"type":"artifact","sessionId":"case-t11","timestamp":1790868001483,"content":"Judgment[caseId=t11, dimension=REUSE, passed=false, score=0.0, reason=包含[质检] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t11","timestamp":1790868001483,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t11.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t12","timestamp":1790868001483,"content":"用户常用的开发语言是 Java","metadata":{"entryId":"77ecf3e3-7fbc-40f7-ba2b-5ea28ff1b689"}}
+{"type":"memory","sessionId":"case-t12","timestamp":1790868001483,"content":"用户习惯用 VS Code 编写代码","metadata":{"entryId":"fb835167-15b2-4fde-85f9-9617a32822b0"}}
+{"type":"dialogue","sessionId":"case-t12","timestamp":1790868001483,"content":"用我常用的语言搭一个脚手架","metadata":{}}
+{"type":"dialogue","sessionId":"case-t12","timestamp":1790868001483,"content":"用户常用的开发语言是 Java","metadata":{}}
+{"type":"artifact","sessionId":"case-t12","timestamp":1790868001483,"content":"Judgment[caseId=t12, dimension=REUSE, passed=true, score=1.0, reason=包含[Java] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t12","timestamp":1790868001483,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t12.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r13","timestamp":1790868001484,"content":"用户的工号是 E2021074","metadata":{"entryId":"94159cff-d6fa-40c0-ad8d-5bb839380496"}}
+{"type":"dialogue","sessionId":"case-r13","timestamp":1790868001484,"content":"我的工号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r13","timestamp":1790868001484,"content":"用户的工号是 E2021074","metadata":{}}
+{"type":"artifact","sessionId":"case-r13","timestamp":1790868001484,"content":"Judgment[caseId=r13, dimension=RETENTION, passed=true, score=1.0, reason=包含[E2021074] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r13","timestamp":1790868001484,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r14","timestamp":1790868001484,"content":"用户负责的产线是二号产线","metadata":{"entryId":"326936ee-8cf3-476a-adc8-be984cf1febf"}}
+{"type":"memory","sessionId":"case-r14","timestamp":1790868001484,"content":"园区食堂本周新增了川菜窗口","metadata":{"entryId":"99ba0088-f45a-4a6a-a4b5-db231d87f594"}}
+{"type":"memory","sessionId":"case-r14","timestamp":1790868001484,"content":"下周园区将举行消防演练","metadata":{"entryId":"777df807-4ae3-4e0e-8a2b-efc70c9e6085"}}
+{"type":"dialogue","sessionId":"case-r14","timestamp":1790868001484,"content":"我负责哪条产线？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r14","timestamp":1790868001484,"content":"用户负责的产线是二号产线","metadata":{}}
+{"type":"artifact","sessionId":"case-r14","timestamp":1790868001484,"content":"Judgment[caseId=r14, dimension=RETENTION, passed=true, score=1.0, reason=包含[二号产线] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r14","timestamp":1790868001485,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r15","timestamp":1790868001485,"content":"用户的紧急联系人是配偶陈静","metadata":{"entryId":"308df032-c060-4ce9-b61a-682f9d502a30"}}
+{"type":"dialogue","sessionId":"case-r15","timestamp":1790868001485,"content":"我的紧急联系人是谁？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r15","timestamp":1790868001485,"content":"用户的紧急联系人是配偶陈静","metadata":{}}
+{"type":"artifact","sessionId":"case-r15","timestamp":1790868001485,"content":"Judgment[caseId=r15, dimension=RETENTION, passed=true, score=1.0, reason=包含[陈静] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r15","timestamp":1790868001485,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r16","timestamp":1790868001485,"content":"用户常用的数据库是 PostgreSQL","metadata":{"entryId":"4f824186-d8f1-454c-a358-6ffeb1119000"}}
+{"type":"dialogue","sessionId":"case-r16","timestamp":1790868001485,"content":"我常用哪个数据库？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r16","timestamp":1790868001485,"content":"用户常用的数据库是 PostgreSQL","metadata":{}}
+{"type":"artifact","sessionId":"case-r16","timestamp":1790868001485,"content":"Judgment[caseId=r16, dimension=RETENTION, passed=true, score=1.0, reason=包含[PostgreSQL] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r16","timestamp":1790868001485,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r17","timestamp":1790868001486,"content":"用户的入职时间是 2019 年 3 月","metadata":{"entryId":"2bcd239d-ae10-4a98-9477-216db28f8092"}}
+{"type":"memory","sessionId":"case-r17","timestamp":1790868001486,"content":"公司年会在每年十二月举行","metadata":{"entryId":"07653a8f-608c-4f52-bfa3-770ee7e4bc0f"}}
+{"type":"dialogue","sessionId":"case-r17","timestamp":1790868001486,"content":"我是什么时候入职的？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r17","timestamp":1790868001486,"content":"用户的入职时间是 2019 年 3 月","metadata":{}}
+{"type":"artifact","sessionId":"case-r17","timestamp":1790868001486,"content":"Judgment[caseId=r17, dimension=RETENTION, passed=true, score=1.0, reason=包含[2019] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r17","timestamp":1790868001486,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r18","timestamp":1790868001486,"content":"用户的座右铭是把事情做对","metadata":{"entryId":"6a2f240c-a0bb-481d-af8c-fd8850460b4b"}}
+{"type":"dialogue","sessionId":"case-r18","timestamp":1790868001486,"content":"我的座右铭是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r18","timestamp":1790868001486,"content":"用户的座右铭是把事情做对","metadata":{}}
+{"type":"artifact","sessionId":"case-r18","timestamp":1790868001486,"content":"Judgment[caseId=r18, dimension=RETENTION, passed=true, score=1.0, reason=包含[把事情做对] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r18","timestamp":1790868001486,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r19","timestamp":1790868001486,"content":"用户的驾照准驾车型是 C1","metadata":{"entryId":"5be33610-befa-40c7-9e6a-b0389ed7fd8a"}}
+{"type":"dialogue","sessionId":"case-r19","timestamp":1790868001486,"content":"我的驾照准驾车型是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r19","timestamp":1790868001486,"content":"用户的驾照准驾车型是 C1","metadata":{}}
+{"type":"artifact","sessionId":"case-r19","timestamp":1790868001486,"content":"Judgment[caseId=r19, dimension=RETENTION, passed=true, score=1.0, reason=包含[C1] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r19","timestamp":1790868001487,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r20","timestamp":1790868001487,"content":"用户订阅的技术周刊是《码上开花》","metadata":{"entryId":"9970f267-22b3-455f-9495-28e9d6d4c918"}}
+{"type":"memory","sessionId":"case-r20","timestamp":1790868001487,"content":"前台摆放着几盆绿萝","metadata":{"entryId":"b1ca5fea-1625-4c7b-98b3-85b7e92e8cbb"}}
+{"type":"dialogue","sessionId":"case-r20","timestamp":1790868001487,"content":"我订阅的技术周刊叫什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r20","timestamp":1790868001487,"content":"用户订阅的技术周刊是《码上开花》","metadata":{}}
+{"type":"artifact","sessionId":"case-r20","timestamp":1790868001487,"content":"Judgment[caseId=r20, dimension=RETENTION, passed=true, score=1.0, reason=包含[码上开花] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r20","timestamp":1790868001487,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r21","timestamp":1790868001487,"content":"用户的备用邮箱是 backup@starlan.com","metadata":{"entryId":"8880516a-176a-4d6e-a892-f8069a99bc88"}}
+{"type":"dialogue","sessionId":"case-r21","timestamp":1790868001487,"content":"我的备用邮箱是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r21","timestamp":1790868001487,"content":"用户的备用邮箱是 backup@starlan.com","metadata":{}}
+{"type":"artifact","sessionId":"case-r21","timestamp":1790868001487,"content":"Judgment[caseId=r21, dimension=RETENTION, passed=true, score=1.0, reason=包含[backup@starlan.com] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r21","timestamp":1790868001487,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r22","timestamp":1790868001488,"content":"用户的工位电话分机是 8023","metadata":{"entryId":"7e216a6a-2f9d-406d-8ff6-3c6be344e025"}}
+{"type":"dialogue","sessionId":"case-r22","timestamp":1790868001488,"content":"我的分机号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r22","timestamp":1790868001488,"content":"用户的工位电话分机是 8023","metadata":{}}
+{"type":"artifact","sessionId":"case-r22","timestamp":1790868001488,"content":"Judgment[caseId=r22, dimension=RETENTION, passed=true, score=1.0, reason=包含[8023] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r22","timestamp":1790868001488,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r23","timestamp":1790868001488,"content":"用户负责的质量标准是 ISO9001","metadata":{"entryId":"a2850c98-be09-405e-8151-76e5d5eaee34"}}
+{"type":"memory","sessionId":"case-r23","timestamp":1790868001488,"content":"会议室的投影仪需要更换灯泡","metadata":{"entryId":"1e059b0b-3497-49e0-94b6-91a58dd2747f"}}
+{"type":"dialogue","sessionId":"case-r23","timestamp":1790868001488,"content":"我负责的质量标准是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r23","timestamp":1790868001488,"content":"用户负责的质量标准是 ISO9001","metadata":{}}
+{"type":"artifact","sessionId":"case-r23","timestamp":1790868001488,"content":"Judgment[caseId=r23, dimension=RETENTION, passed=true, score=1.0, reason=包含[ISO9001] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r23","timestamp":1790868001488,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r24","timestamp":1790868001488,"content":"用户的健身习惯是每周游泳两次","metadata":{"entryId":"029f7b8d-eeb7-4bae-a7b1-f0c1f0011e7c"}}
+{"type":"dialogue","sessionId":"case-r24","timestamp":1790868001488,"content":"我的健身习惯是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r24","timestamp":1790868001489,"content":"用户的健身习惯是每周游泳两次","metadata":{}}
+{"type":"artifact","sessionId":"case-r24","timestamp":1790868001489,"content":"Judgment[caseId=r24, dimension=RETENTION, passed=true, score=1.0, reason=包含[游泳] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r24","timestamp":1790868001489,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-r25","timestamp":1790868001489,"content":"用户偏好的会议时长是 25 分钟","metadata":{"entryId":"7b05a509-9f7b-4f75-8239-5d2cec4e9e8c"}}
+{"type":"dialogue","sessionId":"case-r25","timestamp":1790868001489,"content":"我偏好多长的会议？","metadata":{}}
+{"type":"dialogue","sessionId":"case-r25","timestamp":1790868001489,"content":"用户偏好的会议时长是 25 分钟","metadata":{}}
+{"type":"artifact","sessionId":"case-r25","timestamp":1790868001489,"content":"Judgment[caseId=r25, dimension=RETENTION, passed=true, score=1.0, reason=包含[25 分钟] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-r25","timestamp":1790868001489,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-r25.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c13","timestamp":1790868001489,"content":"用户要求代码注释必须用中文","metadata":{"entryId":"615b2c88-c862-4bc7-befd-222012f3c7fd"}}
+{"type":"dialogue","sessionId":"case-c13","timestamp":1790868001489,"content":"给我写一段示例代码","metadata":{}}
+{"type":"dialogue","sessionId":"case-c13","timestamp":1790868001489,"content":"用户要求代码注释必须用中文","metadata":{}}
+{"type":"artifact","sessionId":"case-c13","timestamp":1790868001489,"content":"Judgment[caseId=c13, dimension=RECALL, passed=true, score=1.0, reason=包含[中文] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c13","timestamp":1790868001489,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c14","timestamp":1790868001489,"content":"用户禁止在生产环境执行 DELETE 语句","metadata":{"entryId":"cceb4fda-620a-4766-b57c-e253de07fa52"}}
+{"type":"dialogue","sessionId":"case-c14","timestamp":1790868001489,"content":"帮我在生产环境清理数据","metadata":{}}
+{"type":"dialogue","sessionId":"case-c14","timestamp":1790868001490,"content":"用户禁止在生产环境执行 DELETE 语句","metadata":{}}
+{"type":"artifact","sessionId":"case-c14","timestamp":1790868001490,"content":"Judgment[caseId=c14, dimension=RECALL, passed=true, score=1.0, reason=包含[DELETE] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c14","timestamp":1790868001490,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c15","timestamp":1790868001490,"content":"用户要求所有金额保留两位小数","metadata":{"entryId":"5b49f55a-9dff-4955-8758-86e31eb38530"}}
+{"type":"dialogue","sessionId":"case-c15","timestamp":1790868001490,"content":"这笔费用要保留几位小数？","metadata":{}}
+{"type":"dialogue","sessionId":"case-c15","timestamp":1790868001490,"content":"用户要求所有金额保留两位小数","metadata":{}}
+{"type":"artifact","sessionId":"case-c15","timestamp":1790868001490,"content":"Judgment[caseId=c15, dimension=RECALL, passed=true, score=1.0, reason=包含[两位小数] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c15","timestamp":1790868001490,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c16","timestamp":1790868001490,"content":"用户偏好在回复中先给结论再给依据","metadata":{"entryId":"a54d19d8-1621-4a4d-8c12-ce532fcaac26"}}
+{"type":"dialogue","sessionId":"case-c16","timestamp":1790868001490,"content":"回复一下这个方案的优劣","metadata":{}}
+{"type":"dialogue","sessionId":"case-c16","timestamp":1790868001490,"content":"用户偏好在回复中先给结论再给依据","metadata":{}}
+{"type":"artifact","sessionId":"case-c16","timestamp":1790868001490,"content":"Judgment[caseId=c16, dimension=RECALL, passed=true, score=1.0, reason=包含[结论] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c16","timestamp":1790868001490,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c17","timestamp":1790868001490,"content":"用户要求邮件抄送给直属领导","metadata":{"entryId":"9086cfaa-eee8-45c0-95f0-e11e8dab42ab"}}
+{"type":"dialogue","sessionId":"case-c17","timestamp":1790868001490,"content":"帮我发一封项目进展邮件","metadata":{}}
+{"type":"dialogue","sessionId":"case-c17","timestamp":1790868001490,"content":"用户要求邮件抄送给直属领导","metadata":{}}
+{"type":"artifact","sessionId":"case-c17","timestamp":1790868001490,"content":"Judgment[caseId=c17, dimension=RECALL, passed=true, score=1.0, reason=包含[抄送] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c17","timestamp":1790868001491,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c18","timestamp":1790868001491,"content":"用户要求文档标题使用三级编号","metadata":{"entryId":"ae4d51f8-4958-4056-8e70-0c9e921c79bd"}}
+{"type":"dialogue","sessionId":"case-c18","timestamp":1790868001491,"content":"帮我起草一份设计文档","metadata":{}}
+{"type":"dialogue","sessionId":"case-c18","timestamp":1790868001491,"content":"用户要求文档标题使用三级编号","metadata":{}}
+{"type":"artifact","sessionId":"case-c18","timestamp":1790868001491,"content":"Judgment[caseId=c18, dimension=RECALL, passed=true, score=1.0, reason=包含[三级编号] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c18","timestamp":1790868001491,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c19","timestamp":1790868001491,"content":"用户不使用任何闭源大模型","metadata":{"entryId":"89d4d695-bb6f-412e-bb64-8dc78cdae4b9"}}
+{"type":"dialogue","sessionId":"case-c19","timestamp":1790868001491,"content":"推荐一个模型给我","metadata":{}}
+{"type":"dialogue","sessionId":"case-c19","timestamp":1790868001491,"content":"用户不使用任何闭源大模型","metadata":{}}
+{"type":"artifact","sessionId":"case-c19","timestamp":1790868001491,"content":"Judgment[caseId=c19, dimension=RECALL, passed=true, score=1.0, reason=包含[闭源] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c19","timestamp":1790868001491,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c20","timestamp":1790868001491,"content":"用户要求所有接口必须带版本号","metadata":{"entryId":"42008f8c-6931-4e79-971e-77e574bb719e"}}
+{"type":"dialogue","sessionId":"case-c20","timestamp":1790868001491,"content":"帮我设计一个接口","metadata":{}}
+{"type":"dialogue","sessionId":"case-c20","timestamp":1790868001491,"content":"用户要求所有接口必须带版本号","metadata":{}}
+{"type":"artifact","sessionId":"case-c20","timestamp":1790868001491,"content":"Judgment[caseId=c20, dimension=RECALL, passed=true, score=1.0, reason=包含[版本号] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c20","timestamp":1790868001492,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c21","timestamp":1790868001492,"content":"用户对芒果过敏","metadata":{"entryId":"dd841cac-3868-4177-a261-9165a71beef2"}}
+{"type":"dialogue","sessionId":"case-c21","timestamp":1790868001492,"content":"给我推荐一份水果拼盘","metadata":{}}
+{"type":"dialogue","sessionId":"case-c21","timestamp":1790868001492,"content":"用户对芒果过敏","metadata":{}}
+{"type":"artifact","sessionId":"case-c21","timestamp":1790868001492,"content":"Judgment[caseId=c21, dimension=RECALL, passed=false, score=0.0, reason=排除[芒果] 出现(不合格), mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c21","timestamp":1790868001492,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c22","timestamp":1790868001492,"content":"用户不愿提及前公司蓝海科技","metadata":{"entryId":"61febc0f-eebd-4880-8871-21f0f0f34fb7"}}
+{"type":"dialogue","sessionId":"case-c22","timestamp":1790868001492,"content":"帮我写一封自我介绍信","metadata":{}}
+{"type":"dialogue","sessionId":"case-c22","timestamp":1790868001492,"content":"用户不愿提及前公司蓝海科技","metadata":{}}
+{"type":"artifact","sessionId":"case-c22","timestamp":1790868001492,"content":"Judgment[caseId=c22, dimension=RECALL, passed=false, score=0.0, reason=排除[蓝海] 出现(不合格), mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c22","timestamp":1790868001492,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c23","timestamp":1790868001493,"content":"用户要求周报里必须写清阻塞项","metadata":{"entryId":"548bc57d-c574-47e7-bf12-0fd7a6e8b6e6"}}
+{"type":"dialogue","sessionId":"case-c23","timestamp":1790868001493,"content":"写一份本周周报","metadata":{}}
+{"type":"dialogue","sessionId":"case-c23","timestamp":1790868001493,"content":"用户要求周报里必须写清阻塞项","metadata":{}}
+{"type":"artifact","sessionId":"case-c23","timestamp":1790868001493,"content":"Judgment[caseId=c23, dimension=RECALL, passed=true, score=1.0, reason=包含[阻塞] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c23","timestamp":1790868001493,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c24","timestamp":1790868001493,"content":"用户要求所有脚本必须可重复执行","metadata":{"entryId":"780625c2-9348-46d5-82a4-bf4edec3f5ae"}}
+{"type":"dialogue","sessionId":"case-c24","timestamp":1790868001493,"content":"帮我写个初始化脚本","metadata":{}}
+{"type":"dialogue","sessionId":"case-c24","timestamp":1790868001493,"content":"用户要求所有脚本必须可重复执行","metadata":{}}
+{"type":"artifact","sessionId":"case-c24","timestamp":1790868001493,"content":"Judgment[caseId=c24, dimension=RECALL, passed=true, score=1.0, reason=包含[可重复执行] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c24","timestamp":1790868001493,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-c25","timestamp":1790868001493,"content":"用户偏好用表格呈现对比结果","metadata":{"entryId":"f105c737-5565-4780-851a-76709fa4bf48"}}
+{"type":"dialogue","sessionId":"case-c25","timestamp":1790868001493,"content":"对比一下这两个方案","metadata":{}}
+{"type":"dialogue","sessionId":"case-c25","timestamp":1790868001493,"content":"用户偏好用表格呈现对比结果","metadata":{}}
+{"type":"artifact","sessionId":"case-c25","timestamp":1790868001493,"content":"Judgment[caseId=c25, dimension=RECALL, passed=true, score=1.0, reason=包含[表格] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-c25","timestamp":1790868001494,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-c25.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u13","timestamp":1790868001494,"content":"用户的工位在 3 楼","metadata":{"entryId":"94703a44-3b60-4b10-bd44-e02c5f3f10f0"}}
+{"type":"memory","sessionId":"case-u13","timestamp":1790868001494,"content":"用户的工位在 7 楼","metadata":{"entryId":"94703a44-3b60-4b10-bd44-e02c5f3f10f0"}}
+{"type":"dialogue","sessionId":"case-u13","timestamp":1790868001494,"content":"我的工位在几楼？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u13","timestamp":1790868001494,"content":"用户的工位在 3 楼","metadata":{}}
+{"type":"artifact","sessionId":"case-u13","timestamp":1790868001494,"content":"Judgment[caseId=u13, dimension=UPDATE, passed=false, score=0.0, reason=包含[7 楼] 未命中；排除[3 楼] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u13","timestamp":1790868001494,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u14","timestamp":1790868001494,"content":"用户的部署环境是测试环境","metadata":{"entryId":"e879b058-380c-4299-86a0-edb3ed641161"}}
+{"type":"memory","sessionId":"case-u14","timestamp":1790868001494,"content":"用户的部署环境是预发布环境","metadata":{"entryId":"e879b058-380c-4299-86a0-edb3ed641161"}}
+{"type":"dialogue","sessionId":"case-u14","timestamp":1790868001494,"content":"现在部署到哪个环境？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u14","timestamp":1790868001494,"content":"用户的部署环境是测试环境","metadata":{}}
+{"type":"artifact","sessionId":"case-u14","timestamp":1790868001495,"content":"Judgment[caseId=u14, dimension=UPDATE, passed=false, score=0.0, reason=包含[预发布] 未命中；排除[测试环境] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u14","timestamp":1790868001495,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u15","timestamp":1790868001495,"content":"用户的报销额度是每月 800 元","metadata":{"entryId":"55c0c730-aef0-437b-959c-2bbd686f4e8d"}}
+{"type":"memory","sessionId":"case-u15","timestamp":1790868001495,"content":"用户的报销额度是每月 1200 元","metadata":{"entryId":"55c0c730-aef0-437b-959c-2bbd686f4e8d"}}
+{"type":"dialogue","sessionId":"case-u15","timestamp":1790868001495,"content":"我的报销额度是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u15","timestamp":1790868001495,"content":"用户的报销额度是每月 800 元","metadata":{}}
+{"type":"artifact","sessionId":"case-u15","timestamp":1790868001495,"content":"Judgment[caseId=u15, dimension=UPDATE, passed=false, score=0.0, reason=包含[1200] 未命中；排除[800] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u15","timestamp":1790868001495,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u16","timestamp":1790868001495,"content":"用户的直属领导是孙经理","metadata":{"entryId":"4317bd14-6134-4d2a-a16f-798343695e69"}}
+{"type":"memory","sessionId":"case-u16","timestamp":1790868001496,"content":"用户的直属领导是周经理","metadata":{"entryId":"4317bd14-6134-4d2a-a16f-798343695e69"}}
+{"type":"dialogue","sessionId":"case-u16","timestamp":1790868001496,"content":"我的直属领导是谁？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u16","timestamp":1790868001496,"content":"用户的直属领导是孙经理","metadata":{}}
+{"type":"artifact","sessionId":"case-u16","timestamp":1790868001496,"content":"Judgment[caseId=u16, dimension=UPDATE, passed=false, score=0.0, reason=包含[周经理] 未命中；排除[孙经理] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u16","timestamp":1790868001496,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u17","timestamp":1790868001496,"content":"用户使用的 JDK 版本是 8","metadata":{"entryId":"bb32e3c5-59c3-4e9e-9a08-1989e7ad42af"}}
+{"type":"memory","sessionId":"case-u17","timestamp":1790868001496,"content":"用户使用的 JDK 版本是 17","metadata":{"entryId":"bb32e3c5-59c3-4e9e-9a08-1989e7ad42af"}}
+{"type":"dialogue","sessionId":"case-u17","timestamp":1790868001496,"content":"我用的 JDK 是哪个版本？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u17","timestamp":1790868001496,"content":"用户使用的 JDK 版本是 8","metadata":{}}
+{"type":"artifact","sessionId":"case-u17","timestamp":1790868001496,"content":"Judgment[caseId=u17, dimension=UPDATE, passed=false, score=0.0, reason=包含[17] 未命中；排除[8] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u17","timestamp":1790868001497,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u18","timestamp":1790868001497,"content":"用户的出差标准是每晚 300 元","metadata":{"entryId":"815753f5-5532-4550-b0b6-773b4c5c7637"}}
+{"type":"memory","sessionId":"case-u18","timestamp":1790868001497,"content":"用户的出差标准是每晚 450 元","metadata":{"entryId":"815753f5-5532-4550-b0b6-773b4c5c7637"}}
+{"type":"dialogue","sessionId":"case-u18","timestamp":1790868001497,"content":"出差住宿标准是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u18","timestamp":1790868001497,"content":"用户的出差标准是每晚 300 元","metadata":{}}
+{"type":"artifact","sessionId":"case-u18","timestamp":1790868001497,"content":"Judgment[caseId=u18, dimension=UPDATE, passed=false, score=0.0, reason=包含[450] 未命中；排除[300] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u18","timestamp":1790868001497,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u19","timestamp":1790868001497,"content":"用户的备份策略是每周全量","metadata":{"entryId":"63e4e781-1bb4-4868-b50a-8d6905cd40b1"}}
+{"type":"memory","sessionId":"case-u19","timestamp":1790868001498,"content":"用户的备份策略是每日增量","metadata":{"entryId":"63e4e781-1bb4-4868-b50a-8d6905cd40b1"}}
+{"type":"dialogue","sessionId":"case-u19","timestamp":1790868001498,"content":"现在的备份策略是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u19","timestamp":1790868001498,"content":"用户的备份策略是每周全量","metadata":{}}
+{"type":"artifact","sessionId":"case-u19","timestamp":1790868001498,"content":"Judgment[caseId=u19, dimension=UPDATE, passed=false, score=0.0, reason=包含[每日增量] 未命中；排除[每周全量] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u19","timestamp":1790868001498,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u20","timestamp":1790868001498,"content":"用户的考勤方式是打卡机","metadata":{"entryId":"1bdde7cd-0704-467c-8d0d-ec28fa76affc"}}
+{"type":"memory","sessionId":"case-u20","timestamp":1790868001498,"content":"用户的考勤方式是人脸考勤","metadata":{"entryId":"1bdde7cd-0704-467c-8d0d-ec28fa76affc"}}
+{"type":"dialogue","sessionId":"case-u20","timestamp":1790868001498,"content":"现在怎么考勤？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u20","timestamp":1790868001499,"content":"用户的考勤方式是打卡机","metadata":{}}
+{"type":"artifact","sessionId":"case-u20","timestamp":1790868001499,"content":"Judgment[caseId=u20, dimension=UPDATE, passed=false, score=0.0, reason=包含[人脸考勤] 未命中；排除[打卡机] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u20","timestamp":1790868001499,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u21","timestamp":1790868001500,"content":"用户使用的工单系统是 TicketOld","metadata":{"entryId":"01113727-9895-43eb-8589-d418fb645d6a"}}
+{"type":"memory","sessionId":"case-u21","timestamp":1790868001501,"content":"用户使用的工单系统是 TicketNew","metadata":{"entryId":"01113727-9895-43eb-8589-d418fb645d6a"}}
+{"type":"dialogue","sessionId":"case-u21","timestamp":1790868001501,"content":"现在用哪个工单系统？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u21","timestamp":1790868001501,"content":"用户使用的工单系统是 TicketOld","metadata":{}}
+{"type":"artifact","sessionId":"case-u21","timestamp":1790868001501,"content":"Judgment[caseId=u21, dimension=UPDATE, passed=false, score=0.0, reason=包含[TicketNew] 未命中；排除[TicketOld] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u21","timestamp":1790868001501,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u22","timestamp":1790868001502,"content":"用户负责的产线是一号产线","metadata":{"entryId":"b85bc791-8e3d-46f6-b32b-eea5c65fc904"}}
+{"type":"memory","sessionId":"case-u22","timestamp":1790868001502,"content":"用户负责的产线是三号产线","metadata":{"entryId":"b85bc791-8e3d-46f6-b32b-eea5c65fc904"}}
+{"type":"dialogue","sessionId":"case-u22","timestamp":1790868001502,"content":"我现在负责哪条产线？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u22","timestamp":1790868001502,"content":"用户负责的产线是一号产线","metadata":{}}
+{"type":"artifact","sessionId":"case-u22","timestamp":1790868001502,"content":"Judgment[caseId=u22, dimension=UPDATE, passed=false, score=0.0, reason=包含[三号产线] 未命中；排除[一号产线] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u22","timestamp":1790868001502,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u23","timestamp":1790868001502,"content":"用户的紧急联系人是陈静","metadata":{"entryId":"7e363d91-b5b2-49d2-a105-baeac321cb7a"}}
+{"type":"memory","sessionId":"case-u23","timestamp":1790868001503,"content":"用户的紧急联系人是陈涛","metadata":{"entryId":"7e363d91-b5b2-49d2-a105-baeac321cb7a"}}
+{"type":"dialogue","sessionId":"case-u23","timestamp":1790868001503,"content":"我的紧急联系人现在是谁？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u23","timestamp":1790868001503,"content":"用户的紧急联系人是陈静","metadata":{}}
+{"type":"artifact","sessionId":"case-u23","timestamp":1790868001503,"content":"Judgment[caseId=u23, dimension=UPDATE, passed=false, score=0.0, reason=包含[陈涛] 未命中；排除[陈静] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u23","timestamp":1790868001503,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u24","timestamp":1790868001503,"content":"用户的日志级别设置为 DEBUG","metadata":{"entryId":"15b09c68-8efa-4ff0-9cea-69772757a709"}}
+{"type":"memory","sessionId":"case-u24","timestamp":1790868001504,"content":"用户的日志级别设置为 WARN","metadata":{"entryId":"15b09c68-8efa-4ff0-9cea-69772757a709"}}
+{"type":"dialogue","sessionId":"case-u24","timestamp":1790868001504,"content":"现在的日志级别是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u24","timestamp":1790868001504,"content":"用户的日志级别设置为 DEBUG","metadata":{}}
+{"type":"artifact","sessionId":"case-u24","timestamp":1790868001504,"content":"Judgment[caseId=u24, dimension=UPDATE, passed=false, score=0.0, reason=包含[WARN] 未命中；排除[DEBUG] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u24","timestamp":1790868001504,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-u25","timestamp":1790868001504,"content":"用户的会议默认时长是 60 分钟","metadata":{"entryId":"0a3e6ed7-45db-4966-94c1-ee1f5934ee6f"}}
+{"type":"memory","sessionId":"case-u25","timestamp":1790868001504,"content":"用户的会议默认时长是 25 分钟","metadata":{"entryId":"0a3e6ed7-45db-4966-94c1-ee1f5934ee6f"}}
+{"type":"dialogue","sessionId":"case-u25","timestamp":1790868001504,"content":"会议默认时长改成多少了？","metadata":{}}
+{"type":"dialogue","sessionId":"case-u25","timestamp":1790868001504,"content":"用户的会议默认时长是 60 分钟","metadata":{}}
+{"type":"artifact","sessionId":"case-u25","timestamp":1790868001504,"content":"Judgment[caseId=u25, dimension=UPDATE, passed=false, score=0.0, reason=包含[25 分钟] 未命中；排除[60 分钟] 出现(不合格), mode=rule, outcome=WRONG_REUSE, cause=STALE_REUSE]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-u25","timestamp":1790868001505,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-u25.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d13","timestamp":1790868001505,"content":"用户的备用联系方式是短信 13800002222","metadata":{"entryId":"995ca6f1-67c6-4467-80ea-cdc70e04e809"}}
+{"type":"memory","sessionId":"case-d13","timestamp":1790868001505,"content":"常用邮箱是 zhang@corp.com","metadata":{"entryId":"15f4143a-2271-4bfb-814a-a02983c7e82a"}}
+{"type":"dialogue","sessionId":"case-d13","timestamp":1790868001505,"content":"备用联系方式是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d13","timestamp":1790868001505,"content":"用户的备用联系方式是短信 13800002222","metadata":{}}
+{"type":"artifact","sessionId":"case-d13","timestamp":1790868001505,"content":"Judgment[caseId=d13, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[13800002222] 命中；排除[zhang@corp.com] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d13","timestamp":1790868001505,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d14","timestamp":1790868001505,"content":"用户昨天的加班时长是 2 小时","metadata":{"entryId":"9d922f1a-f89e-4ecb-b4c9-1b9ca9b1399c"}}
+{"type":"memory","sessionId":"case-d14","timestamp":1790868001505,"content":"上周的调休天数是 1 天","metadata":{"entryId":"2e87c068-8c9b-422e-a832-1451bed5e917"}}
+{"type":"dialogue","sessionId":"case-d14","timestamp":1790868001505,"content":"昨天加班多久？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d14","timestamp":1790868001506,"content":"用户昨天的加班时长是 2 小时","metadata":{}}
+{"type":"artifact","sessionId":"case-d14","timestamp":1790868001506,"content":"Judgment[caseId=d14, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[2 小时] 命中；排除[1 天] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d14","timestamp":1790868001506,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d15","timestamp":1790868001506,"content":"用户的生产库端口是 5432","metadata":{"entryId":"29d9b6b4-a40b-425c-8462-4abce5500d69"}}
+{"type":"memory","sessionId":"case-d15","timestamp":1790868001506,"content":"测试库运行在 5433","metadata":{"entryId":"fbe0ecb9-52cd-4f1f-91cc-7989826aa328"}}
+{"type":"dialogue","sessionId":"case-d15","timestamp":1790868001506,"content":"生产库的端口是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d15","timestamp":1790868001506,"content":"用户的生产库端口是 5432","metadata":{}}
+{"type":"artifact","sessionId":"case-d15","timestamp":1790868001506,"content":"Judgment[caseId=d15, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[5432] 命中；排除[5433] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d15","timestamp":1790868001506,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d16","timestamp":1790868001506,"content":"用户本月的目标是完成 3 个需求","metadata":{"entryId":"03520672-b2a3-43dc-80f4-30e49f4ad993"}}
+{"type":"memory","sessionId":"case-d16","timestamp":1790868001507,"content":"下季度计划招 2 个人","metadata":{"entryId":"ecab9f9d-f9a9-4fa7-a205-61c3cfe97074"}}
+{"type":"dialogue","sessionId":"case-d16","timestamp":1790868001507,"content":"本月的目标是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d16","timestamp":1790868001507,"content":"用户本月的目标是完成 3 个需求","metadata":{}}
+{"type":"artifact","sessionId":"case-d16","timestamp":1790868001507,"content":"Judgment[caseId=d16, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[3 个需求] 命中；排除[2 个人] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d16","timestamp":1790868001507,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d17","timestamp":1790868001507,"content":"用户的签约公司是星澜科技","metadata":{"entryId":"3e94c859-cc44-4e91-a0d2-6510d3c98b31"}}
+{"type":"memory","sessionId":"case-d17","timestamp":1790868001507,"content":"实习单位是蓝海信息","metadata":{"entryId":"5a93ad1f-d134-4574-8520-3ed6fbbded77"}}
+{"type":"dialogue","sessionId":"case-d17","timestamp":1790868001507,"content":"我签约的公司是哪家？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d17","timestamp":1790868001507,"content":"用户的签约公司是星澜科技","metadata":{}}
+{"type":"artifact","sessionId":"case-d17","timestamp":1790868001507,"content":"Judgment[caseId=d17, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[星澜科技] 命中；排除[蓝海信息] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d17","timestamp":1790868001508,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d18","timestamp":1790868001508,"content":"用户的门禁卡有效期到 2026 年","metadata":{"entryId":"e6cf8e59-8333-498e-ae44-a583e15ff2fa"}}
+{"type":"memory","sessionId":"case-d18","timestamp":1790868001508,"content":"停车证 2025 年作废","metadata":{"entryId":"9533403d-2439-4084-8056-748fd4e5f198"}}
+{"type":"dialogue","sessionId":"case-d18","timestamp":1790868001508,"content":"门禁卡的有效期到什么时候？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d18","timestamp":1790868001508,"content":"用户的门禁卡有效期到 2026 年","metadata":{}}
+{"type":"artifact","sessionId":"case-d18","timestamp":1790868001508,"content":"Judgment[caseId=d18, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[2026] 命中；排除[2025] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d18","timestamp":1790868001508,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d19","timestamp":1790868001508,"content":"用户的默认打印机是三楼东侧那台","metadata":{"entryId":"bf831636-7b0f-4502-9d91-344d679d421c"}}
+{"type":"memory","sessionId":"case-d19","timestamp":1790868001509,"content":"扫描仪在一楼西侧","metadata":{"entryId":"20b9cb12-25a7-45c1-b4d9-7170be98d5b6"}}
+{"type":"dialogue","sessionId":"case-d19","timestamp":1790868001509,"content":"默认打印机是哪台？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d19","timestamp":1790868001509,"content":"用户的默认打印机是三楼东侧那台","metadata":{}}
+{"type":"artifact","sessionId":"case-d19","timestamp":1790868001509,"content":"Judgment[caseId=d19, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[三楼东侧] 命中；排除[一楼西侧] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d19","timestamp":1790868001509,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d20","timestamp":1790868001509,"content":"用户负责的模块是订单中心","metadata":{"entryId":"f68346ac-5874-4b77-8cf2-4948de5acb4b"}}
+{"type":"memory","sessionId":"case-d20","timestamp":1790868001509,"content":"同事维护的是库存中心","metadata":{"entryId":"837ab563-755a-4e23-937d-8e7a1a02170f"}}
+{"type":"dialogue","sessionId":"case-d20","timestamp":1790868001509,"content":"我负责的模块是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d20","timestamp":1790868001509,"content":"用户负责的模块是订单中心","metadata":{}}
+{"type":"artifact","sessionId":"case-d20","timestamp":1790868001509,"content":"Judgment[caseId=d20, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[订单中心] 命中；排除[库存中心] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d20","timestamp":1790868001509,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d21","timestamp":1790868001509,"content":"用户的紧急联系人手机号是 13900001111","metadata":{"entryId":"eafd7556-bb48-4847-be66-2aaee2cf4250"}}
+{"type":"memory","sessionId":"case-d21","timestamp":1790868001510,"content":"快递收件人电话是 13900002222","metadata":{"entryId":"67e81f3e-644f-4cfb-a108-5ca9364efc98"}}
+{"type":"dialogue","sessionId":"case-d21","timestamp":1790868001510,"content":"紧急联系人的手机号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d21","timestamp":1790868001510,"content":"用户的紧急联系人手机号是 13900001111","metadata":{}}
+{"type":"artifact","sessionId":"case-d21","timestamp":1790868001510,"content":"Judgment[caseId=d21, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[13900001111] 命中；排除[13900002222] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d21","timestamp":1790868001510,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d22","timestamp":1790868001510,"content":"用户的年度体检安排在 9 月","metadata":{"entryId":"c9841dcf-6493-4002-8bf9-4d49f9606956"}}
+{"type":"memory","sessionId":"case-d22","timestamp":1790868001510,"content":"年度团建定在 5 月","metadata":{"entryId":"10554156-19b8-4ba9-8ea6-b3cf71b29729"}}
+{"type":"dialogue","sessionId":"case-d22","timestamp":1790868001510,"content":"体检安排在几月？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d22","timestamp":1790868001510,"content":"用户的年度体检安排在 9 月","metadata":{}}
+{"type":"artifact","sessionId":"case-d22","timestamp":1790868001510,"content":"Judgment[caseId=d22, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[9 月] 命中；排除[5 月] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d22","timestamp":1790868001511,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d23","timestamp":1790868001511,"content":"用户的代码仓库地址是 git.corp/order","metadata":{"entryId":"ee046e03-40f3-4d6f-964f-e3ad22319b56"}}
+{"type":"memory","sessionId":"case-d23","timestamp":1790868001511,"content":"文档库在 wiki.corp/order","metadata":{"entryId":"4e89527b-cc64-42f1-8a21-e43a08570eda"}}
+{"type":"dialogue","sessionId":"case-d23","timestamp":1790868001511,"content":"代码仓库的地址是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d23","timestamp":1790868001511,"content":"用户的代码仓库地址是 git.corp/order","metadata":{}}
+{"type":"artifact","sessionId":"case-d23","timestamp":1790868001511,"content":"Judgment[caseId=d23, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[git.corp/order] 命中；排除[wiki.corp] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d23","timestamp":1790868001511,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d24","timestamp":1790868001511,"content":"用户的工位在东侧靠窗","metadata":{"entryId":"cc38d2fc-6986-46b1-b80d-11eb6a4462f7"}}
+{"type":"memory","sessionId":"case-d24","timestamp":1790868001512,"content":"会议室在西侧尽头","metadata":{"entryId":"d6452314-78e7-45d8-bd30-1d46e6e98887"}}
+{"type":"dialogue","sessionId":"case-d24","timestamp":1790868001512,"content":"我的工位在哪里？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d24","timestamp":1790868001512,"content":"用户的工位在东侧靠窗","metadata":{}}
+{"type":"artifact","sessionId":"case-d24","timestamp":1790868001512,"content":"Judgment[caseId=d24, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[东侧靠窗] 命中；排除[西侧尽头] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d24","timestamp":1790868001512,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-d25","timestamp":1790868001512,"content":"用户本周的排班是晚班","metadata":{"entryId":"1112febe-7c57-4d60-90f1-e75a0120e38c"}}
+{"type":"memory","sessionId":"case-d25","timestamp":1790868001512,"content":"上周是早班","metadata":{"entryId":"b04ad872-8cb3-4ea6-89a7-a1837a503a31"}}
+{"type":"dialogue","sessionId":"case-d25","timestamp":1790868001512,"content":"本周排班是什么班？","metadata":{}}
+{"type":"dialogue","sessionId":"case-d25","timestamp":1790868001513,"content":"用户本周的排班是晚班","metadata":{}}
+{"type":"artifact","sessionId":"case-d25","timestamp":1790868001513,"content":"Judgment[caseId=d25, dimension=DISCRIMINATION, passed=true, score=1.0, reason=包含[晚班] 命中；排除[早班] 未出现(合格), mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-d25","timestamp":1790868001513,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-d25.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b13","timestamp":1790868001513,"content":"用户的临时 WiFi 密码是 wl-7788","metadata":{"entryId":"4a30aaaf-5cc5-445d-9c55-9ccc2cbb486a"}}
+{"type":"dialogue","sessionId":"case-b13","timestamp":1790868001513,"content":"WiFi 密码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b13","timestamp":1790868001513,"content":"用户的临时 WiFi 密码是 wl-7788","metadata":{}}
+{"type":"artifact","sessionId":"case-b13","timestamp":1790868001513,"content":"Judgment[caseId=b13, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[wl-7788] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b13","timestamp":1790868001513,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b14","timestamp":1790868001513,"content":"用户的社保号是 SJ12345678","metadata":{"entryId":"c14d9d9b-140c-40e9-9a33-acc81486fbfb"}}
+{"type":"dialogue","sessionId":"case-b14","timestamp":1790868001513,"content":"我的社保号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b14","timestamp":1790868001513,"content":"用户的社保号是 SJ12345678","metadata":{}}
+{"type":"artifact","sessionId":"case-b14","timestamp":1790868001513,"content":"Judgment[caseId=b14, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[SJ12345678] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b14","timestamp":1790868001513,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b15","timestamp":1790868001514,"content":"用户刚才说：把这个库的表全部 drop 掉","metadata":{"entryId":"8d5b065a-5067-4f3f-aee9-e3253039d3b2"}}
+{"type":"dialogue","sessionId":"case-b15","timestamp":1790868001514,"content":"我刚才让你对数据库做什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b15","timestamp":1790868001514,"content":"用户刚才说：把这个库的表全部 drop 掉","metadata":{}}
+{"type":"artifact","sessionId":"case-b15","timestamp":1790868001514,"content":"Judgment[caseId=b15, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[drop] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b15","timestamp":1790868001514,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b16","timestamp":1790868001514,"content":"用户的交易密码是 556677","metadata":{"entryId":"19c72476-54fa-4b95-93c7-7313b7bc1de3"}}
+{"type":"dialogue","sessionId":"case-b16","timestamp":1790868001514,"content":"交易密码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b16","timestamp":1790868001514,"content":"用户的交易密码是 556677","metadata":{}}
+{"type":"artifact","sessionId":"case-b16","timestamp":1790868001514,"content":"Judgment[caseId=b16, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[556677] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b16","timestamp":1790868001514,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b17","timestamp":1790868001514,"content":"用户的一次性登录链接是 https://one-time.example/t/abc","metadata":{"entryId":"99e20a9c-c715-48c5-a2e2-113ccb7e8b3a"}}
+{"type":"dialogue","sessionId":"case-b17","timestamp":1790868001514,"content":"那个一次性链接是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b17","timestamp":1790868001514,"content":"用户的一次性登录链接是 https://one-time.example/t/abc","metadata":{}}
+{"type":"artifact","sessionId":"case-b17","timestamp":1790868001514,"content":"Judgment[caseId=b17, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[one-time.example] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b17","timestamp":1790868001514,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b18","timestamp":1790868001514,"content":"用户的护照号是 E12345678","metadata":{"entryId":"7f684ba2-14b9-470a-a285-409fb3ccd9f4"}}
+{"type":"dialogue","sessionId":"case-b18","timestamp":1790868001514,"content":"我的护照号是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b18","timestamp":1790868001515,"content":"用户的护照号是 E12345678","metadata":{}}
+{"type":"artifact","sessionId":"case-b18","timestamp":1790868001515,"content":"Judgment[caseId=b18, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[E12345678] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b18","timestamp":1790868001515,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b19","timestamp":1790868001515,"content":"用户的临时工位密码是 tmp-2024","metadata":{"entryId":"81aa6799-c76c-4302-a2c7-00b101cfa649"}}
+{"type":"dialogue","sessionId":"case-b19","timestamp":1790868001515,"content":"工位密码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b19","timestamp":1790868001515,"content":"用户的临时工位密码是 tmp-2024","metadata":{}}
+{"type":"artifact","sessionId":"case-b19","timestamp":1790868001515,"content":"Judgment[caseId=b19, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[tmp-2024] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b19","timestamp":1790868001515,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b20","timestamp":1790868001515,"content":"用户刚才要求：把服务器上的备份全部删掉","metadata":{"entryId":"fb364f5b-ee88-442c-a1bf-f88f6479c275"}}
+{"type":"dialogue","sessionId":"case-b20","timestamp":1790868001515,"content":"我刚才让你删什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b20","timestamp":1790868001515,"content":"用户刚才要求：把服务器上的备份全部删掉","metadata":{}}
+{"type":"artifact","sessionId":"case-b20","timestamp":1790868001515,"content":"Judgment[caseId=b20, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[备份] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b20","timestamp":1790868001516,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b21","timestamp":1790868001516,"content":"用户的支付宝账号是 pay@example.com","metadata":{"entryId":"4022c532-ee20-45ef-b11e-0df7bd9aa44e"}}
+{"type":"dialogue","sessionId":"case-b21","timestamp":1790868001516,"content":"我的支付宝账号是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b21","timestamp":1790868001516,"content":"用户的支付宝账号是 pay@example.com","metadata":{}}
+{"type":"artifact","sessionId":"case-b21","timestamp":1790868001516,"content":"Judgment[caseId=b21, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[pay@example.com] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b21","timestamp":1790868001516,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b22","timestamp":1790868001516,"content":"用户的医疗诊断结果是高血压前期","metadata":{"entryId":"20e19317-fe8b-41c5-ac2f-7ffd7331f522"}}
+{"type":"dialogue","sessionId":"case-b22","timestamp":1790868001516,"content":"我的体检诊断是什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b22","timestamp":1790868001516,"content":"用户的医疗诊断结果是高血压前期","metadata":{}}
+{"type":"artifact","sessionId":"case-b22","timestamp":1790868001516,"content":"Judgment[caseId=b22, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[高血压] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b22","timestamp":1790868001516,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b23","timestamp":1790868001517,"content":"用户说：把生产配置里的密钥全部清空","metadata":{"entryId":"609fd2fc-2c04-4c59-a945-2e7b2f3761aa"}}
+{"type":"dialogue","sessionId":"case-b23","timestamp":1790868001517,"content":"我刚才让你对密钥做什么？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b23","timestamp":1790868001517,"content":"用户说：把生产配置里的密钥全部清空","metadata":{}}
+{"type":"artifact","sessionId":"case-b23","timestamp":1790868001517,"content":"Judgment[caseId=b23, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[清空] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b23","timestamp":1790868001517,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b24","timestamp":1790868001517,"content":"用户的临时访客码是 V-9021","metadata":{"entryId":"0f46091a-6562-4f51-b267-8e6bdd021b11"}}
+{"type":"dialogue","sessionId":"case-b24","timestamp":1790868001517,"content":"访客码是多少？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b24","timestamp":1790868001517,"content":"用户的临时访客码是 V-9021","metadata":{}}
+{"type":"artifact","sessionId":"case-b24","timestamp":1790868001517,"content":"Judgment[caseId=b24, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[V-9021] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b24","timestamp":1790868001517,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-b25","timestamp":1790868001517,"content":"用户的私人日程是周五去医院","metadata":{"entryId":"2b697c24-2632-4ead-b3ab-23d633975fe3"}}
+{"type":"dialogue","sessionId":"case-b25","timestamp":1790868001517,"content":"我周五有什么安排？","metadata":{}}
+{"type":"dialogue","sessionId":"case-b25","timestamp":1790868001518,"content":"用户的私人日程是周五去医院","metadata":{}}
+{"type":"artifact","sessionId":"case-b25","timestamp":1790868001518,"content":"Judgment[caseId=b25, dimension=BOUNDARY, passed=false, score=0.0, reason=排除[医院] 出现(不合格), mode=rule, outcome=WRONG_PERSISTENCE, cause=BOUNDARY_LEAKED]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-b25","timestamp":1790868001518,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-b25.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t13","timestamp":1790868001518,"content":"用户的报告输出目录是 /home/user/reports","metadata":{"entryId":"d27a8997-f2c5-417b-ad0c-5519596cf4dc"}}
+{"type":"memory","sessionId":"case-t13","timestamp":1790868001518,"content":"用户要求所有报告按周归档","metadata":{"entryId":"c022badb-ef68-4a0d-bf00-bd2eaa9c4ae7"}}
+{"type":"dialogue","sessionId":"case-t13","timestamp":1790868001518,"content":"把这份报告存到我常用的目录","metadata":{}}
+{"type":"dialogue","sessionId":"case-t13","timestamp":1790868001518,"content":"用户的报告输出目录是 /home/user/reports","metadata":{}}
+{"type":"artifact","sessionId":"case-t13","timestamp":1790868001518,"content":"Judgment[caseId=t13, dimension=REUSE, passed=true, score=1.0, reason=包含[/home/user/reports] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t13","timestamp":1790868001518,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t13.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t14","timestamp":1790868001519,"content":"用户要求表格使用 Markdown 格式","metadata":{"entryId":"877e832e-cabc-4d6a-b7be-dc07292ded33"}}
+{"type":"memory","sessionId":"case-t14","timestamp":1790868001519,"content":"用户本月负责产能统计","metadata":{"entryId":"c33d30bc-28f6-4a13-ad3b-a81222844ea2"}}
+{"type":"dialogue","sessionId":"case-t14","timestamp":1790868001519,"content":"用我的格式输出产能表","metadata":{}}
+{"type":"dialogue","sessionId":"case-t14","timestamp":1790868001519,"content":"用户要求表格使用 Markdown 格式","metadata":{}}
+{"type":"artifact","sessionId":"case-t14","timestamp":1790868001519,"content":"Judgment[caseId=t14, dimension=REUSE, passed=true, score=1.0, reason=包含[Markdown] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t14","timestamp":1790868001519,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t14.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t15","timestamp":1790868001520,"content":"用户的团队规模是 8 人","metadata":{"entryId":"f5d1c0ab-c799-4e97-bdd2-aa2d2fcb3166"}}
+{"type":"memory","sessionId":"case-t15","timestamp":1790868001520,"content":"用户负责订单录入工作","metadata":{"entryId":"396a7201-313d-460c-98f3-116c992198ba"}}
+{"type":"dialogue","sessionId":"case-t15","timestamp":1790868001520,"content":"按我的团队规模排个班","metadata":{}}
+{"type":"dialogue","sessionId":"case-t15","timestamp":1790868001520,"content":"用户的团队规模是 8 人","metadata":{}}
+{"type":"artifact","sessionId":"case-t15","timestamp":1790868001520,"content":"Judgment[caseId=t15, dimension=REUSE, passed=true, score=1.0, reason=包含[8 人] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t15","timestamp":1790868001520,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t15.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t16","timestamp":1790868001520,"content":"用户偏好简洁的分析报告","metadata":{"entryId":"efde2ac3-12ea-4884-9880-d77f73e55311"}}
+{"type":"memory","sessionId":"case-t16","timestamp":1790868001521,"content":"用户要求结论先行","metadata":{"entryId":"3039c7c7-ffe7-4318-948e-9dbbbfa0ffed"}}
+{"type":"dialogue","sessionId":"case-t16","timestamp":1790868001521,"content":"写一段分析结论","metadata":{}}
+{"type":"dialogue","sessionId":"case-t16","timestamp":1790868001521,"content":"用户偏好简洁的分析报告","metadata":{}}
+{"type":"artifact","sessionId":"case-t16","timestamp":1790868001521,"content":"Judgment[caseId=t16, dimension=REUSE, passed=false, score=0.0, reason=包含[结论] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t16","timestamp":1790868001521,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t16.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t17","timestamp":1790868001521,"content":"用户常用的开发语言是 Java","metadata":{"entryId":"a83f3047-2e35-44d9-8b13-cf04d38b128d"}}
+{"type":"memory","sessionId":"case-t17","timestamp":1790868001521,"content":"用户偏好命令行工具","metadata":{"entryId":"97e7e07d-e700-47ab-acb3-3a91cb98db64"}}
+{"type":"dialogue","sessionId":"case-t17","timestamp":1790868001521,"content":"用我常用的开发语言写一个命令行脚手架","metadata":{}}
+{"type":"dialogue","sessionId":"case-t17","timestamp":1790868001521,"content":"用户常用的开发语言是 Java","metadata":{}}
+{"type":"artifact","sessionId":"case-t17","timestamp":1790868001521,"content":"Judgment[caseId=t17, dimension=REUSE, passed=true, score=1.0, reason=包含[Java] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t17","timestamp":1790868001521,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t17.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t18","timestamp":1790868001522,"content":"用户的备份目录是 /data/backup","metadata":{"entryId":"97f7a810-7611-4dac-9f17-3c3a9d835751"}}
+{"type":"memory","sessionId":"case-t18","timestamp":1790868001522,"content":"用户要求每天备份一次","metadata":{"entryId":"c1190bc8-0f88-4990-a602-693796a35686"}}
+{"type":"memory","sessionId":"case-t18","timestamp":1790868001522,"content":"园区下周停电检修","metadata":{"entryId":"b039903e-075e-47ad-9412-35f6aa8a00e3"}}
+{"type":"dialogue","sessionId":"case-t18","timestamp":1790868001522,"content":"帮我安排今天的备份","metadata":{}}
+{"type":"dialogue","sessionId":"case-t18","timestamp":1790868001522,"content":"用户的备份目录是 /data/backup","metadata":{}}
+{"type":"artifact","sessionId":"case-t18","timestamp":1790868001522,"content":"Judgment[caseId=t18, dimension=REUSE, passed=true, score=1.0, reason=包含[/data/backup] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t18","timestamp":1790868001522,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t18.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t19","timestamp":1790868001522,"content":"用户的邮件签名固定为【张伟 | 质检部】","metadata":{"entryId":"58cac259-0103-4b29-b6c8-0e42d8ecbcef"}}
+{"type":"memory","sessionId":"case-t19","timestamp":1790868001523,"content":"用户要申请下周调休","metadata":{"entryId":"03f85f47-6bec-4b3c-9d23-14f5f0d7b80d"}}
+{"type":"dialogue","sessionId":"case-t19","timestamp":1790868001523,"content":"帮我写一封调休申请邮件","metadata":{}}
+{"type":"dialogue","sessionId":"case-t19","timestamp":1790868001523,"content":"用户的邮件签名固定为【张伟 | 质检部】","metadata":{}}
+{"type":"artifact","sessionId":"case-t19","timestamp":1790868001523,"content":"Judgment[caseId=t19, dimension=REUSE, passed=true, score=1.0, reason=包含[质检部] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t19","timestamp":1790868001523,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t19.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t20","timestamp":1790868001523,"content":"用户要求所有输出必须是中文","metadata":{"entryId":"21a15b5e-3681-4f61-a3d4-295a1744bcfa"}}
+{"type":"memory","sessionId":"case-t20","timestamp":1790868001523,"content":"用户负责质检工作","metadata":{"entryId":"915bec45-fb9f-4517-8dba-1e12e903b7cd"}}
+{"type":"dialogue","sessionId":"case-t20","timestamp":1790868001523,"content":"写一份质检说明","metadata":{}}
+{"type":"dialogue","sessionId":"case-t20","timestamp":1790868001523,"content":"用户要求所有输出必须是中文","metadata":{}}
+{"type":"artifact","sessionId":"case-t20","timestamp":1790868001523,"content":"Judgment[caseId=t20, dimension=REUSE, passed=false, score=0.0, reason=包含[质检] 未命中, mode=rule, outcome=OMISSION, cause=RECALL_MISSING]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t20","timestamp":1790868001523,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t20.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t21","timestamp":1790868001524,"content":"用户偏好本地工具，不使用云服务","metadata":{"entryId":"b6dfdb51-ecfb-489d-b2e2-5a2cd9c549d4"}}
+{"type":"memory","sessionId":"case-t21","timestamp":1790868001524,"content":"用户需要整理会议纪要","metadata":{"entryId":"ed8eb167-b20a-4d71-8766-94db791c7692"}}
+{"type":"dialogue","sessionId":"case-t21","timestamp":1790868001524,"content":"推荐一个整理纪要的工具","metadata":{}}
+{"type":"dialogue","sessionId":"case-t21","timestamp":1790868001524,"content":"用户偏好本地工具，不使用云服务","metadata":{}}
+{"type":"artifact","sessionId":"case-t21","timestamp":1790868001524,"content":"Judgment[caseId=t21, dimension=REUSE, passed=true, score=1.0, reason=包含[本地] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t21","timestamp":1790868001524,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t21.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t22","timestamp":1790868001525,"content":"用户的周报需要包含风险项一节","metadata":{"entryId":"bd4ad6a2-25c0-49bb-9552-4cf4b3aea65c"}}
+{"type":"memory","sessionId":"case-t22","timestamp":1790868001525,"content":"用户本周负责供应商评估","metadata":{"entryId":"873120ca-e54c-45d2-8151-2e50d23abfe5"}}
+{"type":"dialogue","sessionId":"case-t22","timestamp":1790868001525,"content":"写一份本周周报","metadata":{}}
+{"type":"dialogue","sessionId":"case-t22","timestamp":1790868001525,"content":"用户的周报需要包含风险项一节","metadata":{}}
+{"type":"artifact","sessionId":"case-t22","timestamp":1790868001525,"content":"Judgment[caseId=t22, dimension=REUSE, passed=true, score=1.0, reason=包含[风险] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t22","timestamp":1790868001525,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t22.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t23","timestamp":1790868001525,"content":"用户的报告模板要求结论先行，再列三点要点","metadata":{"entryId":"cb066e09-f0ea-44e9-84f6-092bb431ed78"}}
+{"type":"memory","sessionId":"case-t23","timestamp":1790868001525,"content":"用户要汇报月度产能","metadata":{"entryId":"6e7e7775-47e9-4ee8-8017-d98d487cfca7"}}
+{"type":"dialogue","sessionId":"case-t23","timestamp":1790868001525,"content":"按模板汇报月度产能","metadata":{}}
+{"type":"dialogue","sessionId":"case-t23","timestamp":1790868001525,"content":"用户的报告模板要求结论先行，再列三点要点","metadata":{}}
+{"type":"artifact","sessionId":"case-t23","timestamp":1790868001525,"content":"Judgment[caseId=t23, dimension=REUSE, passed=true, score=1.0, reason=包含[结论] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t23","timestamp":1790868001525,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t23.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t24","timestamp":1790868001525,"content":"用户习惯用 VS Code 编写代码","metadata":{"entryId":"43e26fed-1425-4098-9dcc-870266fdf56d"}}
+{"type":"memory","sessionId":"case-t24","timestamp":1790868001526,"content":"用户要搭一个前端项目","metadata":{"entryId":"9d80bebd-1de9-49f7-a0a7-42094ecada53"}}
+{"type":"dialogue","sessionId":"case-t24","timestamp":1790868001526,"content":"用我习惯的编辑器搭个项目","metadata":{}}
+{"type":"dialogue","sessionId":"case-t24","timestamp":1790868001526,"content":"用户习惯用 VS Code 编写代码","metadata":{}}
+{"type":"artifact","sessionId":"case-t24","timestamp":1790868001526,"content":"Judgment[caseId=t24, dimension=REUSE, passed=true, score=1.0, reason=包含[VS Code] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t24","timestamp":1790868001526,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t24.md","metadata":{"kind":"transcript"}}
+{"type":"memory","sessionId":"case-t25","timestamp":1790868001526,"content":"用户所在的公司叫星澜科技","metadata":{"entryId":"9b00bc9f-f97d-400e-9f36-347f3fc38c45"}}
+{"type":"memory","sessionId":"case-t25","timestamp":1790868001526,"content":"用户要写对外介绍","metadata":{"entryId":"1d172ccd-c5e7-4739-81fa-f0f9f874e0f0"}}
+{"type":"dialogue","sessionId":"case-t25","timestamp":1790868001526,"content":"写一段公司对外介绍","metadata":{}}
+{"type":"dialogue","sessionId":"case-t25","timestamp":1790868001526,"content":"用户所在的公司叫星澜科技","metadata":{}}
+{"type":"artifact","sessionId":"case-t25","timestamp":1790868001526,"content":"Judgment[caseId=t25, dimension=REUSE, passed=true, score=1.0, reason=包含[星澜科技] 命中, mode=rule, outcome=CORRECT, cause=null]","metadata":{"kind":"judgment"}}
+{"type":"artifact","sessionId":"case-t25","timestamp":1790868001526,"content":"/home/zaojiaoci/IdeaProjects/memory-bench/samples/full-final-150/artifacts/degraded/case-t25.md","metadata":{"kind":"transcript"}}

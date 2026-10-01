@@ -29,7 +29,7 @@
     "description": "openKylin 生态智能体框架。若为 CLI 形态，改用 command 类型",
     "type": "http",
     "endpoint": "http://127.0.0.1:8081",
-    "path": "/api/analyze/stream",
+    "path": "/api/v1/analyze/stream",
     "timeoutSeconds": 120,
     "role": "primary"
   },

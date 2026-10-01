@@ -43,6 +43,19 @@ public final class MultiAgentBenchmark {
                                       List<AgentUnderTest> agents,
                                       CaseJudge judge,
                                       Path artifactRoot) {
+        return run(cases, agents, judge, artifactRoot, 1);
+    }
+
+    /**
+     * @param parallelism 用例并行度（{@code <=1} 表示串行）。
+     *                    仅对对话式（真实智能体）路径生效：内置确定性智能体是纯内存计算，
+     *                    本身瞬时完成，无需并行。
+     */
+    public static BenchmarkResult run(List<MemoryCase> cases,
+                                      List<AgentUnderTest> agents,
+                                      CaseJudge judge,
+                                      Path artifactRoot,
+                                      int parallelism) {
         Map<AgentUnderTest, BenchmarkReport> reports = new LinkedHashMap<>();
         Map<AgentUnderTest, EvidenceCollector> evidences = new LinkedHashMap<>();
 
@@ -51,7 +64,7 @@ public final class MultiAgentBenchmark {
             Path dir = artifactRoot == null ? null : artifactRoot.resolve(agent.id());
             BenchmarkReport report = agent.mode() == RunnerMode.MEMORY
                     ? new MemoryBenchmarkRunner(MemoryRegistry.resolve(agent), agent.answerer(), judge, collector, dir).run(cases)
-                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir).run(cases);
+                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir).run(cases, parallelism);
 
             reports.put(agent, report);
             evidences.put(agent, collector);

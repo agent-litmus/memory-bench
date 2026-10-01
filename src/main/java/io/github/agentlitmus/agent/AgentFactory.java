@@ -75,7 +75,7 @@ public final class AgentFactory {
 
     private static String pathOf(AgentConfig config) {
         return (config.path() == null || config.path().isBlank())
-                ? "/api/analyze/stream"
+                ? "/api/v1/analyze/stream"
                 : config.path();
     }
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -52,6 +53,28 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(HermesAcpAnswerer.class);
 
     /**
+     * 同时存活的 Hermes 进程上限。
+     * <p>
+     * 用例是<b>串行</b>执行的：每条用例独占一个 sessionId，且跑完后不再使用。
+     * 因此只需保留少量存活进程，超出上限的按插入顺序（最旧）销毁，
+     * 避免 N 条用例累积 N 个进程把机器拖垮。
+     * <p>
+     * <b>注意：该上限必须 {@code >=} 并行度</b>——并发执行时同时有 N 条用例在跑，
+     * 若上限小于并行度，回收逻辑会误杀正在使用的会话，导致答案丢失。
+     * 默认 16，可用系统属性 {@code litmus.hermes.maxSessions} 调整。
+     */
+    private static final int MAX_LIVE_SESSIONS =
+            Math.max(1, Integer.getInteger("litmus.hermes.maxSessions", 16));
+
+    // ---- 耗时埋点：用于定位瓶颈在「进程冷启动」还是「单次智能体回合」----
+    private static final AtomicLong START_NANOS = new AtomicLong();
+    private static final AtomicInteger START_COUNT = new AtomicInteger();
+    private static final AtomicLong NEW_SESSION_NANOS = new AtomicLong();
+    private static final AtomicInteger NEW_SESSION_COUNT = new AtomicInteger();
+    private static final AtomicLong PROMPT_NANOS = new AtomicLong();
+    private static final AtomicInteger PROMPT_COUNT = new AtomicInteger();
+
+    /**
      * 默认二进制路径。可被系统属性 {@code litmus.hermes.bin} 或环境变量
      * {@code HERMES_ACP_BIN} 覆盖；模板目录（含 config.yaml / .env）可被
      * {@code litmus.hermes.home} / {@code HERMES_ACP_HOME} 覆盖。
@@ -59,6 +82,16 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
      */
     private static final String DEFAULT_BIN =
             System.getProperty("user.home") + "/.kylin-agent-runtime/agent-runtime/venv/bin/hermes-acp";
+
+    /**
+     * 单请求超时（秒）。并发执行时多个用例同时等模型响应，单回合耗时会被拉长
+     * （实测串行峰值约 59 s，并行 8 时可超过 120 s），
+     * 超时过紧会导致「白等一整轮 + 拿不到答案被判失败」。
+     * 可用系统属性 {@code litmus.hermes.timeoutSeconds} 调大。
+     */
+    private static Duration defaultTimeout() {
+        return Duration.ofSeconds(Math.max(1, Long.getLong("litmus.hermes.timeoutSeconds", 120)));
+    }
 
     private static String resolveBinary() {
         String v = System.getProperty("litmus.hermes.bin");
@@ -92,7 +125,7 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
                 resolveTemplateHome(),
                 Path.of(System.getProperty("java.io.tmpdir"), "litmus-hermes"),
                 System.getProperty("user.dir"),
-                Duration.ofSeconds(120));
+                defaultTimeout());
     }
 
     public HermesAcpAnswerer(String binary, Path templateHome, Path root, String cwd, Duration timeout) {
@@ -100,29 +133,48 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
         this.templateHome = templateHome;
         this.root = root;
         this.cwd = cwd == null || cwd.isBlank() ? "." : cwd;
-        this.timeout = timeout == null ? Duration.ofSeconds(120) : timeout;
+        this.timeout = timeout == null ? defaultTimeout() : timeout;
     }
 
     @Override
     public String answer(String sessionId, String question) {
-        AcpSession session = sessions.get(sessionId);
+        AcpSession session;
+        synchronized (sessions) {
+            session = sessions.get(sessionId);
+        }
         if (session == null) {
-            session = start(sessionId);
-            if (session == null) {
+            // start() 含进程启动等耗时 I/O，刻意不持锁，避免阻塞其它并发用例
+            AcpSession created = start(sessionId);
+            if (created == null) {
                 return "";
             }
-            sessions.put(sessionId, session);
+            synchronized (sessions) {
+                AcpSession existing = sessions.get(sessionId);
+                if (existing != null) {
+                    created.close();
+                    session = existing;
+                } else {
+                    sessions.put(sessionId, created);
+                    session = created;
+                }
+            }
+            evictIdle();
         }
         try {
             if (session.hermesSessionId == null && !newHermesSession(session)) {
                 return "";
             }
+            long t0 = System.nanoTime();
             JsonNode res = session.request("session/prompt", mapper.createObjectNode()
                     .put("sessionId", session.hermesSessionId)
                     .set("prompt", mapper.createArrayNode()
                             .add(mapper.createObjectNode()
                                     .put("type", "text")
                                     .put("text", question))), timeout);
+            long ms = (System.nanoTime() - t0) / 1_000_000;
+            PROMPT_NANOS.addAndGet(ms);
+            PROMPT_COUNT.incrementAndGet();
+            log.info("[litmus-timing] session/prompt 耗时 {} ms（session={}）", ms, sessionId);
             return extractText(res);
         } catch (Exception e) {
             log.warn("ACP 调用异常（{}）：{}", sessionId, e.getMessage());
@@ -142,9 +194,14 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
 
     private boolean newHermesSession(AcpSession session) {
         // mcpServers 是 ACP 的必填字段（缺了会报 -32602 Invalid params），不接外部工具时给空数组
+        long t0 = System.nanoTime();
         JsonNode res = session.request("session/new", mapper.createObjectNode()
                 .put("cwd", cwd)
                 .set("mcpServers", mapper.createArrayNode()), timeout);
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        NEW_SESSION_NANOS.addAndGet(ms);
+        NEW_SESSION_COUNT.incrementAndGet();
+        log.info("[litmus-timing] session/new 耗时 {} ms", ms);
         String id = res == null ? null : res.path("result").path("sessionId").asText(null);
         if (id == null || id.isBlank()) {
             log.warn("ACP 建会话失败：{}", res == null ? "(无响应)" : res.toString());
@@ -162,11 +219,16 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
             copyIfAbsent("config.yaml", home);
             copyIfAbsent(".env", home);
 
+            long t0 = System.nanoTime();
             ProcessBuilder pb = new ProcessBuilder(binary);
             pb.environment().put("HERMES_HOME", home.toString());
             Process process = pb.start();
             AcpSession session = new AcpSession(process, home);
             JsonNode res = session.request("initialize", mapper.createObjectNode().put("protocolVersion", 1), timeout);
+            long ms = (System.nanoTime() - t0) / 1_000_000;
+            START_NANOS.addAndGet(ms);
+            START_COUNT.incrementAndGet();
+            log.info("[litmus-timing] 进程启动+initialize 耗时 {} ms（session={}）", ms, sessionId);
             if (res == null) {
                 log.warn("ACP initialize 无响应（{}）", sessionId);
             } else {
@@ -241,10 +303,42 @@ public class HermesAcpAnswerer implements Answerer, AutoCloseable {
 
     @Override
     public void close() {
-        for (AcpSession session : sessions.values()) {
-            session.close();
+        log.info("[litmus-timing] Hermes 耗时汇总 —— 启动+initialize: {} 次/共 {} ms/均值 {} ms；"
+                        + "session/new: {} 次/共 {} ms/均值 {} ms；"
+                        + "session/prompt: {} 次/共 {} ms/均值 {} ms",
+                START_COUNT.get(), START_NANOS.get(), avg(START_NANOS, START_COUNT),
+                NEW_SESSION_COUNT.get(), NEW_SESSION_NANOS.get(), avg(NEW_SESSION_NANOS, NEW_SESSION_COUNT),
+                PROMPT_COUNT.get(), PROMPT_NANOS.get(), avg(PROMPT_NANOS, PROMPT_COUNT));
+        synchronized (sessions) {
+            for (AcpSession session : sessions.values()) {
+                session.close();
+            }
+            sessions.clear();
         }
-        sessions.clear();
+    }
+
+    /**
+     * 销毁超出上限的最旧会话进程。
+     * <p>
+     * 由于用例串行且每条用例跑完即不再使用其 sessionId，
+     * 按插入顺序淘汰最旧者是安全的，可把常驻进程数从上百个压到 {@link #MAX_LIVE_SESSIONS} 个。
+     */
+    private void evictIdle() {
+        synchronized (sessions) {
+            while (sessions.size() > MAX_LIVE_SESSIONS) {
+                String oldest = sessions.keySet().iterator().next();
+                AcpSession victim = sessions.remove(oldest);
+                if (victim != null) {
+                    victim.close();
+                    log.debug("已回收 Hermes 进程（session={}）", oldest);
+                }
+            }
+        }
+    }
+
+    private static long avg(AtomicLong total, AtomicInteger count) {
+        int c = count.get();
+        return c == 0 ? 0 : total.get() / c;
     }
 
     /** 一个 Hermes ACP 进程及其会话状态 */

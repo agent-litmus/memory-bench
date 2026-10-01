@@ -13,7 +13,7 @@ import java.util.List;
  * @param description 说明
  * @param type        接入类型：{@code http} / {@code command} / {@code builtin}
  * @param endpoint    http 类型的服务地址，如 {@code http://localhost:8089}
- * @param path        http 类型的接口路径，默认 {@code /api/analyze/stream}
+ * @param path        http 类型的接口路径，默认 {@code /api/v1/analyze/stream}
  * @param resetPath   http 类型的会话重置路径（跨会话长期保持用例用）
  * @param command     command 类型的可执行文件，如 {@code kylin-agent}
  * @param args        command 类型的参数模板，支持 {@code {sessionId}} 与 {@code {question}} 占位符
@@ -73,7 +73,7 @@ public record AgentConfig(String id,
 
     /** HTTP 智能体 */
     public static AgentConfig http(String id, String name, String endpoint) {
-        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/analyze/stream", null,
+        return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/v1/analyze/stream", null,
                 null, List.of(), List.of(), 120, null);
     }
 

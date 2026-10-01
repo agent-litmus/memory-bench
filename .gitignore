@@ -32,3 +32,16 @@ blog/
 
 ### 指定输出目录（如 out-kylinbot2/）###
 out-*/
+
+### 例外：samples/ 下的评测证据必须入库（交付要求 b：样例数据与样例结果）###
+!samples/**/evidence/
+!samples/**/*.jsonl
+
+### 与评测无关的本地脚手架 / 脚本（不入库）###
+frontend/
+scaffold-cli/
+__pycache__/
+send_email.py
+email_config.json
+项目进展邮件草稿.txt
+cron-*
