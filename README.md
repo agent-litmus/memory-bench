@@ -156,6 +156,11 @@ Hermes Agent（ACP）         96%      56%       4%      36%      12%      76%  
 > ⚠️ **关于"未回答"**：真实智能体存在长尾延迟，本轮 Hermes 有 9/150 条、KylinBot 有 3/150 条
 > 在 300 秒内未返回答案（约占 Hermes 回合数的 4%），按规则计为未通过。
 > 这主要反映被测智能体在高强度对话下的**可用性/稳定性**问题，不完全等同于记忆能力不足。
+>
+> **双口径披露**（避免分数被误读）：把「无响应」样本从分母中剔除后，
+> Hermes 为 **70/141 = 49.6%**（原口径 70/150 = 46.7%），KylinBot 为 **100/147 = 68.0%**（原口径 66.7%）。
+> 变化集中在个别维度：Hermes 记忆调用 56% → **70%**（5 条无响应）、任务复用 76% → **82.6%**（2 条）；
+> 而动态更新 4% → 4.3%、边界识别 12% → 12% 几乎不变——**其低分并非由"未回答"造成**。
 
 #### 附：一次由本 benchmark 定位出的可复现缺陷（诊断价值示例）
 
@@ -395,7 +400,7 @@ java -Dlitmus.hermes.bin=/opt/hermes/venv/bin/hermes-acp \
 |---|---|---|
 | 0:00–0:30 | 环境与项目定位 | `./scripts/verify-openkylin.sh` 的环境采集输出（openKylin 3.0 / JDK 17 / 架构） |
 | 0:30–1:10 | 一键验证跑通 | 执行 `./scripts/verify-openkylin.sh`，展示全量测试通过 + 六维报告 |
-| 1:10–1:50 | 内置两款对照（尺子有分辨力） | `java -jar target/*.jar run --agents reference,degraded --out out-final-builtin/`，展示 100% vs 52% 对比表与雷达图 |
+| 1:10–1:50 | 内置两款对照（尺子有分辨力） | `java -jar target/*.jar run --agents reference,degraded --out out-final-builtin/`，展示 100% vs 54% 对比表与雷达图 |
 | 1:50–3:00 | **真实智能体 KylinBot 接入** | 展示 `examples/agents-kylinbot.json` + `scripts/kylinbot-adapter.sh`，执行评测命令 |
 | 3:00–3:50 | 结果可视化 | 浏览器打开 `out-multi-final/report.html`（三款智能体六维雷达图）+ 展示 `evidence/kylinbot.jsonl` 真实对话证据 + `artifacts/kylinbot/case-b3.md` 文件产物 |
 | 3:50–4:30 | 证据闭环 | `kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list`，展示失败用例的机制性原因 |
