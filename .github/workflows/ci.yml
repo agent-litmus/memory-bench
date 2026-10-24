@@ -1,12 +1,43 @@
 name: CI
 
+# 只手动触发，不在 push / PR 上自动跑：这条流水线会跑 full 283 两轮、拉两个 JRE 镜像
+# 并在密钥存在时调用评委层。要不要花这笔额度由人决定，不由一次提交决定。
+# 触发方式（默认全关，必须显式点名才跑）：
+#   gh workflow run ci.yml                                    # 什么都不跑，只是确认开关是关的
+#   gh workflow run ci.yml -f run_ci=true                     # 只跑主门禁
+#   gh workflow run ci.yml -f run_ci=true -f run_container_matrix=true   # 再加上容器那一格
+#
+# 要配什么：
+#   - 主门禁：不需要任何密钥，也不碰真实智能体（只跑内置 reference / degraded），零 token 消耗。
+#   - run_container_matrix：不需要密钥，runner 自带 docker，会拉 eclipse-temurin 的 21-jre / 17-jre。
+#   - 评委层那一步：需要仓库 secret `LITMUS_LLM_API_KEY`；没有就打印一句「跳过」并 exit 0，不算失败。
+#     换模型/换服务用 --judge-model / --judge-endpoint 传，不写进本文件。
+#
+# 会不会花我的 GitHub 额度？（GitHub 的政策，不是本文件能决定的）
+#   - **公开仓库**：Actions 的 Linux runner 分钟与产物存储都免费，跑多少都不扣额度。
+#   - **私有仓库**：Free 计划每月 2000 分钟、产物存储 500MB；这条流水线主门禁约 3–5 分钟，
+#     带上容器那一格约 8–12 分钟，产物保留 30 天（见 retention-days）。
+#   - 无论哪种，**没被执行的 job 不计分钟**——所以总开关关掉时，触发它也不消耗。
+#
+# 总开关：run_ci，默认 false。不勾上它，两个 job 全部跳过，什么都不跑。
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_ci:
+        description: 总开关——不勾则所有 job 直接跳过（不消耗任何 Actions 分钟）
+        type: boolean
+        required: true
+        default: false
+      run_container_matrix:
+        description: 同时跑「容器 + JVM 17」那一格（要拉两个 JRE 镜像，约 300MB，多花几分钟）
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build-and-gates:
+    # 总开关。没勾 run_ci 时这个 job 不进入执行，不计分钟。
+    if: ${{ github.event.inputs.run_ci == 'true' }}
     runs-on: ubuntu-latest
     env:
       LITMUS_LLM_API_KEY: ${{ secrets.LITMUS_LLM_API_KEY }}
@@ -76,9 +107,18 @@ jobs:
           find out/base -type f -exec sha256sum {} + | sort > /tmp/after.sha
           diff /tmp/before.sha /tmp/after.sha
 
+      # 没配密钥就跳过、不算失败（门禁不许依赖只有维护者才有的凭据）；
+      # 配了密钥这一步会把评委层的 κ 与盲点数打出来。
+      # 检查写在 shell 里而不是 if: env.X != '' ——step 的 if 里 env 上下文不可靠，
+      # 写错的结果是这一步永远静默跳过，看起来像"过了"，其实一次都没跑过。
       - name: 评委层自证（仅在仓库密钥可用时）
-        if: ${{ env.LITMUS_LLM_API_KEY != '' }}
-        run: java -jar target/memory-bench-*.jar selftest --judge --out out/selftest-judge
+        run: |
+          if [ -z "${LITMUS_LLM_API_KEY:-}" ]; then
+            echo "未配置 LITMUS_LLM_API_KEY：跳过评委层（规则层门禁已经跑过，不影响本流水线结论）"
+            exit 0
+          fi
+          echo "密钥已配置（来源 LITMUS_LLM_API_KEY，值不外泄）：跑评委层"
+          java -jar target/memory-bench-*.jar selftest --judge --out out/selftest-judge
 
       - name: 上传基线产物
         uses: actions/upload-artifact@v4
@@ -94,6 +134,10 @@ jobs:
   # 平台矩阵里的「容器」与「JVM 17」两格：无桌面 / root / 无 bwrap / 无 git，
   # 并校验两个 JVM 产出的 report.txt 逐字节一致（docs/USAGE.md §8）
   container-matrix:
+    # 两道开关都要勾：总开关 run_ci + 这一格自己的 run_container_matrix。
+    # 用 github.event.inputs 而不是 inputs 上下文——布尔输入在那里是字符串 'true'，
+    # 没勾时是空串，字符串比较最稳。
+    if: ${{ github.event.inputs.run_ci == 'true' && github.event.inputs.run_container_matrix == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

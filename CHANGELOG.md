@@ -77,6 +77,12 @@
   并有测试守着 schema 与代码常量不漂移。第三方语言只要按协议写证据，就能被同一套尺子重评。
 - **构建期版本戳**：`litmusVersion` 与 `gitCommit` 在打包时写进 jar，运行契约里不再是 `unknown`。
 - **`.deb` 打包**：`scripts/build-deb.sh`，安装后注入 `/usr/bin` 软链与桌面图标。
+- **CI 门禁流水线**：`.github/workflows/ci.yml`，只挂 `workflow_dispatch`（手动触发），
+  **不挂 push**，并带一个默认关闭的总开关 `run_ci`——不点名它，两个 job 全部跳过，
+  不进入执行也就不计 Actions 分钟（私有仓库 Free 计划每月 2000 分钟；公开仓库 Linux runner 免费）。
+  `run_container_matrix` 同样默认不跑。评委层在未配 `LITMUS_LLM_API_KEY` 时打印一句跳过并 `exit 0`。
+  CI 只跑内置被测，不接真实智能体，所以跑它不花 token 钱。配置与额度对照表见
+  `CONTRIBUTING.md`「想跑的时候，怎么开、要配什么」。
 
 ### 修复
 

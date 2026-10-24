@@ -23,7 +23,35 @@ java -jar target/memory-bench-1.0.0.jar compare --from <旧运行> --to <新运�
 
 ## CI 跑的是同一套门禁
 
-`.github/workflows/ci.yml` 把上面三件事搬到了推送触发上，另加几道：
+`.github/workflows/ci.yml` 把上面三件事搬到了**手动触发**上（`workflow_dispatch`），另加几道：
+**不挂在 push 上自动跑**，而且带一个**总开关 `run_ci`，默认关**——不点名它就什么都不跑。
+
+### 会不会花我的 GitHub 额度
+
+| 仓库类型 | Actions 分钟 | 产物存储 |
+|---|---|---|
+| 公开仓库 | Linux runner 免费，跑多少都不扣 | 免费 |
+| 私有仓库（Free 计划） | 每月 2000 分钟；本流水线主门禁约 3–5 分钟，带容器那一格约 8–12 分钟 | 500MB，产物保留 30 天 |
+
+**没被执行的 job 不计分钟**，所以 `run_ci` 关着时触发它也等于零消耗。
+CI 只跑内置被测（reference / degraded），**不接真实智能体、不调评委模型**（除非你配了密钥并
+显式跑那一步），所以跑它不花任何 token 钱——评委层用的 `LITMUS_LLM_API_KEY` 是唯一会花钱的开关，
+没配就打印一句「跳过」并 `exit 0`。
+
+### 想跑的时候，怎么开、要配什么
+
+| 想要的效果 | 需要配置 | 触发命令 |
+|---|---|---|
+| 什么都不跑（默认） | 无 | `gh workflow run ci.yml` |
+| 只跑主门禁 | 只要仓库已推送到 GitHub | `gh workflow run ci.yml -f run_ci=true` |
+| 连「容器 + JVM 17」那一格 | 同上，无需密钥；runner 自带 docker，会拉 `eclipse-temurin:21-jre` 与 `17-jre`（约 300MB） | `gh workflow run ci.yml -f run_ci=true -f run_container_matrix=true` |
+| 评委层那一步也要跑（打 κ） | GitHub 仓库 → Settings → Secrets and variables → Actions → **New repository secret**，名字 `LITMUS_LLM_API_KEY`，值是 OpenAI 兼容服务的 Key | 同上，代码自己按 `LITMUS_LLM_API_KEY → AI_DASHSCOPE_API_KEY → DASHSCOPE_API_KEY → OPENAI_API_KEY → DEEPSEEK_API_KEY` 的顺序找 Key |
+| 评委换模型 / 换服务 | 密钥仍只从环境变量读；模型与地址用 `--judge-model` / `--judge-endpoint` 传，**不写进 workflow、不写进任何配置文件** | — |
+
+没配密钥时评委层那一步打印一句「跳过」然后 `exit 0`，**不会让流水线变红**——
+门禁不许依赖只有维护者才有的凭据。这条判断写在 shell 里而不是 `if: env.X != ''`，
+因为 step 的 `if` 里 `env` 上下文不可靠：写错的后果是这一步永远静默跳过，
+看起来像"过了"，其实一次都没跑过。
 
 | 步骤 | 断言 |
 |---|---|
