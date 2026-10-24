@@ -37,7 +37,7 @@ litmus run --suite basic --out out/trial
 out/trial/
 ├── manifest.json    运行契约：题集哈希、口径版本、环境、每个产物的 sha256
 ├── report.txt       人读报告（可直接贴进材料）
-├── report.html      自包含 HTML（浏览器打开即见，便于录屏）
+├── report.html      自包含 HTML（浏览器打开即见，便于演示与分享）
 ├── radar.svg        六维雷达图
 ├── artifacts/       逐条用例的完整过程（Markdown，可点开看单题）
 ├── attribution.json 归因证据化明细（哪些归因有独立证据、哪些只是推断）

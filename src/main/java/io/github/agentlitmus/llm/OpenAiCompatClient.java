@@ -178,7 +178,7 @@ public final class OpenAiCompatClient implements LlmClient {
      * 从环境变量取密钥。
      * <p>
      * 只走环境变量是刻意的：密钥一旦进配置文件，就会跟着 {@code agents-*.json}、
-     * 运行契约、录屏和 git 一起被复制出去。评测产物是要归档、要发给别人复核的。
+     * 运行契约和 git 一起被复制出去。评测产物是要归档、要发给别人复核的。
      */
     public static String keyFromEnv() {
         for (String name : new String[]{"LITMUS_LLM_API_KEY", "AI_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY",

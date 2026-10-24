@@ -50,3 +50,6 @@ send_email.py
 email_config.json
 项目进展邮件草稿.txt
 cron-*
+
+### 本地 AI 助手会话记录（不入库） ###
+.workbuddy-ai/

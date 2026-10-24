@@ -154,7 +154,7 @@ CI 与 `scripts/verify-container.sh` 里的跨 JVM `report.txt` sha256 断言就
 | `src/main/java/io/github/agentlitmus/core/` | 判定、口径、重评、回归门禁 |
 | `src/main/java/io/github/agentlitmus/agent/` | 接入层（HTTP / 命令行 / 内置）与进程隔离 |
 | `src/main/java/io/github/agentlitmus/dataset/` | 题库与分档套件 |
-| `docs/` | 规范与用法（`SPEC-EVIDENCE.md` / `USAGE.md` / `roadmap.md`） |
+| `docs/` | 规范与用法（`SPEC-EVIDENCE.md` / `USAGE.md`）；路线图见根目录 `ROADMAP.md` |
 | `samples/` | 入库的样例证据，是**冻结样本**：除非协议改版，不要重新生成 |
 | `out-*/`、`litmus-out/` | 本地运行产物，已在 `.gitignore` 里，不要提交 |
 

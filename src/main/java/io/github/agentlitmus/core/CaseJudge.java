@@ -174,7 +174,7 @@ public class CaseJudge {
     /**
      * 信号冲突时给评委的判定标准。
      * <p>
-     * 判词里必须把"两种解释"都写清楚，否则评委会顺着关键词的表面命中直接判过——
+     * 判词里必须把"两种解释"都写清楚，否则评委模型会顺着关键词的表面命中直接判过——
      * 那就等于把规则层的错误换了一种更贵的方式再犯一次。
      */
     private static String ambiguityRubric(MemoryCase kase, String expected, String excluded) {

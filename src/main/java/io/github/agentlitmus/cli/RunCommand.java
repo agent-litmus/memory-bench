@@ -250,7 +250,7 @@ public final class RunCommand implements Command {
         System.out.println("报告已输出到: " + outDir.toAbsolutePath());
         System.out.println("  ├─ manifest.json 运行契约（题集/规则版本/环境/产物哈希），用 litmus verify 对账");
         System.out.println("  ├─ report.txt    文本报告 + 横向对比表（含 Δ 时，另附记忆增量）");
-        System.out.println("  ├─ report.html   含六维雷达图、归因改进建议、稳定性与覆盖度（浏览器打开，便于录屏）");
+        System.out.println("  ├─ report.html   含六维雷达图、归因改进建议、稳定性与覆盖度（浏览器打开，便于演示）");
         System.out.println("  ├─ radar.svg     雷达图");
         System.out.println("  ├─ artifacts/    逐条用例的运行产物（Markdown，可直接打开查看）");
         System.out.println("  ├─ attribution.json 归因证据化明细（有多少条归因由独立证据支撑）");

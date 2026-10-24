@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * HTML 报告渲染的 golden 快照：固定输入 ⇒ 固定 sha256。
  * <p>
- * 与 {@link RadarChartGoldenTest} 同一动机：报告是给人看、给录屏用、也进 sha256 对账的产物，
+ * 与 {@link RadarChartGoldenTest} 同一动机：报告是给人看、给演示用、也进 sha256 对账的产物，
  * 渲染必须是纯函数。报告里唯一的非确定项是首屏「生成时间」，golden 前先把它替换成占位符，
  * 其余所有字节（含内嵌雷达图、逐条明细、归因建议）都在哈希覆盖范围内。
  */

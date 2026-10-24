@@ -135,10 +135,10 @@ litmus leaderboard out/a out/b --out board/  # 多份运行汇总成一张静态
 
 | 文件 | 说明 |
 |---|---|
-| `report.txt` | 各智能体报告 + 横向对比表（纯文本，可直接贴进申报材料） |
-| `report.html` | **含六维雷达图**的自包含报告，浏览器打开即见（便于录屏演示） |
+| `report.txt` | 各智能体报告 + 横向对比表（纯文本，可直接引用） |
+| `report.html` | **含六维雷达图**的自包含报告，浏览器打开即见（便于演示与分享） |
 | `radar.svg` | 雷达图单独文件 |
-| `evidence/<agent>.jsonl` | 每个智能体的运行证据（JSON Lines，命题要求"证据统一组织"） |
+| `evidence/<agent>.jsonl` | 每个智能体的运行证据（JSON Lines，"证据统一组织"） |
 
 内置两款被测智能体（均无需 API Key，结果完全可复现）：
 
@@ -212,7 +212,7 @@ agent-litmus run --out ~/litmus-result
 
 ### 3.5 五类结果分类
 
-评分不只给"通过/未过"，而是区分**错在哪一种记忆能力**上（命题要求）：
+评分不只给"通过/未过"，而是区分**错在哪一种记忆能力**上：
 
 | 类别 | 含义 |
 |---|---|
@@ -226,7 +226,7 @@ agent-litmus run --out ~/litmus-result
 
 ### 3.6 失败归因与改进建议（可行动诊断）
 
-在五类结果之上，进一步叠加**记忆失败归因**与**可行动的改进建议**——把评测从"分类"升级为"诊断"，直接服务命题「自动评分能力」（25%）强调的"可解释评分原因"。
+在五类结果之上，进一步叠加**记忆失败归因**与**可行动的改进建议**——把评测从"分类"升级为"诊断"，直接支撑「可解释评分原因」这一核心要求。
 
 - **三态细分**：同样的"遗漏"，借助 `crossSession` 标记可下钻——跨会话仍遗漏 ⇒ **长期记忆未持久化**（写入/保持阶段缺陷）；同会话即遗漏 ⇒ **召回/应用缺失**（检索/召回阶段缺陷）。这在不侵入被测对象内部的**黑盒**前提下，仍能再下钻一层。
 - **生命周期阶段 + 改进建议**：每条归因都标明发生在记忆生命周期的哪一阶段（写入/保持、检索/召回、相近区分、边界/安全、更新/覆盖、导管/服务），并给出一句改进建议，例如：
@@ -244,7 +244,7 @@ agent-litmus run --out ~/litmus-result
 
 ### 3.7 稳定性证据（同输入重复评测）
 
-命题「稳定性与可复现性」（15%）明确看"同输入下评测结果是否稳定"。`--repeat N` 同输入跑 N 次，报告各维度与总体通过率的**均值 / 抖动（max-min）/ 总体标准差 σ**——内置 `reference` / `degraded` 两次运行完全一致（σ=0），波动仅来自真实被测对象自身：
+稳定性与可复现性要求"同输入下评测结果是否稳定"。`--repeat N` 同输入跑 N 次，报告各维度与总体通过率的**均值 / 抖动（max-min）/ 总体标准差 σ**——内置 `reference` / `degraded` 两次运行完全一致（σ=0），波动仅来自真实被测对象自身：
 
 ```bash
 litmus run --repeat 5 --out stable/
@@ -262,7 +262,7 @@ litmus validate-cases
 
 ### 3.9 主对比与附加案例（角色分离）
 
-命题评的是**通用**智能体长期记忆。为避免"通用基准评垂直 agent"的不公平观感，智能体配置支持 `role` 字段：
+本基准评的是**通用**智能体长期记忆。为避免"通用基准评垂直 agent"的不公平观感，智能体配置支持 `role` 字段：
 
 - `primary`（默认）——主对比对象，进入雷达图与横向对比表；
 - `extra`——附加案例（通常为另一款真实智能体，作为对照 / 鲁棒性证据），单独成区展示，**不计入主对比评分主体**。
@@ -271,7 +271,7 @@ litmus validate-cases
 { "id": "hermes", "type": "builtin", "role": "extra" }
 ```
 
-> **可选跨场景示例**：`examples/agents-employer.json` 提供了一款**独立的 Spring AI 岗位分析服务**（`http` 接入，role=extra）的配置，用于印证「尺子能区分通用记忆型与垂直领域型 agent」——该 agent 在通用记忆任务上低分、但在敏感信息边界识别上高分，属鲁棒性佐证。**需先在 8089 端口启动该外部服务**，非本包内置、评委会不可复现，故不计入默认评测与头部结果，请用 `--agents-config examples/agents-employer.json` 显式启用。
+> **可选跨场景示例**：`examples/agents-employer.json` 提供了一款**独立的 Spring AI 岗位分析服务**（`http` 接入，role=extra）的配置，用于印证「尺子能区分通用记忆型与垂直领域型 agent」——该 agent 在通用记忆任务上低分、但在敏感信息边界识别上高分，属鲁棒性佐证。**需先在 8089 端口启动该外部服务**，非本包内置、使用者无法本地复现，故不计入默认评测与头部结果，请用 `--agents-config examples/agents-employer.json` 显式启用。
 
 ### 3.10 在 openKylin 上一键验证
 
@@ -354,7 +354,7 @@ Hermes 达 **96%**，说明其表现主要来自长期记忆，而非上下文�
 
 > ⚠️ **关于复现波动**：被测对象调用云端模型，同一数据集多次运行会波动（实测 64%~69%）。
 > 这不代表工具不稳定——内置 `reference` / `degraded` 两次运行结果完全一致，波动来自被测智能体自身。
-> 因此提交材料时应**同时给出对照组**，以证明「尺子本身」稳定。
+> 因此公布结果时应**同时给出对照组**，以证明「尺子本身」稳定。
 
 **校验是否真接上**（比看分数更可靠）：
 
@@ -373,12 +373,12 @@ kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list
 
 此外，每条用例都会落盘一份 **Markdown 运行产物**（`artifacts/<agent>/<case>.md`）：
 注入了什么、更新了什么、问了什么、答了什么、怎么判的，一文件看完——
-对应命题「将对话、记忆记录、行动轨迹、文件或其他运行产物统一组织为证据」。
+对应「将对话、记忆记录、行动轨迹、文件或其他运行产物统一组织为证据」的设计目标。
 `u4`（动态更新失败）的根因可由记忆库直接证实：写入了 `user_city=深圳` 与 `user_current_city=杭州`
 **两个 key 而非覆盖**，导致回答时自述「两条记录冲突，无法确定」。
 
 > 说明：接入真实智能体后评测**不再离线可复现**——被测对象会调用云端模型，存在随机性与额度消耗。
-> 因此提交材料时应同时给出 `reference` / `degraded` 对照组，证明「尺子本身」稳定。
+> 因此公布结果时应同时给出 `reference` / `degraded` 对照组，证明「尺子本身」稳定。
 
 ### 3.12 接入真实智能体：openKylin Hermes（ACP）
 
@@ -403,22 +403,8 @@ java -Dlitmus.hermes.bin=/opt/hermes/venv/bin/hermes-acp \
 { "id": "hermes", "name": "Hermes Agent（ACP）", "type": "builtin", "role": "primary" }
 ```
 
-**复现注意**：Hermes 自身须先配置可用的模型供应商（如 `GLM_API_KEY`），且每个用例约 90 秒（Hermes 每回合固有处理开销，含记忆整理）；参赛建议**分层抽样**（如每维 5 条 ≈ 30 条，须含跨会话用例）并明确标注"抽样 N 条"，无需全量 150 条。其运行证据 `evidence/hermes.jsonl` 与 Markdown 产物可随包预置或在该环境复现。
+**复现注意**：Hermes 自身须先配置可用的模型供应商（如 `GLM_API_KEY`），且每个用例约 90 秒（Hermes 每回合固有处理开销，含记忆整理）；成本敏感时建议**分层抽样**（如每维 5 条 ≈ 30 条，须含跨会话用例）并明确标注"抽样 N 条"，无需全量 150 条。其运行证据 `evidence/hermes.jsonl` 与 Markdown 产物可随包预置或在该环境复现。
 
-### 3.13 参赛录屏方案（3–5 分钟）
-
-| 时长 | 画面内容 | 操作 |
-|---|---|---|
-| 0:00–0:30 | 环境与项目定位 | `./scripts/verify-openkylin.sh` 的环境采集输出（openKylin 3.0 / JDK 17 / 架构） |
-| 0:30–1:10 | 一键验证跑通 | 执行 `./scripts/verify-openkylin.sh`，展示全量测试通过 + 六维报告 |
-| 1:10–1:50 | 内置两款对照（尺子有分辨力） | `java -jar target/*.jar run --agents reference,degraded --out out-final-builtin/`，展示 100% vs 54% 对比表与雷达图 |
-| 1:50–3:00 | **真实智能体 KylinBot 接入** | 展示 `examples/agents-kylinbot.json` + `scripts/kylinbot-adapter.sh`，执行评测命令 |
-| 3:00–3:50 | 结果可视化 | 浏览器打开 `out-multi-final/report.html`（三款智能体六维雷达图）+ 展示 `evidence/kylinbot.jsonl` 真实对话证据 + `artifacts/kylinbot/case-b3.md` 文件产物 |
-| 3:50–4:30 | 证据闭环 | `kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list`，展示失败用例的机制性原因 |
-| 4:30–5:00 | 分发形态 | 展示 `dist/*.deb` 安装与 `agent-litmus run`（可选，若已打包） |
-
-录制建议：全程 KylinBot 评测约 10–15 分钟，**不要实时录**——先跑完再录「回放 + 产物讲解」，
-或把长耗时片段剪成「命令执行 → 结果」两段拼接。
 
 ## 4. 设计要点
 
@@ -491,7 +477,7 @@ CaseJudge judge = new CaseJudge(llm);
    核心库不绑定任何框架，接入新被测对象 = 实现单方法 `Answerer`（或 JSON 配置 `http` / `command` / `acp` / `mcp` / `builtin` 五态），与评测流程完全解耦，便于横向对比多款智能体。
 
 7. **证据三态统一，结果可核验。**
-   对话、记忆、行动轨迹、产物统一收敛为 `Evidence` 并导出 JSON Lines（外加每条用例的 Markdown `Transcript` 产物），跑完即可直接提交检查，评审能逐条核验，而非只相信一个汇总分数。
+   对话、记忆、行动轨迹、产物统一收敛为 `Evidence` 并导出 JSON Lines（外加每条用例的 Markdown `Transcript` 产物），跑完即可直接归档检查，任何人都能逐条核验，而非只相信一个汇总分数。
 
 ## 6. 项目结构
 
@@ -613,7 +599,7 @@ Hermes 的长期记忆在 `HERMES_HOME` 里。如果所有用例共用一个 HOM
 
 | 文档 | 内容 |
 |---|---|
-| [SOLUTION.md](./SOLUTION.md) | **方案说明**：测试目标、基本前提、数据生成、用例设计、证据收集、自动评分流程（命题交付 a） |
+| [SOLUTION.md](./SOLUTION.md) | **方案说明**：测试目标、基本前提、数据生成、用例设计、证据收集、自动评分流程 |
 | [README.md](./README.md) | 使用说明：快速开始、CLI、打包、设计要点 |
 | [README_EN.md](./README_EN.md) | 英文版说明（English README） |
 | [docs/USAGE.md](./docs/USAGE.md) | **使用说明**：不用 Key 试用 / 接入新智能体 / 读报告 / 改完复验 |
