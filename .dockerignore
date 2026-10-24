@@ -1,0 +1,6 @@
+# Dockerfile 只 COPY fat jar——上下文里其他一切都是白送的体积
+# （samples 3.4MB、.git、target/classes 等），构建上下文越小越快
+*
+!target/
+target/*
+!target/memory-bench-*.jar

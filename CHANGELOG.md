@@ -62,6 +62,15 @@
   `continue-on-error`（测试里有 sh -c，git-bash 不保证提供），修绿后摘除。
   评委层与容器格维持手动流水线不变。
 - **三值判定与覆盖率口径**：`Verdict.PASS/FAIL/UNKNOWN`，有效分 / 覆盖率 / 悲观下界三口径并列输出。
+- **Python 用户免装 Java（pip 薄壳）**：`pip install agentlitmus`——首次运行自动从 Release 下载
+  当前平台自包含可执行（sha256 对账 checksums.txt），之后离线转发命令；判定器保持单一实现，
+  不复刻任何评测逻辑。支持 `AGENTLITMUS_BINARY`（已有部署直连）与 `AGENTLITMUS_DOWNLOAD_BASE`（镜像）。
+- **五平台自包含二进制 + 多架构 Docker 镜像**：Release 发布时 CI 自动构建
+  macos arm64/x64（Intel runner 已退役，x64 经 Rosetta 交叉打包）、linux arm64/x64、windows x64
+  的 app-image（内置运行时，产物 `--help` 自检后才上传）并附 checksums.txt；
+  Docker 多架构镜像推 ghcr.io（Release 打版本号 + latest，试跑打 edge）。
+  打包脚本本地实测：macOS arm64 48.5MB，selftest/run/verify 全链路通过；
+  pip 壳离线全流程（下载→校验→解压→转发→二次免下载）通过；Docker 本机构建运行产物落卷通过。
 - **macOS（aarch64）真机格点亮**：259 条测试全绿 + selftest / run / verify / regrade /
   compare / leaderboard / rerender 全链路实测，basic 150 双跑 `report.txt` sha256 逐字节一致
   （与 Linux x86_64、JVM 17/21 同列）；平台矩阵 3 格 → 4 格，USAGE §8 如实更新。

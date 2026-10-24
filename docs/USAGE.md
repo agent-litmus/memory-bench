@@ -8,16 +8,29 @@
 
 ---
 
-## 0. 前置
+## 0. 前置与安装
 
-- JDK **17 或更高**（开发机实测 JDK 21）。运行期依赖已全部打进 fat jar，**不需要联网**。
-- 构建：`mvn -o package`（离线可构建；依赖只有 Jackson + slf4j + JUnit）。
-- 评委层（可选）需要一个 OpenAI 兼容端点的密钥，**只从环境变量读**，见 §4。
+三种安装方式，按你的环境选一种——**功能完全一致，判定器单一实现（Java）**，
+pip 与 Docker 只是分发形态，不引入第二把尺子：
 
 ```bash
-mvn -o package                      # → target/memory-bench-<version>.jar
-sudo bash scripts/build-deb.sh      # → dist/agent-litmus_<version>_<arch>.deb（openKylin/Debian 系）
+# ① pip（推荐 Python 用户；首次运行自动下载自包含可执行，无需装 Java）
+pip install agentlitmus
+agentlitmus run --out result/
+
+# ② Docker（服务器 / CI；多架构 linux/amd64+arm64）
+docker run --rm -v "$PWD/result":/out ghcr.io/agent-litmus/memory-bench run --out /out
+
+# ③ jar（有 JDK 17+ 的机器）或 .deb（openKylin / Debian 系）
+mvn -o package                              # → target/memory-bench-<version>.jar
+sudo bash scripts/build-deb.sh              # → dist/agent-litmus_<version>_<arch>.deb
 ```
+
+- 自包含可执行（内置运行时）由 `scripts/build-binary.sh` / `build-binary.ps1` 产出，
+  Release 发布时 CI 自动构建五平台（macos arm64/x64、linux arm64/x64、windows x64）
+  并附 `checksums.txt`，pip 薄壳（`python/`）按它做 sha256 校验。
+- 运行期依赖已全部打进 fat jar，**不需要联网**；评委层（可选）需要一个
+  OpenAI 兼容端点的密钥，**只从环境变量读**，见 §4。
 
 ---
 

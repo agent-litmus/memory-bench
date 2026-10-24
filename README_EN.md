@@ -88,12 +88,17 @@ Excluding them from the denominator: Hermes **46.7% → 49.6%**, KylinBot **66.7
 
 ## Quick start
 
-Requires **JDK 17+** and Maven 3.8+ (or the bundled `./mvnw`). **No API key needed** — the built-in dataset is judged entirely by rules, offline.
+Three install paths, identical functionality (single-source judge):
 
 ```bash
-./mvnw -q clean package -DskipTests
-java -jar target/memory-bench-1.0.0.jar run --out result/
+pip install agentlitmus && agentlitmus run --out result/   # Python users: no Java needed
+docker run --rm -v "$PWD/result":/out ghcr.io/agent-litmus/memory-bench run --out /out   # Docker (amd64/arm64)
+./mvnw -q clean package -DskipTests && java -jar target/memory-bench-1.0.0.jar run --out result/   # JDK 17+
 ```
+
+**No API key needed** — the built-in dataset is judged entirely by rules, offline.
+The pip package is a thin shim: it downloads a self-contained binary (bundled runtime,
+sha256-checked against the release's `checksums.txt`) on first run and forwards commands verbatim. The judge stays single-sourced — never two rulers for the same evidence.
 
 ### CLI
 

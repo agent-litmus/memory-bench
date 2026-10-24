@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentlitmus"
+version = "1.0.0"
+description = "AgentLitmus——智能体长期记忆评测基准的 pip 入口：免装 Java，命令原样转发"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "AgentLitmus" }]
+keywords = ["agent", "llm", "memory", "benchmark", "evaluation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Software Development :: Testing",
+]
+# 零依赖是刻意的：安装这一步不允许有任何额外摩擦
+
+[project.urls]
+Homepage = "https://github.com/agent-litmus/memory-bench"
+
+[project.scripts]
+agentlitmus = "agentlitmus.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agentlitmus*"]

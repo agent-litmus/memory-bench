@@ -72,8 +72,15 @@
 
 ### 3.1 环境要求
 
-- JDK 17+
-- Maven 3.8+（或直接用项目自带的 `./mvnw`）
+三种安装方式任选（功能一致，判定器单一实现）：
+
+```bash
+pip install agentlitmus && agentlitmus run --out result/   # ① Python 用户：免装 Java
+docker run --rm -v "$PWD/result":/out ghcr.io/agent-litmus/memory-bench run --out /out   # ② Docker
+./mvnw -q clean package -DskipTests && java -jar target/memory-bench-1.0.0.jar run --out result/   # ③ JDK 17+
+```
+
+- JDK 17+ / Maven 3.8+（或项目自带 `./mvnw`）适用于方式 ③；openKylin / Debian 系另有 `.deb`（`scripts/build-deb.sh`，自带运行时）
 - **不需要 API Key**：内置用例全部走规则判定，离线可跑完整套
 
 ### 3.2 运行评测
