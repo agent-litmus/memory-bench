@@ -6,7 +6,7 @@
 
     <groupId>io.github.agentlitmus</groupId>
     <artifactId>memory-bench</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>AgentLitmus Memory Bench</name>
@@ -22,6 +22,8 @@
         <jackson.version>2.17.2</jackson.version>
         <slf4j.version>2.0.13</slf4j.version>
         <junit.version>5.10.2</junit.version>
+        <!-- 构建时可用 -Dlitmus.git.commit 覆盖（build-deb.sh 会传入 git rev-parse 的结果）；默认 unknown -->
+        <litmus.git.commit>unknown</litmus.git.commit>
     </properties>
 
     <dependencies>
@@ -55,6 +57,18 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <!-- 只过滤版本戳文件：把版本号与构建时的 commit 钉进产物，
+                 否则运行契约里的 litmusVersion 永远是 unknown，"这批数字出自哪个版本"就没有答案 -->
+            <resource>
+                <directory>src/main/filtered-resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

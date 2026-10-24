@@ -26,9 +26,23 @@ public final class HtmlReport {
     private HtmlReport() {
     }
 
+    /** 该被测对象的置信层级与生效能力——分数旁边必须写清它凭什么可信 */
+    private static String tierCell(AgentUnderTest agent) {
+        var tier = agent.answerer().confidenceTier();
+        String caps = agent.answerer().capabilities().stream()
+                .map(c -> c.label()).sorted().reduce((a, b) -> a + "、" + b).orElse("仅对话");
+        return "<b>" + tier.name() + "</b> <span class=\"tag\">" + escape(tier.label())
+                + "</span><div class=\"sub\">" + escape(caps) + "</div>";
+    }
+
     /** 兼容旧调用：无稳定性/覆盖度信息 */
     public static String html(BenchmarkResult result) {
-        return html(result, null, null);
+        return html(result, null, null, null);
+    }
+
+    /** 兼容旧调用：无记忆增量信息 */
+    public static String html(BenchmarkResult result, StabilityReport stability, CoverageReport coverage) {
+        return html(result, stability, coverage, null);
     }
 
     /**
@@ -36,8 +50,27 @@ public final class HtmlReport {
      *
      * @param stability 稳定性证据（同输入重复评测），可为 null
      * @param coverage  数据集覆盖度校验，可为 null
+     * @param delta     记忆增量 Δ（同题双臂），可为 null；已含说明文字
      */
-    public static String html(BenchmarkResult result, StabilityReport stability, CoverageReport coverage) {
+    public static String html(BenchmarkResult result, StabilityReport stability, CoverageReport coverage,
+                              String delta) {
+        return html(result, stability, coverage, delta, null);
+    }
+
+    /**
+     * @param oracle 神谕对照结论（可为 null）：失败里多少是记忆成因、多少不是
+     */
+    public static String html(BenchmarkResult result, StabilityReport stability, CoverageReport coverage,
+                              String delta, String oracle) {
+        return html(result, stability, coverage, delta, oracle, null);
+    }
+
+    /**
+     * @param attribution 归因证据化结论（可为 null）：报告里的归因有多少条由独立证据支撑，
+     *                    有多少条只是从回答文本推断——见 {@code AttributionEvidence}
+     */
+    public static String html(BenchmarkResult result, StabilityReport stability, CoverageReport coverage,
+                              String delta, String oracle, String attribution) {
         StringBuilder sb = new StringBuilder();
         sb.append("""
                 <!DOCTYPE html>
@@ -60,6 +93,7 @@ public final class HtmlReport {
                   td.num { text-align: right; }
                   .pass { color: #2E7D32; font-weight: bold; }
                   .fail { color: #C62828; font-weight: bold; }
+                  .unknown { color: #ef6c00; font-weight: bold; }
                   .tag { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 10px;
                          background: #eee; color: #555; margin-left: 8px; }
                   .tag.extra { background: #fff3e0; color: #ef6c00; }
@@ -82,12 +116,14 @@ public final class HtmlReport {
         sb.append("</div>");
 
         // 对比表（仅主对比）
-        sb.append("<div class=\"card\"><h2>横向对比（主对比）</h2><table>");
+        sb.append("<div class=\"card\"><h2>横向对比（主对比）</h2>");
+        sb.append("<div class=\"sub\">表内为<b>有效分（通过 / 已判定）</b>；不可判（被测无响应或评委故障）"
+                + "意味着判定并未发生，不计入分母，改由覆盖率与悲观下界两个数说明证据强度。</div><table>");
         sb.append("<tr><th>智能体</th>");
         for (Dimension dimension : Dimension.values()) {
             sb.append("<th>").append(dimension.label()).append("</th>");
         }
-        sb.append("<th>总体</th></tr>");
+        sb.append("<th>总体</th><th>覆盖率</th><th>不可判</th><th>悲观下界</th><th>置信层级</th></tr>");
         for (AgentUnderTest agent : result.primary()) {
             BenchmarkReport report = result.reportOf(agent);
             sb.append("<tr><td>").append(escape(agent.name())).append("</td>");
@@ -95,9 +131,38 @@ public final class HtmlReport {
                 double rate = report.byDimension().get(dimension).rate();
                 sb.append("<td class=\"num\">").append(pct(rate)).append("</td>");
             }
-            sb.append("<td class=\"num\"><b>").append(pct(report.passRate())).append("</b></td></tr>");
+            sb.append("<td class=\"num\"><b>").append(pct(report.passRate())).append("</b></td>");
+            sb.append("<td class=\"num\">").append(pct(report.coverage())).append("</td>");
+            sb.append("<td class=\"num\">").append(report.unknownCount()).append("</td>");
+            sb.append("<td class=\"num\">").append(pct(report.lowerBound())).append("</td>");
+            sb.append("<td>").append(tierCell(agent)).append("</td></tr>");
         }
-        sb.append("</table></div>");
+        sb.append("</table>");
+        sb.append("<div class=\"sub\">置信层级：<b>T1</b> 仅对话证据（失败归因靠用例标记推断）／"
+                + "<b>T2</b> 记忆状态可观测（能区分「没写进去」与「写进去没答出来」）／"
+                + "<b>T3</b> 行动或产物可观测（能定位「记住了但没用」）。"
+                + "同一列的分数含义不同，跨行比较前先比较层级。</div></div>");
+
+        if (oracle != null && !oracle.isBlank()) {
+            sb.append("<div class=\"card\"><h2>神谕对照（失败用例附正确答案重问）</h2>")
+                    .append("<div class=\"sub\">附上正确事实仍答错的用例<b>改判不可判</b>并标注「基座/执行」："
+                            + "那不是记忆缺陷，混进分母会把模型能力问题记成记忆模块的账。</div>")
+                    .append("<pre>").append(escape(oracle)).append("</pre></div>");
+        }
+
+        if (attribution != null && !attribution.isBlank()) {
+            sb.append("<div class=\"card\"><h2>归因证据化（归因有多少条由独立证据支撑）</h2>")
+                    .append("<div class=\"sub\">三个口径管的是<b>分数</b>可不可信，这一节管的是<b>结论</b>可不可信。"
+                            + "记忆可读时「旧值仍在库里」是观测事实；记忆在被测对象内部读不到时，"
+                            + "同一句归因只是从回答文本做的推断。<b>未证据化的归因引用时需注明是推断。</b>"
+                            + "完整清单见 <code>attribution.json</code>。</div>")
+                    .append("<pre>").append(escape(attribution)).append("</pre></div>");
+        }
+
+        if (delta != null && !delta.isBlank()) {
+            sb.append("<div class=\"card\"><h2>记忆增量 Δ（同题双臂）</h2>")
+                    .append("<pre>").append(escape(delta)).append("</pre></div>");
+        }
 
         // 各主对比智能体明细
         for (AgentUnderTest agent : result.primary()) {
@@ -201,8 +266,12 @@ public final class HtmlReport {
             sb.append("<div class=\"sub\">").append(escape(agent.description())).append("</div>");
         }
         sb.append("<p>用例总数 <b>").append(report.total())
+                .append("</b> ｜ 已判定 <b>").append(report.judgedCount())
                 .append("</b> ｜ 通过 <b>").append(report.passedCount())
-                .append("</b> ｜ 通过率 <b>").append(pct(report.passRate())).append("</b></p>");
+                .append("</b> ｜ 不可判 <b>").append(report.unknownCount())
+                .append("</b> ｜ 有效分 <b>").append(pct(report.passRate()))
+                .append("</b> ｜ 覆盖率 <b>").append(pct(report.coverage()))
+                .append("</b> ｜ 悲观下界 <b>").append(pct(report.lowerBound())).append("</b></p>");
         sb.append("<p><b>结果分类：</b>");
         report.outcomeCounts().forEach((outcome, count) -> {
             if (count > 0) {
@@ -223,14 +292,22 @@ public final class HtmlReport {
             sb.append("<tr>");
             sb.append("<td>").append(escape(judgment.caseId())).append("</td>");
             sb.append("<td>").append(judgment.dimension().label()).append("</td>");
-            sb.append("<td class=\"").append(judgment.passed() ? "pass" : "fail").append("\">")
-                    .append(judgment.passed() ? "通过" : "未过").append("</td>");
-            sb.append("<td>").append(judgment.outcome().label()).append("</td>");
+            sb.append("<td class=\"").append(cssClass(judgment.verdict())).append("\">")
+                    .append(judgment.verdict().label()).append("</td>");
+            sb.append("<td>").append(judgment.outcome() == null ? "—" : judgment.outcome().label()).append("</td>");
             sb.append("<td>").append(judgment.cause() == null ? "—" : escape(judgment.cause().label())).append("</td>");
             sb.append("<td>").append(escape(judgment.reason())).append("</td>");
             sb.append("</tr>");
         }
         return sb.toString();
+    }
+
+    private static String cssClass(io.github.agentlitmus.core.Verdict verdict) {
+        return switch (verdict) {
+            case PASS -> "pass";
+            case FAIL -> "fail";
+            case UNKNOWN -> "unknown";
+        };
     }
 
     private static String pct(double rate) {

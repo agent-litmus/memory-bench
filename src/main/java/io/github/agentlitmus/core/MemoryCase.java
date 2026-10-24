@@ -1,5 +1,7 @@
 package io.github.agentlitmus.core;
 
+import io.github.agentlitmus.agent.AgentCapability;
+
 import java.util.List;
 
 /**
@@ -110,12 +112,49 @@ public record MemoryCase(String id,
     }
 
     /**
+     * 本用例成立的<b>观测前提</b>；{@code null} 表示只要有对话接口就能测。
+     * <p>
+     * 跨会话用例要求被测对象能把对话上下文清空、只留长期记忆（{@link AgentCapability#RESETS_CONTEXT}）。
+     * 做不到这一点的平台，这道题<b>测不了</b>——它的答案无法区分「靠窗口」还是「靠长期记忆」。
+     * 此时应判不可判并移出分母，而不是判失败（那是一只不存在的缺陷）。
+     */
+    public AgentCapability requiredCapability() {
+        return crossSession ? AgentCapability.RESETS_CONTEXT : null;
+    }
+
+    /**
      * 返回使用新会话 ID 的副本——用于「同输入重复评测」时隔离各次运行，
      * 避免真实智能体的跨轮记忆累积污染后续重复的结果（保证每次重复从干净状态独立运行）。
      * 用例 ID 保持不变，以维持报告中的可对照标识。
      */
     public MemoryCase withSessionId(String newSessionId) {
         return new MemoryCase(id, dimension, newSessionId, seeds, seedsRetainable,
+                crossSession, updateTo, question, expectedContains, expectedNotContains,
+                requiresLlmJudge, llmRubric);
+    }
+
+    /**
+     * 返回替换掉注入事实的副本——构造<b>对照组</b>用。
+     * <p>
+     * 「同题双臂」只改这一处：把要记的事实换成一句与提问无关的开场，其余（提问、判定）完全一致。
+     * 两条臂的通过率之差才是记忆带来的增量；没有对照臂，任何绝对通过率都无法排除
+     * 「这题本来就能靠常识答对」。
+     */
+    public MemoryCase withSeeds(List<String> newSeeds) {
+        return new MemoryCase(id, dimension, sessionId, newSeeds, false, crossSession, updateTo,
+                question, expectedContains, expectedNotContains, requiresLlmJudge, llmRubric);
+    }
+
+    /** 返回去掉「动态更新」步骤的副本——对照臂必须连更新一起抹掉，否则新事实仍会被注入 */
+    public MemoryCase withoutUpdate() {
+        return new MemoryCase(id, dimension, sessionId, seeds, seedsRetainable,
+                crossSession, null, question, expectedContains, expectedNotContains,
+                requiresLlmJudge, llmRubric);
+    }
+
+    /** 返回更换用例 ID 的副本（对照臂用 {@code 原ID:对照} 保持可配对又可区分） */
+    public MemoryCase withId(String newId) {
+        return new MemoryCase(newId, dimension, sessionId, seeds, seedsRetainable,
                 crossSession, updateTo, question, expectedContains, expectedNotContains,
                 requiresLlmJudge, llmRubric);
     }

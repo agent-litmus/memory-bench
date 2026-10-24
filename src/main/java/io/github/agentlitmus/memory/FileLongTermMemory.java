@@ -88,15 +88,25 @@ public class FileLongTermMemory implements LongTermMemory {
     public List<MemoryEntry> recall(String sessionId, String query, int topK) {
         List<String> terms = terms(query);
         synchronized (lock) {
-            return readAll(sessionId).stream()
-                    // 只召回「有效」且「策略上应保留」的：被取代的与不该留的都不出现
-                    .filter(MemoryEntry::isActive)
-                    .filter(MemoryEntry::retainable)
-                    .map(entry -> new Scored(entry, score(entry.content(), terms)))
-                    .filter(scored -> scored.score() > 0)
-                    .sorted(Comparator
-                            .comparingInt(Scored::score).reversed()
-                            .thenComparing(s -> s.entry().updatedAt(), Comparator.reverseOrder()))
+            List<MemoryEntry> all = readAll(sessionId);
+            List<Scored> scored = new ArrayList<>(all.size());
+            for (int i = 0; i < all.size(); i++) {
+                MemoryEntry entry = all.get(i);
+                // 只召回「有效」且「策略上应保留」的：被取代的与不该留的都不出现
+                if (!entry.isActive() || !entry.retainable()) {
+                    continue;
+                }
+                int score = score(entry.content(), terms);
+                if (score > 0) {
+                    scored.add(new Scored(entry, score, i));
+                }
+            }
+            return scored.stream()
+                    // 同分时按写入次序取「后写的」：写入次序天然就是时间次序
+                    // （write 追加、update 把替换条目追加到末尾），因此用它替代 updatedAt 比较，
+                    // 排序结果不再依赖 System.currentTimeMillis() 落在哪个毫秒边界上
+                    .sorted(Comparator.comparingInt(Scored::score).reversed()
+                            .thenComparing(Comparator.comparingInt(Scored::index).reversed()))
                     .limit(Math.max(1, topK))
                     .map(Scored::entry)
                     .toList();
@@ -292,6 +302,7 @@ public class FileLongTermMemory implements LongTermMemory {
         return hit;
     }
 
-    private record Scored(MemoryEntry entry, int score) {
+    /** @param index 在会话记忆文件里的位置，即写入次序；同分时用它决定先后，避免依赖时钟 */
+    private record Scored(MemoryEntry entry, int score, int index) {
     }
 }

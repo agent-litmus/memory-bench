@@ -99,13 +99,13 @@ public class MemoryBenchmarkRunner {
         }
 
         // 3) 提问
-        collector.collect(Evidence.dialogue(sessionId, kase.question()));
+        collector.collect(Evidence.dialogue(sessionId, kase.question(), Evidence.ROLE_QUESTION));
         String answer = answerer.answer(sessionId, kase.question());
-        collector.collect(Evidence.dialogue(sessionId, answer == null ? "" : answer));
+        collector.collect(Evidence.dialogue(sessionId, answer == null ? "" : answer, Evidence.ROLE_ANSWER));
 
         // 4) 判定
         Judgment judgment = judge.judge(kase, answer);
-        collector.collect(Evidence.artifact(sessionId, judgment.toString(), "judgment"));
+        collector.collect(Evidence.judgment(sessionId, judgment.toString(), judgment.verdict().name()));
 
         // 5) 落盘为文件产物并登记证据
         transcript.add("## 提问");

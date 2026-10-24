@@ -576,6 +576,20 @@ public final class MemoryCases {
     }
 
     /**
+     * 用例集的规范化 JSON（无缩进、字段顺序由 record 组件顺序决定）。
+     * <p>
+     * 用于哈希锚定：只有序列化本身确定，{@code 用例集 sha256} 才有意义——
+     * 同一份题集在任何机器上必须得到同一个哈希。
+     */
+    public static String canonicalJson(List<MemoryCase> cases) {
+        try {
+            return new ObjectMapper().writeValueAsString(cases);
+        } catch (IOException e) {
+            throw new IllegalStateException("用例集序列化失败: " + e.getMessage(), e);
+        }
+    }
+
+    /**
      * 把用例集导出为 JSON，便于基于内置用例扩展自己的数据集。
      */
     public static void exportTo(List<MemoryCase> cases, Path file) {

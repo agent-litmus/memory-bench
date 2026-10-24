@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-gates:
+    runs-on: ubuntu-latest
+    env:
+      LITMUS_LLM_API_KEY: ${{ secrets.LITMUS_LLM_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: 构建（带版本戳）
+        run: ./mvnw -q clean package -DskipTests -Dlitmus.git.commit="${GITHUB_SHA::7}"
+
+      # 单元与协议测试，含 ProtocolSchemaTest：docs/schema 与代码常量漂移会在这里失败
+      - name: 全量测试
+        run: ./mvnw test
+
+      - name: 版本戳必须写进 jar
+        run: |
+          unzip -p target/memory-bench-*.jar litmus-version.properties | tee /tmp/stamp.properties
+          grep -q '^version=' /tmp/stamp.properties
+          ! grep -q '\${' /tmp/stamp.properties   # 未过滤的占位符等于没打上版本戳
+
+      # selftest 自带门禁（gateFailures 非空即退出码 1）；这里再把关键指标打出来便于排查
+      - name: 尺子自证（规则层，不需要密钥）
+        run: |
+          java -jar target/memory-bench-*.jar selftest --out out/selftest
+          python3 -c "
+          import json
+          d = json.load(open('out/selftest/selftest.json'))['ruleLayer']
+          print('κ=%s 开口即对率=%s 弃权率=%s 盲点=%s' % (d['kappa'], d['spokenRate'], d['abstainRate'], d['blindSpots']))
+          assert d['blindSpots'] == 0, '出现盲点（把该判未过的判成通过），尺子不可信'
+          "
+
+      - name: 跑一次全量基线
+        run: java -jar target/memory-bench-*.jar run --suite full --agents reference,degraded --out out/base
+
+      - name: 运行契约对账
+        run: java -jar target/memory-bench-*.jar verify --from out/base
+
+      # 归因证据化：报告里的失败归因必须由回答文本之外的证据支撑，否则只是推断。
+      # 内置被测是记忆注入模式（记忆逐条可读），比例必须是 1.0；掉下来就说明判据或证据链断了。
+      - name: 归因证据化必须达标
+        run: |
+          python3 -c "
+          import json
+          d = json.load(open('out/base/attribution.json'))
+          for a in d['agents']:
+              print('%s: %d/%d = %.3f  %s' % (a['agent'], a['backed'], a['attributed'], a['ratio'], a['basis']))
+              for u in a['unbacked'][:10]:
+                  print('   未证据化:', u)
+          assert d['meetsTarget'], '归因证据化 %.3f < %.2f，归因以推断为主，不得对外当作观测结论' % (d['minRatio'], d['target'])
+          "
+
+      # 同一份代码跑两次，结果必须一致：门禁若在这里拦下，说明评测本身不确定
+      - name: 回归门禁（自比必须通过）
+        run: |
+          java -jar target/memory-bench-*.jar run --suite full --agents reference,degraded --out out/base2
+          java -jar target/memory-bench-*.jar compare --from out/base --to out/base2
+
+      - name: 离线重评不得改动源目录
+        run: |
+          find out/base -type f -exec sha256sum {} + | sort > /tmp/before.sha
+          java -jar target/memory-bench-*.jar regrade --from out/base --out out/regraded
+          find out/base -type f -exec sha256sum {} + | sort > /tmp/after.sha
+          diff /tmp/before.sha /tmp/after.sha
+
+      - name: 评委层自证（仅在仓库密钥可用时）
+        if: ${{ env.LITMUS_LLM_API_KEY != '' }}
+        run: java -jar target/memory-bench-*.jar selftest --judge --out out/selftest-judge
+
+      - name: 上传基线产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-run
+          path: |
+            out/base/manifest.json
+            out/base/report.txt
+            out/selftest/selftest.txt
+            out/base/attribution.json
+          retention-days: 30
+
+  # 平台矩阵里的「容器」与「JVM 17」两格：无桌面 / root / 无 bwrap / 无 git，
+  # 并校验两个 JVM 产出的 report.txt 逐字节一致（docs/USAGE.md §8）
+  container-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: 构建（带版本戳）
+        run: ./mvnw -q clean package -DskipTests -Dlitmus.git.commit="${GITHUB_SHA::7}"
+
+      - name: 容器格实测
+        run: ./scripts/verify-container.sh

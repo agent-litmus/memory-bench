@@ -64,7 +64,8 @@ public final class MultiAgentBenchmark {
             Path dir = artifactRoot == null ? null : artifactRoot.resolve(agent.id());
             BenchmarkReport report = agent.mode() == RunnerMode.MEMORY
                     ? new MemoryBenchmarkRunner(MemoryRegistry.resolve(agent), agent.answerer(), judge, collector, dir).run(cases)
-                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir).run(cases, parallelism);
+                    : new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir, agent.memoryRoots())
+                            .run(cases, parallelism);
 
             reports.put(agent, report);
             evidences.put(agent, collector);
@@ -113,7 +114,8 @@ public final class MultiAgentBenchmark {
                     List<MemoryCase> isolated = cases.stream()
                             .map(c -> c.withSessionId(c.sessionId() + "-r" + runNo))
                             .toList();
-                    rep = new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir).run(isolated);
+                    rep = new DialogueBenchmarkRunner(agent.answerer(), judge, collector, dir, agent.memoryRoots())
+                            .run(isolated);
                 }
                 reps.add(rep);
                 if (r == 1) {

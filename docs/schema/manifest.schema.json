@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentlitmus.github.io/schema/manifest.schema.json",
+  "title": "AgentLitmus 运行契约 manifest.json",
+  "description": "一次评测的可对账指纹：输入（题集哈希、被测配置、判定口径、参数、环境）、输出（每个产物文件的 sha256）、结论（三口径分数）。必须在所有其他产物落盘之后写入。litmus verify --from <run-dir> 会重算并逐项比对。详见 docs/SPEC-EVIDENCE.md §4。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "generatedAt", "litmusVersion", "gitCommit", "rulesVersion",
+    "caseSetSha256", "caseCount", "environment", "params", "agents", "scores", "files"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0",
+      "description": "本协议版本"
+    },
+    "generatedAt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ISO-8601 生成时间"
+    },
+    "litmusVersion": {
+      "type": "string",
+      "description": "产出该运行的工具版本"
+    },
+    "gitCommit": {
+      "type": "string",
+      "description": "工具代码的 commit；取不到时为空串，不得省略该字段"
+    },
+    "rulesVersion": {
+      "type": "string",
+      "pattern": "^\\d{4}\\.\\d{2}-[a-z]$",
+      "description": "判定口径版本，如 2026.10-c。两次运行该值不同时禁止直接 compare——差值会同时包含「尺子变了」与「东西变了」"
+    },
+    "caseSetSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "题集规范化 JSON 的 sha256"
+    },
+    "caseCount": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "计划题数，即覆盖率与悲观下界的分母"
+    },
+    "suite": {
+      "type": ["string", "null"],
+      "enum": ["basic", "security", "pressure", "crosscut", "standard", "full", null],
+      "description": "题集档位；外置题集为 null。verify 用该档位重算题集哈希——用默认档位去对 full 档目录只会得到假的「题集不一致」"
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["osName", "osVersion", "osArch", "javaVersion", "javaVendor"],
+      "properties": {
+        "osName": { "type": "string" },
+        "osVersion": { "type": "string" },
+        "osArch": { "type": "string" },
+        "javaVersion": { "type": "string" },
+        "javaVendor": { "type": "string" }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repeat", "parallel"],
+      "properties": {
+        "repeat": { "type": "integer", "minimum": 1 },
+        "parallel": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "mode", "role", "adapter", "description",
+                      "capabilities", "confidenceTier", "isolation"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "mode": { "enum": ["MEMORY", "DIALOGUE"] },
+          "role": { "enum": ["PRIMARY", "EXTRA"] },
+          "adapter": {
+            "type": "string",
+            "description": "剥掉能力叠加层之后的真实实现类名"
+          },
+          "description": { "type": "string" },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "enum": ["RESETS_CONTEXT", "MEMORY_INSPECTABLE", "TOOL_CALLS_VISIBLE",
+                       "ARTIFACTS_VISIBLE", "STATE_RESETTABLE"]
+            },
+            "description": "空数组表示仅对话能力"
+          },
+          "confidenceTier": {
+            "enum": ["T1", "T2", "T3"],
+            "description": "T1 仅对话 / T2 记忆可观测 / T3 行动可观测"
+          },
+          "isolation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "隔离层级，不得为空。不启动被测进程时要写清「隔离责任在被测服务自身」——留空会被读成「已隔离」"
+          }
+        }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "description": "对象名 → 三口径分数。三个口径必须同时给出：只报有效分是虚高，只报下界是虚低",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "effectiveRate", "coverage", "lowerBound", "total", "judged", "unknown"],
+        "properties": {
+          "name": { "type": "string" },
+          "effectiveRate": { "type": "number", "minimum": 0, "maximum": 1, "description": "PASS / 已判定" },
+          "coverage": { "type": "number", "minimum": 0, "maximum": 1, "description": "已判定 / 计划" },
+          "lowerBound": { "type": "number", "minimum": 0, "maximum": 1, "description": "PASS / 计划" },
+          "total": { "type": "integer", "minimum": 0 },
+          "judged": { "type": "integer", "minimum": 0 },
+          "unknown": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "description": "相对路径 → sha256，覆盖运行目录内除 manifest 自身以外的所有常规文件",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+    }
+  }
+}

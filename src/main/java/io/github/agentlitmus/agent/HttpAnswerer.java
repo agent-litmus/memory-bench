@@ -9,6 +9,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -56,6 +58,33 @@ public class HttpAnswerer implements Answerer {
     }
 
     /**
+     * 能力声明以<b>配置为准</b>：只有给了 {@code resetPath} 才承认能重置会话上下文。
+     * <p>
+     * {@link Answerer} 的默认声明包含「可重置会话」，因为内置被测没有上下文窗口概念、重置与否无差别；
+     * 但对 HTTP 智能体，未配置 resetPath 时 {@link #resetSession(String)} 只是空转，
+     * 跨会话题会退化成「靠窗口答对」的假通过。这里如实收回该声明，让门禁把这些用例移出分母。
+     */
+    @Override
+    public java.util.Set<AgentCapability> capabilities() {
+        return resetPath == null
+                ? java.util.Set.of()
+                : java.util.Set.of(AgentCapability.RESETS_CONTEXT);
+    }
+
+    /**
+     * 传输级行动观测：请求方法/URL/状态码/耗时/重试次数——都是评测方<b>自己发出并收到</b>的事实。
+     * 被测服务内部调了什么工具，这一层看不见，也不假装看见。
+     */
+    private static final ThreadLocal<List<String>> ACTIONS = ThreadLocal.withInitial(ArrayList::new);
+
+    @Override
+    public List<String> drainObservedActions() {
+        List<String> drained = List.copyOf(ACTIONS.get());
+        ACTIONS.get().clear();
+        return drained;
+    }
+
+    /**
      * 重置会话上下文：调用被测服务声明的重置端点（清空对话，保留其长期记忆）。
      * 未配置 resetPath 时不做任何事——跨会话用例会退化为同会话用例，判定时应知悉该差异。
      */
@@ -77,9 +106,12 @@ public class HttpAnswerer implements Answerer {
                     .timeout(Duration.ofSeconds(30))
                     .DELETE()
                     .build();
-            http.send(request, HttpResponse.BodyHandlers.discarding());
+            long startedAt = System.currentTimeMillis();
+            HttpResponse<Void> response = http.send(request, HttpResponse.BodyHandlers.discarding());
+            ACTIONS.get().add("DELETE " + uri + " ｜ 状态码=" + response.statusCode()
+                    + " ｜ 耗时=" + (System.currentTimeMillis() - startedAt) + "ms ｜ 会话重置");
         } catch (Exception e) {
-            // 重置失败不应中断评测
+            ACTIONS.get().add("会话重置请求失败：" + e.getClass().getSimpleName() + " " + e.getMessage());
         }
     }
 
@@ -92,6 +124,7 @@ public class HttpAnswerer implements Answerer {
         int maxAttempts = 8;
         long backoffMillis = 2000;
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            long startedAt = System.currentTimeMillis();
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(url))
@@ -103,6 +136,10 @@ public class HttpAnswerer implements Answerer {
 
                 HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
                 int code = response.statusCode();
+                ACTIONS.get().add("POST " + url + " ｜ 状态码=" + code
+                        + " ｜ 耗时=" + (System.currentTimeMillis() - startedAt) + "ms"
+                        + (attempt > 1 ? " ｜ 第 " + attempt + " 次尝试" : "")
+                        + " ｜ 响应 " + (response.body() == null ? 0 : response.body().length()) + " B");
                 // 限流 429 与服务端瞬时 5xx：尊重并指数退避重试，而非直接判失败——
                 // 这样评测结果反映真实记忆能力，而非被测服务的限流/抖动策略（避免污染分数）。
                 if (code == 429 || code / 100 == 5) {
@@ -121,7 +158,10 @@ public class HttpAnswerer implements Answerer {
                 Thread.currentThread().interrupt();
                 return "";
             } catch (Exception e) {
-                // 单个请求失败不应中断整轮评测：返回空串，由判定器判为"遗漏"
+                // 单个请求失败不应中断整轮评测：返回空串，由判定器记为「不可判（无响应）」
+                ACTIONS.get().add("POST " + url + " ｜ 传输失败：" + e.getClass().getSimpleName()
+                        + " " + e.getMessage() + " ｜ 耗时="
+                        + (System.currentTimeMillis() - startedAt) + "ms");
                 return "";
             }
         }

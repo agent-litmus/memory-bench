@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentlitmus.github.io/schema/evidence.schema.json",
+  "title": "AgentLitmus 证据条目（evidence/<agent-id>.jsonl 的一行）",
+  "description": "证据流是 JSON Lines：一行一条本 schema 描述的对象。校验时需逐行套用本 schema，再单独校验 seq 从 1 连续、sha256 等于 content 的 sha256 十六进制小写——这两条是跨行约束，JSON Schema 表达不了，由 litmus verify 负责。详见 docs/SPEC-EVIDENCE.md §2。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "sessionId", "timestamp", "content", "metadata", "seq", "sha256"],
+  "properties": {
+    "type": {
+      "enum": ["dialogue", "memory", "action", "artifact"],
+      "description": "证据类型"
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "所属会话；单用例单会话，形如 case-<caseId>，重复评测时形如 case-<caseId>-r<N>"
+    },
+    "timestamp": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "description": "产生时间，Unix 毫秒"
+    },
+    "content": {
+      "type": "string",
+      "description": "证据内容；artifact 类可以是文件路径。不得为 null；空回答写成空串或「（空回答）」"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "字符串→字符串；无附加信息时给 {}",
+      "additionalProperties": { "type": "string" },
+      "properties": {
+        "role": {
+          "enum": ["seed", "update", "question", "answer", "note"],
+          "description": "type=dialogue 时必填。离线重评只认 role=answer 作为被测对象的回答；缺失时该证据流会被如实拒绝而不靠顺序推断"
+        },
+        "kind": {
+          "enum": ["judgment", "transcript"],
+          "description": "type=artifact 时的产物种类"
+        },
+        "verdict": {
+          "enum": ["PASS", "FAIL", "UNKNOWN"],
+          "description": "kind=judgment 时必填。结构化裁决是协议，content 里的人读文本不是"
+        },
+        "entryId": {
+          "type": "string",
+          "description": "type=memory 时可选，指向被测对象自己的记忆条目 ID"
+        },
+        "tool": {
+          "type": "string",
+          "description": "type=action 时的来源。只收评测方自己观测到的进程级事实，不收被测对象自报的工具调用"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "judgment" } }, "required": ["kind"] },
+          "then": { "required": ["verdict"] }
+        }
+      ]
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "本流内序号，从 1 开始连续递增，不得断号。断号意味着有人删过行"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "content 的 sha256，十六进制小写。这不是签名：它挡的是悄悄改一行与传输损坏，不挡恶意伪造"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "dialogue" } }, "required": ["type"] },
+      "then": { "properties": { "metadata": { "required": ["role"] } } }
+    }
+  ]
+}

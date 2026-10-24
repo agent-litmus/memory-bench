@@ -139,4 +139,35 @@ class FileLongTermMemoryTest {
         assertEquals(1, FileLongTermMemory.score("我上周去了杭州", List.of("杭州")));
         assertEquals(0, FileLongTermMemory.score("我上周去了苏州", List.of("杭州")));
     }
+
+    @Test
+    void tieBreakFollowsWriteOrderNotWallClock() {
+        // 两条对同一提问同分。先写的那条 updatedAt 反而更大——这不是构造出来的怪例，
+        // 而是真实运行里必然发生的事：MemoryEntry.of 用 System.currentTimeMillis()，
+        // 一次注入十几条事实时，谁和谁落在同一个毫秒边界上纯看机器快慢。
+        // 用 updatedAt 当同分排序键，就等于让 topK 截断掉哪几条由时钟决定：
+        // 同一份题库、同一个 jar、同一个 JVM，两次运行的判定可以不一样（p5 曾这样翻面）。
+        memory.write("s1", new MemoryEntry(null, "s1", "青梧智能的对账口径是双周",
+                "fact", null, true, 2_000L, 2_000L, null));
+        memory.write("s1", new MemoryEntry(null, "s1", "青梧智能的对账口径是月结",
+                "fact", null, true, 1_000L, 1_000L, null));
+
+        List<MemoryEntry> recalled = memory.recall("s1", "青梧智能的对账口径", 1);
+
+        assertEquals(1, recalled.size());
+        assertTrue(recalled.get(0).content().endsWith("月结"),
+                "同分时应按写入次序取后写的；按 updatedAt 取就把可复现性交给了时钟");
+    }
+
+    @Test
+    void repeatedRecallIsStable() {
+        for (int i = 0; i < 6; i++) {
+            memory.write("s1", MemoryEntry.fact("s1", "青梧智能的对账口径第 " + i + " 版"));
+        }
+        List<MemoryEntry> first = memory.recall("s1", "青梧智能的对账口径", 3);
+        for (int round = 0; round < 5; round++) {
+            assertEquals(first, memory.recall("s1", "青梧智能的对账口径", 3),
+                    "同库同问，召回结果必须逐条一致");
+        }
+    }
 }

@@ -5,6 +5,7 @@ import io.github.agentlitmus.memory.LongTermMemory;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,19 +47,22 @@ public final class Agents {
                             + "会话与长期记忆都在 Hermes 内部；需 Hermes 自身已配置可用的模型供应商。",
                     new HermesAcpAnswerer(), AgentRole.PRIMARY);
         }
+        // 内置被测的记忆就是我们自己落盘的目录，状态证据直接可读
+        List<Path> memoryRoots = memory instanceof FileLongTermMemory file
+                ? List.of(file.baseDir()) : List.of();
         AgentUnderTest agent = switch (key) {
             case REFERENCE -> AgentUnderTest.memory(
                     REFERENCE, "参考智能体（baseline）",
                     "基于相关性召回记忆，忠实使用召回结果；记忆能力健全，作为对照组。",
-                    new RecallAnswerer(memory));
+                    inspectable(new RecallAnswerer(memory), memory), AgentRole.PRIMARY, memoryRoots);
             case DEGRADED -> AgentUnderTest.memory(
                     DEGRADED, "缺陷智能体（degraded）",
                     "不按相关性检索，总是取最早写入的记忆；会复用过时信息、混淆相近信息、泄露不应保留的信息。",
-                    new DegradedAnswerer(memory));
+                    inspectable(new DegradedAnswerer(memory), memory), AgentRole.PRIMARY, memoryRoots);
             case LLM -> AgentUnderTest.memory(
                     LLM, "通义千问智能体（qwen-flash）",
                     "真实调用大模型的被测对象：从长期记忆召回后交给模型组织回答；结果非确定性，用于验证评测能落在真实智能体的运行证据上。",
-                    new LlmAnswerer(memory));
+                    inspectable(new LlmAnswerer(memory), memory), AgentRole.PRIMARY, memoryRoots);
             default -> null;
         };
         if (agent != null) {
@@ -66,6 +70,17 @@ public final class Agents {
             MemoryRegistry.bind(agent.id(), memory);
         }
         return agent;
+    }
+
+    /**
+     * 内置被测对象的记忆由框架自己落盘，因此「记忆可读」「状态可复位」是<b>可证的事实</b>而非声明：
+     * 报告里它们的置信层级应为 T2，与只有对话接口的真实智能体区分开。
+     */
+    private static Answerer inspectable(Answerer answerer, LongTermMemory memory) {
+        return CapabilityOverlay.of(answerer,
+                memory instanceof FileLongTermMemory
+                        ? EnumSet.of(AgentCapability.MEMORY_INSPECTABLE, AgentCapability.STATE_RESETTABLE)
+                        : EnumSet.of(AgentCapability.STATE_RESETTABLE));
     }
 
     /** 默认参与对比的智能体 id */

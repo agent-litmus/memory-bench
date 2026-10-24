@@ -16,6 +16,6 @@
 
 ```bash
 ./mvnw -B -q clean package -DskipTests
-java -jar target/memory-bench-0.1.0-SNAPSHOT.jar run \
+java -jar target/memory-bench-1.0.0.jar run \
      --agents-config examples/agents-multi.json --out out-multi-final/
 ```

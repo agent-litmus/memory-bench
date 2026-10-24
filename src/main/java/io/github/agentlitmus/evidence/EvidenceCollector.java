@@ -22,10 +22,12 @@ public class EvidenceCollector {
     private final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private final List<Evidence> buffer = new ArrayList<>();
+    private long sequence;
 
+    /** 收集时盖章：序号连续递增 + 内容哈希，让「缺行」和「改字」都能被离线查出来 */
     public synchronized void collect(Evidence evidence) {
         if (evidence != null) {
-            buffer.add(evidence);
+            buffer.add(evidence.sealed(++sequence));
         }
     }
 

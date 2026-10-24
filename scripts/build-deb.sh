@@ -14,10 +14,17 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-VERSION="0.1.0"
 APP_NAME="agent-litmus"
-MAIN_JAR="memory-bench-${VERSION}-SNAPSHOT.jar"
 ARCH="$(dpkg --print-architecture 2>/dev/null || echo amd64)"
+
+# 版本只认 pom.xml，不在脚本里再写一遍——两边各写一份迟早对不上，
+# 对不上的表现是「deb 打出来了但里面是旧版本」，比直接失败更难查
+VERSION="$(sed -n 's:.*<version>\(.*\)</version>.*:\1:p' pom.xml | head -1)"
+if [ -z "$VERSION" ]; then
+  echo "无法从 pom.xml 读出版本号" >&2
+  exit 1
+fi
+MAIN_JAR="memory-bench-${VERSION}.jar"
 
 # 重新打包需要一个能伪造 root 归属的工具，否则 /opt 下文件会变成非 root
 if ! command -v fakeroot >/dev/null 2>&1; then
@@ -26,7 +33,15 @@ if ! command -v fakeroot >/dev/null 2>&1; then
 fi
 
 echo "==> 1/4 构建可执行 jar"
-./mvnw -q clean package -DskipTests
+# 把 commit 钉进产物：运行契约要能回答「这批数字出自哪个版本」，
+# 否则发布出去的 jar 里 litmusVersion/gitCommit 永远是 unknown
+GIT_COMMIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+# 工作区脏就如实标脏：否则 deb 里的 gitCommit 指向一个不含这些改动的提交，
+# 「这批数字出自哪个版本」这个问题就答错了，而且错得看不出来
+if [ "$GIT_COMMIT" != "unknown" ] && [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+  GIT_COMMIT="${GIT_COMMIT}-dirty"
+fi
+./mvnw -q clean package -DskipTests -Dlitmus.git.commit="${GIT_COMMIT}"
 
 JAR_PATH="target/${MAIN_JAR}"
 if [ ! -f "$JAR_PATH" ]; then
@@ -39,9 +54,14 @@ echo "==> 2/4 使用 jpackage 打包 deb（应用镜像 + 默认控制脚本）"
 rm -rf dist
 mkdir -p dist
 
+# jpackage 会把 --input 目录整个塞进 /opt/<app>/lib/。直接指 target 就等于把
+# classes/ test-classes/ surefire-reports/ 一起发出去，所以只暂存可执行 jar
+STAGE="$(mktemp -d)"
+cp "$JAR_PATH" "$STAGE/"
+
 jpackage \
   --name "$APP_NAME" \
-  --input target \
+  --input "$STAGE" \
   --main-jar "$MAIN_JAR" \
   --main-class io.github.agentlitmus.Cli \
   --type deb \
@@ -51,6 +71,8 @@ jpackage \
   --dest dist \
   --linux-shortcut \
   --linux-menu-group "Development"
+
+rm -rf "$STAGE"
 
 echo "==> 3/4 注入 /usr/bin 软链（使 agent-litmus 命令直接可用）并重新打包"
 DEB="dist/${APP_NAME}_${VERSION}_${ARCH}.deb"
@@ -93,5 +115,6 @@ rm -rf "$WORK"
 echo "==> 4/4 完成"
 ls -1 dist/*.deb
 echo
+echo "版本: ${VERSION}  提交: ${GIT_COMMIT}  架构: ${ARCH}"
 echo "安装: sudo dpkg -i dist/${APP_NAME}_${VERSION}*.deb"
 echo "运行: agent-litmus run --out ~/litmus-result"
