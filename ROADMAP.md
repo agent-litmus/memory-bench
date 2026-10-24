@@ -17,7 +17,8 @@
 - [ ] **Windows 格修绿**：替换测试里的 `sh -c` 假设，摘除 CI `continue-on-error`。
 - [ ] **报告 i18n**：report.txt / report.html 支持 `--lang en`。
 - [ ] **真实智能体上榜 ≥5 款**：用新的 acp / mcp 适配器接入社区智能体，每款附 manifest 与可离线重评证据。
-- [ ] **macOS / arm64 真机格补齐**（沙箱 `sandbox-exec` 层）。
+- [x] **macOS（aarch64）真机格已补齐**：全链路实测 + 双跑字节一致（2026-10-24，见 USAGE §8）。
+- [ ] **Linux arm64 真机格**（含 openKylin ARM 版；需确认 jpackage/JDK 可用性）。
 
 ## 中期（3–6 月）
 

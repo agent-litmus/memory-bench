@@ -318,7 +318,7 @@ regrade 用当前口径重判旧证据，逐条列出裁决变化。**不重跑�
 | 容器（无桌面 / root / 无 bwrap / 无 git，Ubuntu 26.04 镜像） | **已实测**：`./scripts/verify-container.sh` 一键复现——full 283 条 run + selftest + verify 全链路；命令行型被测接入（无特权隔离 + `sandboxSeed`）；`sandbox=strict` 缺 bwrap 时直接失败而非静默降级 |
 | JVM 17（Temurin 17.0.20，容器内） | **已实测**：与 JVM 21 产出的 `report.txt` **sha256 逐字节一致**——「编译目标 17，17+ 均可运行」与「结果确定」都不是纸面声明 |
 | Linux arm64 | 未验证（需确认 jpackage/JDK 可用性） |
-| macOS | CI 矩阵持续验证中（`gate` job 首亮）；沙箱 `sandbox-exec` 层待真机补 |
+| macOS（aarch64，macOS 26.5） | **已实测**：259 条测试全绿（含进程沙箱与 ACP/MCP 适配器的真实子进程测试）；selftest / run / verify / regrade / compare / leaderboard / rerender 全链路；basic 150 双跑 `report.txt` **sha256 逐字节一致**；`/usr/bin/sandbox-exec` 在位，strict 隔离可用。另有 CI 矩阵持续验证 |
 | Windows | CI 矩阵持续验证中（`gate` job 首亮，`continue-on-error`：测试里的 `sh -c` 需适配 git-bash）；隔离手段待评估 |
 | 信创架构（申威 / 龙芯） | 未验证。Java 有发行版，Rust 大概率没有——这是不迁 Rust 的实证理由 |
 | 远程目标机（`ssh://`） | 未实现 |

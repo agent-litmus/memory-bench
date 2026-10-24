@@ -62,6 +62,9 @@
   `continue-on-error`（测试里有 sh -c，git-bash 不保证提供），修绿后摘除。
   评委层与容器格维持手动流水线不变。
 - **三值判定与覆盖率口径**：`Verdict.PASS/FAIL/UNKNOWN`，有效分 / 覆盖率 / 悲观下界三口径并列输出。
+- **macOS（aarch64）真机格点亮**：259 条测试全绿 + selftest / run / verify / regrade /
+  compare / leaderboard / rerender 全链路实测，basic 150 双跑 `report.txt` sha256 逐字节一致
+  （与 Linux x86_64、JVM 17/21 同列）；平台矩阵 3 格 → 4 格，USAGE §8 如实更新。
 - **README 特性叙事对齐 1.0.0**：新增三值判定与三口径小节、§4.6 运行契约与可信链（五命令闭环），
   创新点七条扩为九条（三值口径、运行契约、评委团多数决、四通道接入），产物表补 manifest 与
   artifacts；SOLUTION 副标题改为跨平台定位；双 README 加 CI 徽章；USAGE 平台矩阵如实标注
