@@ -311,7 +311,8 @@ public final class HtmlReport {
     }
 
     private static String pct(double rate) {
-        return String.format("%.0f%%", rate * 100);
+        // Locale.ROOT：小数点不被本地化，保证同一份输入在任何环境下渲染出相同字节（golden 测试的前提）
+        return String.format(java.util.Locale.ROOT, "%.0f%%", rate * 100);
     }
 
     private static String escape(String text) {

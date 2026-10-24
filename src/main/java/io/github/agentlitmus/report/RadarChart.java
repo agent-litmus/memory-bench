@@ -4,6 +4,7 @@ import io.github.agentlitmus.core.Dimension;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -15,6 +16,9 @@ import java.util.Map;
  *   <li>可以直接内嵌进 HTML 报告，浏览器打开即见，便于录屏演示；</li>
  *   <li>文本格式可读、可版本管理、可转成 PNG。</li>
  * </ul>
+ * 渲染刻意做到<b>跨环境字节一致</b>：数字一律 {@code Locale.ROOT}（小数点不被本地化成逗号）、
+ * 换行一律 {@code \n}（不吃平台分隔符）——否则同一份输入在不同 locale / 操作系统下
+ * 渲染出不同字节，sha256 对账就失效了。
  */
 public final class RadarChart {
 
@@ -52,8 +56,8 @@ public final class RadarChart {
         int height = LEGEND_TOP + rows * LEGEND_ROW_H + 12;
 
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format(
-                "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%d\" height=\"%d\" viewBox=\"0 0 %d %d\">%n",
+        sb.append(String.format(Locale.ROOT,
+                "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%d\" height=\"%d\" viewBox=\"0 0 %d %d\">\n",
                 WIDTH, height, WIDTH, height));
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>");
         sb.append("<g font-family=\"sans-serif\">");
@@ -69,13 +73,13 @@ public final class RadarChart {
             double angle = angleOf(i, dims.length);
             double x = CX + RADIUS * Math.cos(angle);
             double y = CY + RADIUS * Math.sin(angle);
-            sb.append(String.format(
+            sb.append(String.format(Locale.ROOT,
                     "<line x1=\"%.1f\" y1=\"%.1f\" x2=\"%.1f\" y2=\"%.1f\" stroke=\"#b0b0b0\" stroke-width=\"1\"/>",
                     CX, CY, x, y));
             // 标签稍微外移
             double lx = CX + (RADIUS + 26) * Math.cos(angle);
             double ly = CY + (RADIUS + 26) * Math.sin(angle);
-            sb.append(String.format(
+            sb.append(String.format(Locale.ROOT,
                     "<text x=\"%.1f\" y=\"%.1f\" font-size=\"14\" fill=\"#333\" text-anchor=\"middle\" dominant-baseline=\"middle\">%s</text>",
                     lx, ly, dims[i].label()));
         }
@@ -90,7 +94,7 @@ public final class RadarChart {
                 double rate = entry.getValue().getOrDefault(dims[i], 0.0);
                 double angle = angleOf(i, dims.length);
                 double r = RADIUS * Math.max(0, Math.min(1, rate));
-                sb.append(String.format(
+                sb.append(String.format(Locale.ROOT,
                         "<circle cx=\"%.1f\" cy=\"%.1f\" r=\"3.5\" fill=\"%s\"/>",
                         CX + r * Math.cos(angle), CY + r * Math.sin(angle), color));
             }
@@ -154,7 +158,7 @@ public final class RadarChart {
     private static String polygon(List<double[]> points, String stroke, int width, String fill) {
         StringBuilder sb = new StringBuilder("<polygon points=\"");
         for (double[] p : points) {
-            sb.append(String.format("%.1f,%.1f ", p[0], p[1]));
+            sb.append(String.format(Locale.ROOT, "%.1f,%.1f ", p[0], p[1]));
         }
         sb.append(String.format("\" stroke=\"%s\" stroke-width=\"%d\" fill=\"%s\" ",
                 stroke, width, fill));
