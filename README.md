@@ -8,6 +8,7 @@
 [![Platform](https://img.shields.io/badge/openKylin-3.0-brightgreen.svg)](https://www.openkylin.top/)
 [![GitHub](https://img.shields.io/badge/GitHub-agent--litmus%2Fmemory--bench-181717?logo=github)](https://github.com/agent-litmus/memory-bench)
 [![Gitee](https://img.shields.io/badge/Gitee-agent--litmus%2Fmemory--bench-C71D23?logo=gitee)](https://gitee.com/agent-litmus/memory-bench)
+[![CI](https://github.com/agent-litmus/memory-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/agent-litmus/memory-bench/actions/workflows/ci.yml)
 
 **简体中文** | [English](./README_EN.md)
 
@@ -139,6 +140,8 @@ litmus leaderboard out/a out/b --out board/  # 多份运行汇总成一张静态
 | `report.html` | **含六维雷达图**的自包含报告，浏览器打开即见（便于演示与分享） |
 | `radar.svg` | 雷达图单独文件 |
 | `evidence/<agent>.jsonl` | 每个智能体的运行证据（JSON Lines，"证据统一组织"） |
+| `artifacts/<agent>/<case>.md` | 逐条用例的运行产物（注入/提问/回答/判定，一文件看完） |
+| `manifest.json` | **运行契约**：题集 sha256、判定口径、环境指纹、逐产物哈希——`litmus verify` 据此离线对账 |
 
 内置两款被测智能体（均无需 API Key，结果完全可复现）：
 
@@ -210,9 +213,19 @@ agent-litmus run --out ~/litmus-result
 > 安装后可直接执行 `agent-litmus`，不需要 `apt install openjdk`。
 > 只有在直接用 `java -jar` 跑 fat jar 时才需要 JRE 17+。
 
-### 3.5 五类结果分类
+### 3.5 三值判定与五类结果
 
-评分不只给"通过/未过"，而是区分**错在哪一种记忆能力**上：
+判定是**三态**的：`PASS / FAIL / UNKNOWN`。无响应（空回答 / 超时 / 限流）与能力门控跳过
+意味着**判定并未发生**，记 `UNKNOWN` 并移出评分分母——用「评测导管坏了」去扣「被测对象的
+记忆能力」是假数字。于是任何一个分数都拆成三个一起读：
+
+| 口径 | 算法 | 回答的问题 |
+|---|---|---|
+| **有效分** | 通过 / 已判定 | 能力有多强 |
+| **覆盖率** | 已判定 / 计划 | 这个分数建立在多大比例的样本上 |
+| **悲观下界** | 通过 / 计划 | 最坏情况下至少多少 |
+
+在五类结果之上，评分进一步区分**错在哪一种记忆能力**上：
 
 | 类别 | 含义 |
 |---|---|
@@ -412,7 +425,7 @@ java -Dlitmus.hermes.bin=/opt/hermes/venv/bin/hermes-acp \
 
 能用确定性规则判定的（关键词包含 / 排除），**绝不用模型**——判定本身不应引入新的不确定性，否则"评测结果不稳定"会掩盖被测对象的真实问题。
 
-只有无法用关键词表达的标准才走 LLM；**无模型时降级为规则判定并标注**（`rule-degraded`），不会因缺 Key 就跑不出结果。
+只有无法用关键词表达的标准才走 LLM；**无模型时如实弃权**（记不可判并标注原因），不会因缺 Key 就跑不出结果，也不会替被测对象硬猜。配置多位评委（`--judge-model a,b,c`）时按**严格多数决**聚合，平票或弃权占多数记不可判；裁决按（口径版本, 评委指纹, 判定标准, 回答）缓存，离线重评逐字复现。
 
 ### 4.2 可信度治理延伸到记忆层
 
@@ -454,9 +467,19 @@ CaseJudge judge = new CaseJudge(llm);
 
 `Evidence` 把对话、记忆、行动轨迹、产物收敛成同一种结构，`EvidenceCollector` 收集并导出为 JSON Lines——**一行一条、人可读**，跑完即可直接提交检查。
 
+### 4.6 运行契约与可信链
+
+「完全可复现」如果不能被第三方检查，就只是一句自我声明。每次运行产出 `manifest.json`
+运行契约（题集 sha256、判定口径版本、工具版本与构建提交、环境指纹、**逐产物 sha256**），
+五个命令组成闭环，链条上任何一环被改动都能查出来：
+
+`run` 产出契约 → `verify` 重算哈希对账 → `regrade` 换口径离线重判（不重跑被测）→
+`compare` 逐题回归门禁（可接 CI）→ `selftest` 用标注金集量判定器自己（κ 门禁）→
+`leaderboard` 把多份运行汇总成榜单，分数取契约原值、行内标注对账状态。
+
 ## 5. 创新点与差异化优势
 
-针对前文"人工检查难规模化 / 简单问答式验证覆盖不全 / 自动评分语义偏移"三大痛点，本项目在以下七个方面形成差异化：
+针对前文"人工检查难规模化 / 简单问答式验证覆盖不全 / 自动评分语义偏移"三大痛点，本项目在以下九个方面形成差异化：
 
 1. **跨会话范式，真正测「长期」而非「上下文窗口」。**
    注入事实后先 `resetSession` 重置会话上下文（仅保留长期记忆），再提问。答对只能来自长期记忆，不能靠上下文窗口"偷看"——这是「长期记忆」的本义，也是区别于普通多轮问答评测的关键。
@@ -470,14 +493,27 @@ CaseJudge judge = new CaseJudge(llm);
 4. **五分类定位，而非对错二分。**
    结果细分为「正确记忆 / 遗漏 / 混淆 / 错误持久化 / 错误复用」五类，能精准定位被测对象到底弱在"没记住""记混了"还是"乱复用"，为改进提供方向，而非只给一个总分。
 
-5. **规则优先、分层判定，结果稳定可复现。**
-   能用关键词判定的绝不用模型；仅无法表达的标准走 LLM，且**无 Key 时自动降级为规则判定并标注**，不会因缺模型就跑不出结果，也从根上消除"评测自身不稳定"带来的干扰。
+5. **规则优先、评委团多数决，结果稳定可复现。**
+   能用关键词判定的绝不用模型；仅无法表达的标准走 LLM 评委层（可组多位评委严格多数决），
+   无 Key 时如实弃权记不可判；裁决按四元组缓存，离线重评逐字复现——判定自身不引入新的不确定性。
 
-6. **零代码隔离适配，一行接入任意智能体。**
-   核心库不绑定任何框架，接入新被测对象 = 实现单方法 `Answerer`（或 JSON 配置 `http` / `command` / `acp` / `mcp` / `builtin` 五态），与评测流程完全解耦，便于横向对比多款智能体。
+6. **四通道零代码接入，一行配置接任意智能体。**
+   `http` / `command`（CLI，无特权进程沙箱）/ `acp`（任意 ACP 智能体，编辑器能接的都能测）/
+   `mcp`（MCP server 形态，一次 `tools/call` 即一回合）/ `builtin` 五种类型全部 JSON 配置即接入，
+   与评测流程完全解耦，便于横向对比多款智能体。
 
-7. **证据三态统一，结果可核验。**
-   对话、记忆、行动轨迹、产物统一收敛为 `Evidence` 并导出 JSON Lines（外加每条用例的 Markdown `Transcript` 产物），跑完即可直接归档检查，任何人都能逐条核验，而非只相信一个汇总分数。
+7. **证据四态统一，结果可核验。**
+   对话、记忆、行动轨迹、产物统一收敛为 `Evidence`（每条 seq + sha256 盖章，断号 / 改行可离线查出）
+   并导出 JSON Lines（外加每条用例的 Markdown `Transcript` 产物），跑完即可直接归档检查，
+   任何人都能逐条核验，而非只相信一个汇总分数。
+
+8. **三值口径，分数自带证据强度。**
+   判定三态（PASS/FAIL/UNKNOWN），不可判移出分母；有效分 / 覆盖率 / 悲观下界三个数一起读，
+   「导管故障冒充能力缺陷」这类假数字从口径上就不可能出现。
+
+9. **运行契约，可复现可对账。**
+   manifest 记录题集 / 口径 / 环境 / 逐产物哈希，verify 离线对账、regrade 换口径重判、
+   compare 回归门禁、selftest 尺子自证（κ 门禁）——四个方向的质疑各有一个命令当场回答。
 
 ## 6. 项目结构
 

@@ -8,6 +8,7 @@
 [![Platform](https://img.shields.io/badge/openKylin-3.0-brightgreen.svg)](https://www.openkylin.top/)
 [![GitHub](https://img.shields.io/badge/GitHub-agent--litmus%2Fmemory--bench-181717?logo=github)](https://github.com/agent-litmus/memory-bench)
 [![Gitee](https://img.shields.io/badge/Gitee-agent--litmus%2Fmemory--bench-C71D23?logo=gitee)](https://gitee.com/agent-litmus/memory-bench)
+[![CI](https://github.com/agent-litmus/memory-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/agent-litmus/memory-bench/actions/workflows/ci.yml)
 
 **English** | [简体中文](./README.md)
 
@@ -67,6 +68,16 @@ The point is not the numbers — it is that **the four profiles differ**. KylinB
 
 `reference` and `degraded` are deterministic and give **identical results across repeated runs (σ=0)**, which is the evidence that *the ruler itself is stable*. Two independent full re-runs of the real agents gave 68%/67% (KylinBot) and 45%/47% (Hermes) — the variance comes from the agents, not the tool.
 
+### Three numbers, not one
+
+Verdicts are **three-valued**: `PASS / FAIL / UNKNOWN`. A no-response (empty answer, timeout, rate limit) or a capability-gated skip means **no judgment happened** — it is recorded as `UNKNOWN` and removed from the scoring denominator. A broken harness must not masquerade as a memory defect. Every score therefore comes as three numbers to read together:
+
+| Number | Formula | What it answers |
+|---|---|---|
+| **Effective rate** | passed / judged | how strong |
+| **Coverage** | judged / planned | how much evidence the score rests on |
+| **Pessimistic lower bound** | passed / planned | worst case |
+
 ### No-response cases, disclosed both ways
 
 Real agents have long-tail latency: in this run **9/150** Hermes cases and **3/150** KylinBot cases returned nothing within the timeout. They are counted as failures (the conservative reading) but **attributed separately** as `NO_RESPONSE` — *service failure, not a memory defect*.
@@ -115,8 +126,15 @@ litmus leaderboard out/a out/b --out board/  # aggregate runs into one static le
 | `report.txt` | Per-agent report + comparison table (plain text) |
 | `report.html` | Self-contained report with a six-dimension radar chart |
 | `radar.svg` | Radar chart |
-| `evidence/<agent>.jsonl` | Per-agent run evidence (JSON Lines, one record per line) |
+| `evidence/<agent>.jsonl` | Per-agent run evidence (JSON Lines, one record per line, seq + sha256 sealed) |
 | `artifacts/<agent>/<case>.md` | Per-case Markdown transcript |
+| `manifest.json` | **Run contract**: case-set sha256, rules caliber, environment fingerprint, per-artifact hashes |
+
+Every run writes a verifiable contract: `verify` re-hashes everything offline, `regrade` re-judges stored
+evidence under new rules without re-running the agent, `compare` is a per-case regression gate you can put
+in CI, `selftest` calibrates the judge itself on a gold set (κ gate), and `leaderboard` aggregates runs —
+scores are taken from contracts verbatim, never recomputed. Reproducibility here is a checkable property,
+not a claim.
 
 ---
 

@@ -1,6 +1,6 @@
 # AgentLitmus · Memory Bench 方案说明
 
-> **面向 openKylin 操作系统的智能体长期记忆自动化评测 Benchmark**
+> **跨平台智能体长期记忆自动化评测 Benchmark**（openKylin 为首个深度实测平台）
 > 品牌：AgentLitmus（智能体试金石） ｜ 项目：`memory-bench` ｜ 协议：Apache 2.0
 
 本文档梳理长期记忆评测的**测试目标、基本前提、数据生成方式、验证用例设计、结果收集与自动评分完整流程**。

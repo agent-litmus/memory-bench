@@ -62,6 +62,10 @@
   `continue-on-error`（测试里有 sh -c，git-bash 不保证提供），修绿后摘除。
   评委层与容器格维持手动流水线不变。
 - **三值判定与覆盖率口径**：`Verdict.PASS/FAIL/UNKNOWN`，有效分 / 覆盖率 / 悲观下界三口径并列输出。
+- **README 特性叙事对齐 1.0.0**：新增三值判定与三口径小节、§4.6 运行契约与可信链（五命令闭环），
+  创新点七条扩为九条（三值口径、运行契约、评委团多数决、四通道接入），产物表补 manifest 与
+  artifacts；SOLUTION 副标题改为跨平台定位；双 README 加 CI 徽章；USAGE 平台矩阵如实标注
+  macOS / Windows 进入 CI 持续验证（首亮）。
 - **题库分档**：basic 150 ／ security 88 ／ pressure 30 ／ crosscut 15；
   `standard` = basic + security = 238，`full` = 283。新增安全档（提示注入、越权持久化、隐私边界）、
   压力档（长上下文、相似事实干扰）、交叉档（更新 × 边界复合），以及对照臂、等价变体与虚构实体用例。
