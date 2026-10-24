@@ -17,7 +17,7 @@ package io.github.agentlitmus.core;
  *   <li>同会话即遗漏（上下文还在却答不出）→ 偏<b>未召回/未应用</b>（{@link #RECALL_MISSING}）。</li>
  * </ul>
  * 每个归因都配一句<b>改进建议</b>，把评测从「分类」升级为「可行动的诊断」，
- * 直接服务命题 25% 权重强调的「可解释评分原因」。
+ * 直接服务「可解释评分原因」这条要求。
  */
 public enum FailureCause {
 

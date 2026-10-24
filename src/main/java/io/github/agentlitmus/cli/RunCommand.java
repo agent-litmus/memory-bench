@@ -40,7 +40,7 @@ import java.util.Set;
 /**
  * {@code litmus run}——批量评测入口。
  * <p>
- * 命题要求「打包为可在 openKylin 上一键运行的 CLI 工具，支持导入不同智能体配置进行批量对比评测」。
+ * 需求「打包为可在 openKylin 上一键运行的 CLI 工具，支持导入不同智能体配置进行批量对比评测」。
  * 产出：{@code report.txt}（纯文本报告 + 横向对比表）、{@code report.html}（含六维雷达图、
  * 归因改进建议、稳定性与覆盖度的自包含报告）、{@code radar.svg}、{@code evidence/<agent>.jsonl}
  * 与逐条用例的 Markdown 产物，最后写运行契约 {@code manifest.json} 供 {@code verify} 对账。

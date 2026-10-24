@@ -11,7 +11,7 @@ import java.util.Map;
  * 稳定性证据：对同一输入重复评测 N 次，统计各维度与总体通过率的
  * 均值、标准差、最小/最大与抖动（max-min）。
  * <p>
- * 命题「稳定性与可复现性」（15% 权重）明确看「同输入下评测结果是否稳定」，
+ * 稳定性与可复现性要求看「同输入下评测结果是否稳定」，
  * 本类把这种稳定性<b>量化</b>为可报告的指标，避免仅靠口述「结果稳定」。
  */
 public record StabilityReport(Map<AgentUnderTest, Map<Dimension, DimStability>> byAgent,

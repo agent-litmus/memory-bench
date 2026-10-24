@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * 智能体配置化接入测试：验证 http / command / builtin 三种类型，
- * 以及从 JSON 加载配置的能力（对应命题"支持导入不同智能体配置"）。
+ * 以及从 JSON 加载配置的能力（对应需求"支持导入不同智能体配置"）。
  */
 class AgentFactoryTest {
 

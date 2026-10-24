@@ -183,7 +183,7 @@ public final class HtmlReport {
         // 失败归因与改进建议（可行动诊断）：覆盖全部智能体
         sb.append("<div class=\"card\"><h2>失败归因与改进建议（可行动诊断）</h2>");
         sb.append("<div class=\"sub\">在五类结果之上叠加记忆生命周期阶段归因，并为每条归因给出可行动的改进建议——"
-                + "把评测从「分类」升级为「诊断」，对应命题自动评分能力（25%）强调的「可解释评分原因」。</div>");
+                + "把评测从「分类」升级为「诊断」，对应「可解释评分原因」这条评分要求。</div>");
         for (AgentUnderTest agent : result.ranked()) {
             BenchmarkReport report = result.reportOf(agent);
             sb.append("<h3>").append(escape(agent.name())).append("</h3>");
@@ -206,7 +206,7 @@ public final class HtmlReport {
         // 稳定性证据
         if (stability != null) {
             sb.append("<div class=\"card\"><h2>稳定性证据（同输入重复评测）</h2>");
-            sb.append("<div class=\"sub\">命题「稳定性与可复现性」（15%）明确看同输入下结果是否稳定。"
+            sb.append("<div class=\"sub\">稳定性与可复现性看的是同输入下结果是否稳定。"
                     + "下表量化各智能体的抖动（max-min）与总体标准差 σ，数值越小越稳定。</div>");
             sb.append("<table><tr><th>智能体</th><th>总体均值</th><th>抖动</th><th>σ</th></tr>");
             stability.overall().forEach((agent, s) -> sb.append("<tr><td>").append(escape(agent.name())).append("</td>")
@@ -219,7 +219,7 @@ public final class HtmlReport {
         // 数据集覆盖度校验
         if (coverage != null) {
             sb.append("<div class=\"card\"><h2>数据集覆盖度校验</h2>");
-            sb.append("<div class=\"sub\">命题「数据设计质量」（25%）要求样本具备区分度、覆盖面和扩展空间。"
+            sb.append("<div class=\"sub\">用例集设计要求样本具备区分度、覆盖面和扩展空间。"
                     + "下表给出每维度用例数、正/负样本与区分度。</div>");
             sb.append(coverage.valid() ? "<p>合法性：通过（无重复 ID、无无约束用例）</p>"
                     : "<p>合法性：发现问题 " + coverage.issues().size() + " 项</p>");

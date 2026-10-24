@@ -4,7 +4,7 @@
 
 ```bash
 ./mvnw clean package        # JDK 17+ 编译，运行时需要 17 及以上（开发机是 21）
-./mvnw test                 # 全部测试，当前 227 条，必须在提交前全绿
+./mvnw test                 # 全部测试，当前 255 条，必须在提交前全绿
 ```
 
 核心库只允许依赖 **Jackson + slf4j**。新增第三方依赖前请先在 issue 里说明理由——
@@ -56,7 +56,7 @@ CI 只跑内置被测（reference / degraded），**不接真实智能体、不�
 | 步骤 | 断言 |
 |---|---|
 | 构建 | 版本戳写进 jar（`litmusVersion` / `gitCommit` 不得是 `unknown` 或残留 `${...}`） |
-| 全量测试 | 227 条全绿 |
+| 全量测试 | 255 条全绿 |
 | `selftest` | 规则层 **盲点数必须为 0**，并打印 κ / 开口即对率 / 弃权率 |
 | `run --suite full` | 内置两款跑完 283 条 |
 | `verify --from` | 全部产物哈希一致 |

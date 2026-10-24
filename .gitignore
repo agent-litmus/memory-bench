@@ -33,7 +33,7 @@ blog/
 ### 指定输出目录（如 out-kylinbot2/）###
 out-*/
 
-### 例外：samples/ 下的评测证据必须入库（交付要求 b：样例数据与样例结果）###
+### 例外：samples/ 下的评测证据必须入库（样例与证据要能对外举证）###
 !samples/**/evidence/
 !samples/**/*.jsonl
 

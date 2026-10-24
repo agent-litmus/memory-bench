@@ -581,7 +581,7 @@ java -jar target/memory-bench-1.0.0.jar run --suite full \
 | 规则优先判定 | 评分不依赖模型，避免语义漂移 |
 | 评委层去随机化 | `temperature=0` + 固定 `seed` + `JudgeCache`，同输入重跑不产生新调用 |
 | 运行契约哈希锚定 | `manifest.json` 记用例集 sha256 与口径版本，`verify` 逐份对账 |
-| 全量离线测试 | **227 个单元测试（27 个测试类）**，无网络请求 |
+| 全量离线测试 | **255 个单元测试（33 个测试类）**，无网络请求 |
 | 跨 JVM 一致性 | 同一 jar 在 JVM 21 与 JVM 17 上产出的 `report.txt` **sha256 逐字节一致**（full 283 条实测；这条断言由 `scripts/verify-container.sh` 每次执行，它抓到过一次真实回归，见下） |
 
 `--repeat N` 实测：内置 `reference` / `degraded` 两次运行完全一致（σ=0），

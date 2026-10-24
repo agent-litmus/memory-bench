@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class HtmlReportGoldenTest {
 
     /** 有意改样式/文案时更新我（先看失败信息里的实际值，并确认改动是有意的） */
-    private static final String GOLDEN_SHA256 = "4aea8ecca1a7689617d0d552673c2956e43cb1c889f3ac49125b3f42e9a39828";
+    private static final String GOLDEN_SHA256 = "363ae74df78df2d633e65b9d195d8b9006667417187da801dea99830db53e4e5";
 
     @Test
     void fixedInputRendersByteIdenticalHtml() {

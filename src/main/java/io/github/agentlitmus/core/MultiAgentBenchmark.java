@@ -75,7 +75,7 @@ public final class MultiAgentBenchmark {
     }
 
     /**
-     * 同输入重复评测 N 次，用于稳定性证据（命题「稳定性与可复现性」15% 权重）。
+     * 同输入重复评测 N 次，用于稳定性证据（同输入必须出同分这条要求）。
      * <p>
      * 每次重复都从<b>干净状态</b>独立运行：内置记忆模式每次使用独立的记忆目录，
      * 对话模式每次使用不同的会话 ID 前缀（见 {@link MemoryCase#withSessionId}），

@@ -536,7 +536,7 @@ kylin-bot --config-dir /tmp/litmus-kylinbot/case-u4 memory list
 
 **驱动方式**：`HermesAcpAnswerer` 以**每用例一个独立进程**的方式拉起官方 `hermes-acp` 二进制，走 `initialize → session/new → session/prompt`；每个用例分配独立的 `HERMES_HOME`（从主目录拷贝 `config.yaml` 与 `.env`），保证跨用例记忆互不污染、且不触碰用户真实记忆。
 
-**路径可配置**（避免硬编码，便于评审机指定自有安装位置）：
+**路径可配置**（避免硬编码，便于使用者指定自有安装位置）：
 
 ```bash
 # 默认回落到 ~/.kylin-agent-runtime/agent-runtime/venv/bin/hermes-acp
