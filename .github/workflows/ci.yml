@@ -21,6 +21,12 @@ name: CI
 #
 # 总开关：run_ci，默认 false。不勾上它，两个 job 全部跳过，什么都不跑。
 on:
+  # 主门禁挂 push / PR：公开仓库的 runner 分钟免费，且这条流水线只跑内置被测与离线校验，
+  # 不需要任何密钥、不消耗模型额度——每个 PR 都有门禁，是接受外部贡献的前提。
+  # 评委层与容器格仍在 workflow_dispatch 手动流水线里（额度由人决定，不由提交决定）。
+  push:
+    branches: [main]
+  pull_request:
   workflow_dispatch:
     inputs:
       run_ci:
@@ -35,6 +41,57 @@ on:
         default: false
 
 jobs:
+  # ── push / PR 主门禁：三平台矩阵（Linux / macOS / Windows）─────────────────────
+  # 跨平台矩阵从「未验证」变「持续验证」。本门禁零密钥、零模型额度：
+  # 只跑内置 reference / degraded（确定性）与离线校验（selftest / verify / compare）。
+  gate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    # Windows 首次点亮：测试里有 sh -c 与 bash 脚本（git-bash 提供 bash；sh 不保证在 PATH），
+    # 先允许失败拿真实信号、不拦 PR；修绿后删除这一行，Windows 格才算「已验证」。
+    continue-on-error: ${{ matrix.os == 'windows-latest' }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: 构建（带版本戳）
+        run: ./mvnw -q clean package -DskipTests -Dlitmus.git.commit="${GITHUB_SHA::7}"
+
+      - name: 全量测试
+        run: ./mvnw test
+
+      - name: 尺子自证（规则层门禁，零密钥）
+        run: |
+          java -jar target/memory-bench-*.jar selftest --out out/selftest
+          PY=python3; command -v python3 >/dev/null 2>&1 || PY=python
+          "$PY" -c "
+          import json
+          d = json.load(open('out/selftest/selftest.json'))['ruleLayer']
+          print('κ=%s 开口即对率=%s 弃权率=%s 盲点=%s' % (d['kappa'], d['spokenRate'], d['abstainRate'], d['blindSpots']))
+          assert d['blindSpots'] == 0, '出现盲点（把该判未过的判成通过），尺子不可信'
+          "
+
+      - name: 基线运行 + 运行契约对账
+        run: |
+          java -jar target/memory-bench-*.jar run --suite basic --agents reference,degraded --out out/base
+          java -jar target/memory-bench-*.jar verify --from out/base
+
+      - name: 同代码两次运行必须一致（确定性门禁）
+        run: |
+          java -jar target/memory-bench-*.jar run --suite basic --agents reference,degraded --out out/base2
+          java -jar target/memory-bench-*.jar compare --from out/base --to out/base2
+
   build-and-gates:
     # 总开关。没勾 run_ci 时这个 job 不进入执行，不计分钟。
     if: ${{ github.event.inputs.run_ci == 'true' }}
