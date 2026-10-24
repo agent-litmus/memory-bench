@@ -37,6 +37,11 @@ out-*/
 !samples/**/evidence/
 !samples/**/*.jsonl
 
+### 源码包 evidence/ 与运行产物目录撞名：src 下的 evidence 是代码，必须入库。
+### 上面的裸 evidence/ 规则曾把 evidence 包里的新文件悄悄排除在提交之外，
+### 造成 fresh clone 编译不过而推送方毫无察觉——见 CHANGELOG「修复」。###
+!**/src/**/evidence/
+
 ### 与评测无关的本地脚手架 / 脚本（不入库）###
 frontend/
 scaffold-cli/
