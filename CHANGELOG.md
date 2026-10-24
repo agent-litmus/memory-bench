@@ -38,12 +38,29 @@
 
 ---
 
-## [1.0.0] - 未发布
+## [1.0.0] - 2026-10-24
 
-从「能跑出通过率」升级为「跑出的数字可以被质疑、被复核、被回归拦截」。
+从「能跑出通过率」升级为「跑出的数字可以被质疑、被复核、被回归拦截」；
+接入面从 openKylin 两款真实智能体扩展为 **HTTP / CLI / ACP / MCP 四通道、配置即接入**。
 
 ### 新增
 
+- **通用 ACP 适配器（`type: acp`）**：任意 ACP（Agent Communication Protocol，stdio JSON-RPC）
+  智能体配置即接入——凡是能被编辑器（Zed / VS Code / JetBrains）接上的 ACP 智能体都能直接测。
+  `homeEnvVar` + `homeTemplate` 给每个会话独立家目录（凭据从模板铺入），用例间长期记忆互不污染；
+  会话重置只丢 ACP 会话句柄、家目录保留（跨会话用例的正确边界）。内置 Hermes 驱动保持原实现不变。
+- **MCP 适配器（`type: mcp`）**：以 MCP server（stdio 传输）暴露对话工具的智能体一次
+  `tools/call` 即一个评测回合；工具名与消息参数名可配（默认 `chat(text)`）。
+  MCP 没有会话概念，重置 = 进程重启——长期记忆须由被测方持久化在进程外，
+  否则跨会话用例测到的「重启即失忆」是该智能体的实况；这条语义边界写进了文档而不是藏在代码里。
+- **共享 stdio JSON-RPC 底座**：`JsonRpcPeer`（后台读线程 + 超时队列 + 通知攒集，
+  机制与 Hermes 实测同源）与 `StdioRpcAnswerer`（每会话一进程、存活上限淘汰、异常降级为无响应）。
+  端到端测试用单文件 Java 假服务器（`java FakeXxxServer.java` 拉起真实子进程）覆盖：
+  思考块不混入答案、家目录注入真的生效、重置语义、流式抽取与 isError 路径。
+- **CI 主门禁挂 push / PR 并扩为三平台矩阵**（Linux / macOS / Windows；公开仓库 runner 免费、
+  零密钥零模型额度）。跨平台矩阵从「未验证」变「持续验证」；Windows 首次点亮
+  `continue-on-error`（测试里有 sh -c，git-bash 不保证提供），修绿后摘除。
+  评委层与容器格维持手动流水线不变。
 - **三值判定与覆盖率口径**：`Verdict.PASS/FAIL/UNKNOWN`，有效分 / 覆盖率 / 悲观下界三口径并列输出。
 - **题库分档**：basic 150 ／ security 88 ／ pressure 30 ／ crosscut 15；
   `standard` = basic + security = 238，`full` = 283。新增安全档（提示注入、越权持久化、隐私边界）、

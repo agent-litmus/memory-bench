@@ -15,12 +15,14 @@ import java.util.Set;
  * @param id          唯一标识（报告中显示）
  * @param name        展示名称
  * @param description 说明
- * @param type        接入类型：{@code http} / {@code command} / {@code builtin}
+ * @param type        接入类型：{@code http} / {@code command} / {@code builtin} / {@code acp} / {@code mcp}
  * @param endpoint    http 类型的服务地址，如 {@code http://localhost:8089}
  * @param path        http 类型的接口路径，默认 {@code /api/v1/analyze/stream}
  * @param resetPath   http 类型的会话重置路径（跨会话长期保持用例用）
- * @param command     command 类型的可执行文件，如 {@code kylin-agent}
- * @param args        command 类型的参数模板，支持 {@code {sessionId}} 与 {@code {question}} 占位符
+ * @param command     command / acp / mcp 类型的可执行文件。command 每轮一进程；
+ *                    acp / mcp 是<b>常驻进程</b>（stdio JSON-RPC），args 只在启动时使用
+ * @param args        command 类型支持 {@code {sessionId}} 与 {@code {question}} 占位符；
+ *                    acp / mcp 的 args 不做占位符替换（进程不按轮接收参数）
  * @param resetArgs   command 类型的「重置会话」参数模板（跨会话长期保持用例用，通常删除会话状态文件）
  * @param timeoutSeconds 单次调用超时（秒）
  * @param role        对比角色：{@code primary}（主对比）/ {@code extra}（附加案例），默认 primary
@@ -32,6 +34,12 @@ import java.util.Set;
  * @param sandboxSeed command 类型专用：需要复制进沙箱家目录的宿主文件/目录（如 {@code ~/.kylinbot}）。
  *                    本地大模型智能体要读自己的凭据才起得来，而沙箱刻意把 HOME 指向空目录；
  *                    注入项会写进隔离说明与运行契约，不做暗中放行。支持 {@code ~} 与相对路径（相对启动目录）
+ * @param homeEnvVar  acp / mcp 专用：家目录环境变量名（如 {@code HERMES_HOME}）。给了它，
+ *                    每个会话得到独立家目录（用例间长期记忆互不污染，模板见 {@code homeTemplate}）
+ * @param homeTemplate acp / mcp 专用：家目录模板（凭据 / 配置所在目录），首次启动时拷入各会话家目录
+ * @param tool        mcp 专用：对话工具名，默认 {@code chat}
+ * @param messageArg  mcp 专用：承载用户消息的工具参数名，默认 {@code text}
+ * @param sessionArg  mcp 专用：会话 ID 参数名（部分智能体要求）；不给则不传
  */
 public record AgentConfig(String id,
                           String name,
@@ -48,11 +56,18 @@ public record AgentConfig(String id,
                           String sandbox,
                           String stateDir,
                           List<String> capabilities,
-                          List<String> sandboxSeed) {
+                          List<String> sandboxSeed,
+                          String homeEnvVar,
+                          String homeTemplate,
+                          String tool,
+                          String messageArg,
+                          String sessionArg) {
 
     public static final String TYPE_HTTP = "http";
     public static final String TYPE_COMMAND = "command";
     public static final String TYPE_BUILTIN = "builtin";
+    public static final String TYPE_ACP = "acp";
+    public static final String TYPE_MCP = "mcp";
 
     public static final String SANDBOX_ISOLATED = "isolated";
     public static final String SANDBOX_STRICT = "strict";
@@ -98,6 +113,8 @@ public record AgentConfig(String id,
         }
         capabilities = List.copyOf(normalizeCapabilities(capabilities == null ? List.of() : capabilities));
         sandboxSeed = sandboxSeed == null ? List.of() : List.copyOf(sandboxSeed);
+        homeEnvVar = homeEnvVar == null || homeEnvVar.isBlank() ? null : homeEnvVar.trim();
+        homeTemplate = homeTemplate == null || homeTemplate.isBlank() ? null : homeTemplate.trim();
     }
 
     /**
@@ -139,7 +156,8 @@ public record AgentConfig(String id,
     /** HTTP 智能体 */
     public static AgentConfig http(String id, String name, String endpoint) {
         return new AgentConfig(id, name, "", TYPE_HTTP, endpoint, "/api/v1/analyze/stream", null,
-                null, List.of(), List.of(), 120, null, null, null, List.of(), List.of());
+                null, List.of(), List.of(), 120, null, null, null, List.of(), List.of(),
+                null, null, null, null, null);
     }
 
     /** 命令行智能体 */
@@ -151,12 +169,12 @@ public record AgentConfig(String id,
     public static AgentConfig command(String id, String name, String command,
                                       List<String> args, List<String> resetArgs) {
         return new AgentConfig(id, name, "", TYPE_COMMAND, null, null, null, command, args, resetArgs,
-                120, null, null, null, List.of(), List.of());
+                120, null, null, null, List.of(), List.of(), null, null, null, null, null);
     }
 
     /** 内置智能体（reference / degraded） */
     public static AgentConfig builtin(String id, String name) {
         return new AgentConfig(id, name, "", TYPE_BUILTIN, null, null, null, null, List.of(), List.of(),
-                120, null, null, null, List.of(), List.of());
+                120, null, null, null, List.of(), List.of(), null, null, null, null, null);
     }
 }

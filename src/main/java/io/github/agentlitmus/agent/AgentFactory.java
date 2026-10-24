@@ -20,6 +20,10 @@ import java.util.List;
  * <ul>
  *   <li>{@code http}——调用 HTTP 服务（SSE 或普通响应），适用于提供接口的智能体；</li>
  *   <li>{@code command}——调用命令行程序，适用于 CLI 形态的本地智能体；</li>
+ *   <li>{@code acp}——ACP（Agent Communication Protocol，stdio JSON-RPC）常驻进程，
+ *       编辑器能接的 ACP 智能体都能直接测；</li>
+ *   <li>{@code mcp}——MCP（Model Context Protocol，stdio 传输）server 形态的智能体，
+ *       一次 {@code tools/call} 即一个评测回合；</li>
  *   <li>{@code builtin}——内置参考/缺陷智能体，用于验证评测本身有效。</li>
  * </ul>
  * 配置中的 {@code role} 字段（primary/extra）决定该智能体进入「主对比」还是「附加案例」。
@@ -50,9 +54,21 @@ public final class AgentFactory {
                     config.id(), config.name(), config.description(),
                     new CommandAnswerer(config.command(), config.args(), config.resetArgs(),
                             timeout, sandboxBase, config.sandbox(), config.sandboxSeed()), role);
+            case AgentConfig.TYPE_ACP -> AgentUnderTest.dialogue(
+                    config.id(), config.name(), config.description(),
+                    new AcpAnswerer(commandOf(config),
+                            config.homeEnvVar(), templateOf(config),
+                            stdioStateRoot(config.id()), timeout), role);
+            case AgentConfig.TYPE_MCP -> AgentUnderTest.dialogue(
+                    config.id(), config.name(), config.description(),
+                    new McpAnswerer(commandOf(config),
+                            config.tool(), config.messageArg(), config.sessionArg(),
+                            config.homeEnvVar(), templateOf(config),
+                            stdioStateRoot(config.id()), timeout), role);
             case AgentConfig.TYPE_BUILTIN -> requireBuiltin(config.id());
             default -> throw new IllegalArgumentException(
-                    "不支持的智能体类型: " + config.type() + "（可选 http / command / builtin）");
+                    "不支持的智能体类型: " + config.type()
+                            + "（可选 http / command / acp / mcp / builtin）");
         };
         // 接入方声明的能力叠加在适配器自证能力之上（并集），置信层级随之重算
         Answerer overlaid = CapabilityOverlay.of(agent.answerer(), config.declaredCapabilities());
@@ -176,5 +192,34 @@ public final class AgentFactory {
         return (config.path() == null || config.path().isBlank())
                 ? "/api/v1/analyze/stream"
                 : config.path();
+    }
+
+    /** acp / mcp 的启动命令：可执行文件 + 固定参数（不做占位符替换，进程常驻不按轮取参） */
+    private static List<String> commandOf(AgentConfig config) {
+        if (config.command() == null || config.command().isBlank()) {
+            throw new IllegalArgumentException(
+                    config.type() + " 类型智能体必须提供 command（可执行文件）");
+        }
+        List<String> command = new ArrayList<>();
+        command.add(config.command());
+        command.addAll(config.args());
+        return command;
+    }
+
+    /** acp / mcp 的家目录模板：把被测对象启动所需的凭据 / 配置铺进每个会话的隔离家目录；支持 {@code ~} */
+    private static Path templateOf(AgentConfig config) {
+        if (config.homeTemplate() == null) {
+            return null;
+        }
+        String template = config.homeTemplate();
+        if (template.startsWith("~")) {
+            template = System.getProperty("user.home") + template.substring(1);
+        }
+        return Path.of(template);
+    }
+
+    /** acp / mcp 各会话家目录的父目录：按智能体 id 分开，避免两款智能体互相覆盖 */
+    private static Path stdioStateRoot(String agentId) {
+        return Path.of(System.getProperty("java.io.tmpdir"), "agentlitmus-stdio", agentId);
     }
 }

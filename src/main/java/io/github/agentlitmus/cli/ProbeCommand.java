@@ -37,7 +37,7 @@ public final class ProbeCommand implements Command {
     public void run(CliOptions options) throws IOException {
         if (options.agentsConfig == null || options.agentsConfig.isBlank()) {
             throw new IllegalArgumentException("litmus probe 需要 --agents-config <file>："
-                    + "探针按配置逐个探测被测对象（http / command / builtin）");
+                    + "探针按配置逐个探测被测对象（http / command / acp / mcp / builtin）");
         }
         Path outDir = Path.of(options.out);
         Files.createDirectories(outDir);

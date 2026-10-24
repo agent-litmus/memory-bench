@@ -1,0 +1,16 @@
+[
+  {
+    "id": "my-mcp-agent",
+    "name": "我的 MCP 智能体",
+    "description": "以 MCP server（stdio 传输）暴露对话工具的智能体；一次 tools/call 即一个评测回合。注意：重置=重启进程，长期记忆须由被测方持久化在进程外",
+    "type": "mcp",
+    "command": "/path/to/agent-mcp-server",
+    "args": [],
+    "timeoutSeconds": 180,
+    "tool": "chat",
+    "messageArg": "text",
+    "homeEnvVar": "AGENT_HOME",
+    "homeTemplate": "~/.config/my-agent",
+    "role": "primary"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "my-acp-agent",
+    "name": "我的 ACP 智能体",
+    "description": "任何能被编辑器（Zed / VS Code / JetBrains）经 ACP 接入的智能体都可以这样接入评测",
+    "type": "acp",
+    "command": "/path/to/agent-acp",
+    "args": [],
+    "timeoutSeconds": 180,
+    "homeEnvVar": "AGENT_HOME",
+    "homeTemplate": "~/.config/my-agent",
+    "role": "primary"
+  }
+]

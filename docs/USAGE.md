@@ -110,7 +110,7 @@ probe 在跑几百回合之前先花不到十回合探清**这个平台能被测
 答对可能只是窗口里还留着原文——判它通过是虚高，判它失败是给它扣一顶「我们测不了」的帽子。
 两个都是假数字。probe 把这条边界提前变成已知事实。
 
-### 3.2 三种接入类型
+### 3.2 五种接入类型
 
 ```jsonc
 [
@@ -125,18 +125,40 @@ probe 在跑几百回合之前先花不到十回合探清**这个平台能被测
     "sandboxSeed": ["~/.my-agent/config.toml", "~/.my-agent/.secret_key"],
     "capabilities": ["MEMORY_INSPECTABLE", "RESETS_CONTEXT"] },
 
+  { "id": "my-acp", "name": "某 ACP 智能体", "type": "acp",
+    "command": "/usr/local/bin/my-agent-acp",
+    "homeEnvVar": "AGENT_HOME", "homeTemplate": "~/.config/my-agent",
+    "timeoutSeconds": 180 },
+
+  { "id": "my-mcp", "name": "某 MCP 智能体", "type": "mcp",
+    "command": "/usr/local/bin/my-agent-mcp",
+    "tool": "chat", "messageArg": "text",
+    "homeEnvVar": "AGENT_HOME", "homeTemplate": "~/.config/my-agent",
+    "timeoutSeconds": 180 },
+
   { "id": "reference", "name": "内置参考实现", "type": "builtin", "role": "primary" }
 ]
 ```
 
-- `args` / `resetArgs` 支持占位符 `{sessionId}`、`{question}`、`{sandboxHome}`。
+- `args` / `resetArgs` 支持占位符 `{sessionId}`、`{question}`、`{sandboxHome}`（仅 command 类型；
+  acp / mcp 是常驻进程，参数只在启动时用一次，不做占位符替换）。
+- **acp**（Agent Communication Protocol，stdio JSON-RPC）：凡是能被编辑器（Zed / VS Code /
+  JetBrains）接上的 ACP 智能体都能直接测。`homeEnvVar` + `homeTemplate` 给每个会话一个独立
+  家目录（凭据/配置从模板铺入），用例间长期记忆互不污染；**会话重置只丢 ACP 会话句柄、
+  家目录保留**——跨会话用例测的正是这个边界。被测回合若要求客户端侧回调（sampling 等），
+  适配器不代答，该回合按超时记「无响应」。
+- **mcp**（Model Context Protocol，stdio 传输）：以 MCP server 形态暴露对话工具的智能体，
+  一次 `tools/call` 即一个评测回合；工具名（`tool`，默认 `chat`）与消息参数名
+  （`messageArg`，默认 `text`）可配。**会话重置 = 进程重启**（MCP 没有会话概念）：
+  被测对象必须把长期记忆持久化在进程之外，否则跨会话用例测到的是「重启即失忆」——
+  那是该智能体的实况，如实读，不是适配器的缺陷。
 - **相对路径按启动 litmus 的目录解析**（如 `scripts/foo.sh`），不会因为被测进程被放进沙箱工作目录而失效。
   只有含 `/` 且在启动目录下真实存在的 token 会被锚定：靠 `PATH` 解析的程序名不动，提问文本更不会动。
 - `sandboxSeed`：要从宿主复制进沙箱家目录的文件/目录（按末级名字落位，`~/.my-agent/config.toml` →
   `<sandboxHome>/config.toml`）。本地大模型智能体几乎都要读自己的凭据才起得来，而沙箱的 HOME 是空的。
   注入后权限收紧到仅属主可读写，且注入清单会写进 `manifest.json` 的 `isolation` 字段——
   **给了什么进沙箱，纸面上看得见**。源不存在会如实报「未找到」，不静默跳过。
-- `sandbox`：`isolated`（默认，临时 HOME）/ `strict` / `none`。**命令行被测会以你的权限执行**，
+- `sandbox`：`isolated`（默认，临时 HOME）/ `strict` / `none`（仅 command 类型）。**命令行被测会以你的权限执行**，
   不要用 `none` 跑不信任的程序。隔离层级会如实写进 `manifest.json` 的 `isolation` 字段；
   HTTP 接入不启动被测进程时，那里写的是「隔离责任在被测服务自身」——**留空会被读成「已隔离」**。
 - `stateDir`：给出记忆落盘目录，「记忆有没有写进去」就从推断升成观测（T1 → T2）。

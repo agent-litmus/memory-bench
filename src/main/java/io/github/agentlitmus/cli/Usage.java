@@ -39,7 +39,7 @@ public final class Usage {
 
                 选项:
                   --agents <id,id,...>   指定被测智能体（内置: reference,degraded）
-                  --agents-config <file> 从 JSON 文件导入智能体配置（http/command/builtin），可标注 role
+                  --agents-config <file> 从 JSON 文件导入智能体配置（http/command/acp/mcp/builtin），可标注 role
                   --suite <name>         题集档位：basic/security/pressure/crosscut/standard/full（默认 basic）
                   --cases <file>         使用外部用例集 JSON（覆盖 --suite）
                   --out <dir>            输出目录（默认 litmus-out）

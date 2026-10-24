@@ -131,13 +131,15 @@ public interface Answerer {
 }
 ```
 
-No framework, no model, no memory implementation is assumed. Three adapter types are ready out of the box:
+No framework, no model, no memory implementation is assumed. Five adapter types are ready out of the box:
 
 | Type | Use for |
 |---|---|
 | `builtin` | Deterministic built-ins (`reference`, `degraded`) — offline calibration |
 | `command` | CLI agents, e.g. openKylin **KylinBot** via `scripts/kylinbot-adapter.sh` |
 | `http` | Any agent exposing an HTTP endpoint |
+| `acp` | Any **ACP** agent (stdio JSON-RPC) — whatever your editor can drive, this can benchmark |
+| `mcp` | Agents exposing a chat tool as an **MCP server** (stdio transport); one `tools/call` per turn |
 
 Hermes is driven over **ACP** (Agent Communication Protocol, JSON-RPC over stdio) by `HermesAcpAnswerer`.
 

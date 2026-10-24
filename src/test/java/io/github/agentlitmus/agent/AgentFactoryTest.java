@@ -96,7 +96,8 @@ class AgentFactoryTest {
     @Test
     void rejectsUnknownAgentType() {
         AgentConfig config = new AgentConfig("x", "X", "", "grpc", null, null, null, null,
-                List.of(), List.of(), 60, null, null, null, List.of(), List.of());
+                List.of(), List.of(), 60, null, null, null, List.of(), List.of(),
+                null, null, null, null, null);
         assertThrows(IllegalArgumentException.class, () -> AgentFactory.create(config));
     }
 
@@ -110,7 +111,7 @@ class AgentFactoryTest {
         AgentConfig withState = new AgentConfig("cli2", "CLI 智能体（带状态目录）", "", 
                 AgentConfig.TYPE_COMMAND, null, null, null, "echo", List.of("{question}"), List.of(),
                 60, null, null, System.getProperty("java.io.tmpdir"), List.of("memory_inspectable"),
-                List.of());
+                List.of(), null, null, null, null, null);
         var agent = AgentFactory.create(withState);
         assertTrue(agent.answerer().capabilities().contains(AgentCapability.MEMORY_INSPECTABLE),
                 "小写声明也应被接受");
@@ -123,7 +124,8 @@ class AgentFactoryTest {
         // 拼错的能力名必须报错：静默丢弃等于悄悄把该智能体的置信层级降一档
         assertThrows(IllegalArgumentException.class, () -> new AgentConfig("x", "X", "",
                 AgentConfig.TYPE_HTTP, "http://localhost:1", null, null, null, List.of(), List.of(),
-                60, null, null, null, List.of("MEMORY_INSPEKTABLE"), List.of()));
+                60, null, null, null, List.of("MEMORY_INSPEKTABLE"), List.of(),
+                null, null, null, null, null));
     }
 
     @Test
